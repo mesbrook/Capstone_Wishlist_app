@@ -47,13 +47,20 @@ namespace Capstone_Wishlist_app.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,ASIN,Title,Gender,AgeGroup,Amount,FormattedPrice,ImageUrlSmall,ImageUrlMed,Url,Features")] Item item)
+        public ActionResult Create([Bind(Include = "ID,ASIN,Title,Approved")] Item item)
         {
             if (ModelState.IsValid)
             {
-                db.Items.Add(item);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                try
+                {
+                    db.Items.Add(item);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                catch (Exception e)
+                {
+                    return View("Error");
+                }
             }
 
             return View(item);
@@ -79,7 +86,7 @@ namespace Capstone_Wishlist_app.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,ASIN,Title,Gender,AgeGroup,Amount,FormattedPrice,ImageUrlSmall,ImageUrlMed,Url,Features")] Item item)
+        public ActionResult Edit([Bind(Include = "ID,ASIN,Title,Approved")] Item item)
         {
             if (ModelState.IsValid)
             {

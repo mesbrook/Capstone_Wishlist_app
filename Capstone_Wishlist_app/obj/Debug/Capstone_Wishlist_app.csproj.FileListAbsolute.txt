@@ -163,3 +163,9 @@ C:\Users\mesbrook\Home_DEV\GitHub_projects\Capstone_Wishlist_app\Capstone_Wishli
 C:\Users\mesbrook\Home_DEV\GitHub_projects\Capstone_Wishlist_app\Capstone_Wishlist_app\obj\Debug\Capstone_Wishlist_app.csprojResolveAssemblyReference.cache
 C:\Users\mesbrook\Home_DEV\GitHub_projects\Capstone_Wishlist_app\Capstone_Wishlist_app\obj\Debug\Capstone_Wishlist_app.dll
 C:\Users\mesbrook\Home_DEV\GitHub_projects\Capstone_Wishlist_app\Capstone_Wishlist_app\obj\Debug\Capstone_Wishlist_app.pdb
+C:\Users\Mesbrook\Documents\GitHub\Capstone_Wishlist_app\Capstone_Wishlist_app\obj\Debug\Capstone_Wishlist_app.Migrations.InitialCreate.resources
+C:\Users\Mesbrook\Documents\GitHub\Capstone_Wishlist_app\Capstone_Wishlist_app\obj\Debug\Capstone_Wishlist_app.csproj.GenerateResource.Cache
+C:\Users\Mesbrook\Documents\GitHub\Capstone_Wishlist_app\Capstone_Wishlist_app\obj\Debug\Capstone_Wishlist_app.Migrations.change_database.resources
+C:\Users\Mesbrook\Documents\GitHub\Capstone_Wishlist_app\Capstone_Wishlist_app\obj\Debug\Capstone_Wishlist_app.Migrations.edit_item_model.resources
+C:\Users\Mesbrook\Documents\GitHub\Capstone_Wishlist_app\Capstone_Wishlist_app\obj\Debug\Capstone_Wishlist_app.Migrations.addedTitletoitemstable.resources
+C:\Users\Mesbrook\Documents\GitHub\Capstone_Wishlist_app\Capstone_Wishlist_app\obj\Debug\Capstone_Wishlist_app.Migrations.addedmaxlengthtoASIN.resources
