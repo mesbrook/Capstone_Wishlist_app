@@ -40,7 +40,7 @@ namespace RetailService {
                             SearchIndex = Enum.GetName(typeof(ItemCategory), category),
                             Keywords = keywords,
                             ItemPage = "1",
-                            ResponseGroup = new string[] { "ItemAttributes" }
+                            ResponseGroup = new string[] { "Images", "ItemAttributes" }
                         }
                     }
                 });
