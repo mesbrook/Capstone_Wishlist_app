@@ -10,14 +10,15 @@ using System.Web.Mvc;
 using System.Configuration;
 using RetailService;
 using System.ServiceModel.Web;
+using Capstone_Wishlist_app.Services;
 
 namespace Capstone_Wishlist_app.Controllers {
     public class HomeController : Controller {
 
-        private IRetailer _retailer;
+        private IRetailerClient _retailer;
 
-        private IRetailer Retailer {
-            get { return _retailer ?? new WebChannelFactory<IRetailer>("RetailService").CreateChannel(); }
+        private IRetailerClient Retailer {
+            get { return _retailer ?? new RetailerClient("http://localhost:8080/RetailService/Retailer.svc"); }
         }
 
         public ActionResult Index() {
@@ -54,8 +55,8 @@ namespace Capstone_Wishlist_app.Controllers {
             return View();
         }
 
-        public ActionResult Items() {
-            var items = Retailer.FindItems(ItemCategory.Toys, "minecraft lego set");
+        public async Task<ActionResult> Items() {
+            var items = await Retailer.FindItemsAsync(ItemCategory.Toys, "minecraft lego set");
             return View(items);
         }
     }
