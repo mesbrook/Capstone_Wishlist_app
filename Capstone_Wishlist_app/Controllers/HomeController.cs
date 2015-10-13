@@ -8,17 +8,27 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using System.Configuration;
-using RetailService;
 using System.ServiceModel.Web;
 using Capstone_Wishlist_app.Services;
 
 namespace Capstone_Wishlist_app.Controllers {
     public class HomeController : Controller {
+        private static string AmazonAccessKey {
+            get {
+                return ConfigurationManager.AppSettings["AWSAccessKeyId"];
+            }
+        }
 
-        private IRetailerClient _retailer;
+        private static string AmazonAssociateTag {
+            get {
+                return ConfigurationManager.AppSettings["AWSAssociatesId"];
+            }
+        }
 
-        private IRetailerClient Retailer {
-            get { return _retailer ?? new RetailerClient("http://localhost:8080/RetailService/Retailer.svc"); }
+        private IRetailer _retailer;
+
+        private IRetailer Retailer {
+            get { return _retailer ?? new AmazonRetailer(AmazonAssociateTag, AmazonAccessKey, "AWSECommerceServicePort"); }
         }
 
         public ActionResult Index() {

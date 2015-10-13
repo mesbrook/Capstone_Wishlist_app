@@ -196,3 +196,4 @@ FakesAssemblies/
 *.opt
 RetailService/Web.config
 *.orig
+Capstone_Wishlist_app/Web.config

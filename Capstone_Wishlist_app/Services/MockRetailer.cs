@@ -2,16 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using RetailService;
 using Newtonsoft.Json;
 using System.IO;
 using System.Threading.Tasks;
 
 namespace Capstone_Wishlist_app.Services {
-    public class MockRetailerClient : IRetailerClient {
+    public class MockRetailer : IRetailer {
         private string _itemFileName;
 
-        public MockRetailerClient(string itemFileName) {
+        public MockRetailer(string itemFileName) {
             _itemFileName = itemFileName;
         }
 
@@ -20,6 +19,10 @@ namespace Capstone_Wishlist_app.Services {
                 string serializedItems = reader.ReadToEnd();
                 return JsonConvert.DeserializeObject<Item[]>(serializedItems);
             }
+        }
+
+        public Task<Item[]> LookupItemsAsync(string[] itemIds) {
+            throw new NotImplementedException();
         }
     }
 }
