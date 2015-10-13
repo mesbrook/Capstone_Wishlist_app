@@ -163,17 +163,42 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ItemsController.cs" />
+    <Compile Include="DAL\WishlistContext.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201510042149110_InitialCreate.cs" />
+    <Compile Include="Migrations\201510042149110_InitialCreate.Designer.cs">
+      <DependentUpon>201510042149110_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201510100146443_change_database.cs" />
+    <Compile Include="Migrations\201510100146443_change_database.Designer.cs">
+      <DependentUpon>201510100146443_change_database.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201510100150044_edit_item_model.cs" />
+    <Compile Include="Migrations\201510100150044_edit_item_model.Designer.cs">
+      <DependentUpon>201510100150044_edit_item_model.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201510100205392_added Title to items table.cs" />
+    <Compile Include="Migrations\201510100205392_added Title to items table.Designer.cs">
+      <DependentUpon>201510100205392_added Title to items table.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201510100250284_added maxlength to ASIN.cs" />
+    <Compile Include="Migrations\201510100250284_added maxlength to ASIN.Designer.cs">
+      <DependentUpon>201510100250284_added maxlength to ASIN.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\Item.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\images\santa_gift.jpg" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -226,6 +251,11 @@
     <Content Include="Views\Account\RoleAddToUser.cshtml" />
     <Content Include="Views\Account\RoleCreate.cshtml" />
     <Content Include="Views\Home\Items.cshtml" />
+    <Content Include="Views\Items\Create.cshtml" />
+    <Content Include="Views\Items\Delete.cshtml" />
+    <Content Include="Views\Items\Details.cshtml" />
+    <Content Include="Views\Items\Edit.cshtml" />
+    <Content Include="Views\Items\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -242,6 +272,23 @@
       <Project>{30396b06-10b8-4f23-85a3-5a0a3a6a4eec}</Project>
       <Name>RetailService</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201510042149110_InitialCreate.resx">
+      <DependentUpon>201510042149110_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201510100146443_change_database.resx">
+      <DependentUpon>201510100146443_change_database.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201510100150044_edit_item_model.resx">
+      <DependentUpon>201510100150044_edit_item_model.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201510100205392_added Title to items table.resx">
+      <DependentUpon>201510100205392_added Title to items table.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201510100250284_added maxlength to ASIN.resx">
+      <DependentUpon>201510100250284_added maxlength to ASIN.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
