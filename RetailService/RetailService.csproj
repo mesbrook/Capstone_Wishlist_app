@@ -65,6 +65,10 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
+    <Content Include="App_Data\RetailService.mdf" />
+    <Content Include="App_Data\RetailService_log.ldf">
+      <DependentUpon>RetailService.mdf</DependentUpon>
+    </Content>
     <Content Include="Retailer.svc" />
     <Content Include="Web.config" />
     <Content Include="Service References\Amazon\RetailService.Amazon.BrowseNodeLookupResponse.datasource">
@@ -110,9 +114,7 @@
     <Compile Include="IRetailer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="App_Data\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="Service References\Amazon\AWSECommerceService.wsdl" />
     <None Include="Web.Debug.config">
