@@ -12,14 +12,14 @@ namespace RetailService {
 
         [OperationContract]
         [WebGet(
-            BodyStyle=WebMessageBodyStyle.Wrapped,
+            BodyStyle=WebMessageBodyStyle.Bare,
             ResponseFormat=WebMessageFormat.Json,
             UriTemplate="/items/find?category={category}&keywords={keywords}")]
         Item[] FindItems(ItemCategory category, string keywords);
 
         [OperationContract]
         [WebGet(
-            BodyStyle=WebMessageBodyStyle.Wrapped,
+            BodyStyle=WebMessageBodyStyle.Bare,
             ResponseFormat=WebMessageFormat.Json,
             UriTemplate="/items/lookup?itemIds={itemIds}")]
         Item[] LookupItems(string itemIds);
@@ -27,7 +27,7 @@ namespace RetailService {
         [OperationContract]
         [WebInvoke(
             Method = "POST",
-            BodyStyle = WebMessageBodyStyle.Wrapped,
+            BodyStyle = WebMessageBodyStyle.Bare,
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json,
             UriTemplate = "/placeOrder")]
@@ -35,14 +35,14 @@ namespace RetailService {
 
         [OperationContract]
         [WebGet(
-            BodyStyle = WebMessageBodyStyle.Wrapped,
+            BodyStyle = WebMessageBodyStyle.Bare,
             ResponseFormat = WebMessageFormat.Json,
             UriTemplate = "/order/{id}")]
         PlacedOrder GetOrder(string id);
 
         [OperationContract]
         [WebGet(
-            BodyStyle = WebMessageBodyStyle.Wrapped,
+            BodyStyle = WebMessageBodyStyle.Bare,
             ResponseFormat = WebMessageFormat.Json,
             UriTemplate = "/order/{id}/status")]
         OrderStatus GetOrderStatus(string id);

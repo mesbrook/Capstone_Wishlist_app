@@ -62,7 +62,40 @@ namespace RetailService {
         }
 
         public Item[] LookupItems(string itemIds) {
-            throw new NotImplementedException();
+            var ids = itemIds.Split(',');
+
+            if (ids.Length == 0) {
+                return new Item[] { };
+            }
+
+            var itemLookup = new ItemLookup {
+                    AssociateTag = AmazonAssociateTag,
+                    AWSAccessKeyId = AmazonAccessKey,
+                    Request = new ItemLookupRequest[] {
+                        new ItemLookupRequest {
+                            ItemId = ids.Length > 10 ? ids.Take(10).ToArray() : ids,
+                            IdType = ItemLookupRequestIdType.ASIN,
+                            IdTypeSpecified = true,
+                            ResponseGroup = new string[]{ "Images", "ItemAttributes" }
+                        }
+                    }
+                };
+
+            var lookupResult = _amazonClient.ItemLookup(itemLookup);
+            var items = new List<Item>();
+
+            foreach (var amazonItem in lookupResult.Items[0].Item) {
+                var item = new Item {
+                    Id = amazonItem.ASIN,
+                    ListPrice = decimal.Parse(amazonItem.ItemAttributes.ListPrice.Amount),
+                    Title = amazonItem.ItemAttributes.Title,
+                    ListingUrl = amazonItem.DetailPageURL,
+                    ImageUrl = amazonItem.SmallImage == null ? "" : amazonItem.SmallImage.URL
+                };
+                items.Add(item);
+            }
+
+            return items.ToArray();
         }
 
         public PlacedOrder PlaceOrder(Order order) {
