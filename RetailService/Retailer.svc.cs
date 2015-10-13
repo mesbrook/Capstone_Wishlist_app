@@ -60,5 +60,22 @@ namespace RetailService {
 
             return items.ToArray();
         }
+
+
+        public Item[] LookupItems(string itemIds) {
+            throw new NotImplementedException();
+        }
+
+        public PlacedOrder PlaceOrder(Order order) {
+            throw new NotImplementedException();
+        }
+
+        public PlacedOrder GetOrder(string id) {
+            throw new NotImplementedException();
+        }
+
+        public OrderStatus GetOrderStatus(int id) {
+            throw new NotImplementedException();
+        }
     }
 }
