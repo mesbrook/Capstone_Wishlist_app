@@ -61,7 +61,6 @@ namespace RetailService {
             return items.ToArray();
         }
 
-
         public Item[] LookupItems(string itemIds) {
             throw new NotImplementedException();
         }
@@ -74,7 +73,7 @@ namespace RetailService {
             throw new NotImplementedException();
         }
 
-        public OrderStatus GetOrderStatus(int id) {
+        public OrderStatus GetOrderStatus(string id) {
             throw new NotImplementedException();
         }
     }

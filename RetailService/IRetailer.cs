@@ -45,7 +45,7 @@ namespace RetailService {
             BodyStyle = WebMessageBodyStyle.Wrapped,
             ResponseFormat = WebMessageFormat.Json,
             UriTemplate = "/order/{id}/status")]
-        OrderStatus GetOrderStatus(int id);
+        OrderStatus GetOrderStatus(string id);
     }
 
     [DataContract]
