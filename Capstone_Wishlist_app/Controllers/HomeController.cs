@@ -4,15 +4,34 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using System.Configuration;
+using System.ServiceModel.Web;
+using Capstone_Wishlist_app.Services;
 
-namespace Capstone_Wishlist_app.Controllers
-{
-    public class HomeController : Controller
-    {
-        public ActionResult Index()
-        {
+namespace Capstone_Wishlist_app.Controllers {
+    public class HomeController : Controller {
+        private static string AmazonAccessKey {
+            get {
+                return ConfigurationManager.AppSettings["AWSAccessKeyId"];
+            }
+        }
+
+        private static string AmazonAssociateTag {
+            get {
+                return ConfigurationManager.AppSettings["AWSAssociatesId"];
+            }
+        }
+
+        private IRetailer _retailer;
+
+        private IRetailer Retailer {
+            get { return _retailer ?? new AmazonRetailer(AmazonAssociateTag, AmazonAccessKey, "AWSECommerceServicePort"); }
+        }
+
+        public ActionResult Index() {
             //*********************************This section of code is only used in the initial launch to assign the first user to use
             //********************************** the registration as an Admin. step 1 run the program with this section commented out
             //********************************** step 2: re-run the program with this comment not commented out. Stop the program and comment this section out forever more.
@@ -34,18 +53,21 @@ namespace Capstone_Wishlist_app.Controllers
             return View();
         }
 
-        public ActionResult About()
-        {
+        public ActionResult About() {
             //ViewBag.Message = "Your application description page.";
 
             return View();
         }
 
-        public ActionResult Contact()
-        {
+        public ActionResult Contact() {
             //ViewBag.Message = "Your contact page.";
 
             return View();
+        }
+
+        public async Task<ActionResult> Items() {
+            var items = await Retailer.FindItemsAsync(ItemCategory.Toys, "minecraft lego set");
+            return View(items);
         }
     }
 }
