@@ -35,7 +35,7 @@ namespace Capstone_Wishlist_app.Services {
             var items = searchResult.ItemSearchResponse.Items[0].Item;
             return items.Select(item => new Item {
                 Id = item.ASIN,
-                ListPrice = decimal.Parse(item.ItemAttributes.ListPrice.Amount),
+                ListPrice = ConvertToDecimalPrice(item.ItemAttributes.ListPrice),
                 Title = item.ItemAttributes.Title,
                 ListingUrl = item.DetailPageURL,
                 ImageUrl = item.SmallImage == null ? "" : item.SmallImage.URL
@@ -65,11 +65,15 @@ namespace Capstone_Wishlist_app.Services {
             var items = lookupResult.ItemLookupResponse.Items[0].Item;
             return items.Select(item => new Item {
                 Id = item.ASIN,
-                ListPrice = decimal.Parse(item.ItemAttributes.ListPrice.Amount),
+                ListPrice = ConvertToDecimalPrice(item.ItemAttributes.ListPrice),
                 Title = item.ItemAttributes.Title,
                 ListingUrl = item.DetailPageURL,
                 ImageUrl = item.SmallImage == null ? "" : item.SmallImage.URL
             }).ToArray();
+        }
+
+        private decimal ConvertToDecimalPrice(Price price) {
+            return decimal.Parse(price.Amount) / 100;
         }
     }
 }
