@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Threading.Tasks;
 using Capstone_Wishlist_app.Services.Amazon;
+using AmazonItem = Capstone_Wishlist_app.Services.Amazon.Item;
 
 namespace Capstone_Wishlist_app.Services {
     public class AmazonRetailer : IRetailer {
@@ -33,13 +34,12 @@ namespace Capstone_Wishlist_app.Services {
             var searchResult = await _amazonClient.ItemSearchAsync(new ItemSearchRequest1 { ItemSearch = itemSearch });
 
             var items = searchResult.ItemSearchResponse.Items[0].Item;
-            return items.Select(item => new Item {
-                Id = item.ASIN,
-                ListPrice = decimal.Parse(item.ItemAttributes.ListPrice.Amount),
-                Title = item.ItemAttributes.Title,
-                ListingUrl = item.DetailPageURL,
-                ImageUrl = item.SmallImage == null ? "" : item.SmallImage.URL
-            }).ToArray();
+
+            if (items == null) {
+                return new Item[0];
+            }
+
+            return items.Select(item => ToRetailerItem(item)).ToArray();
         }
 
 
@@ -63,13 +63,27 @@ namespace Capstone_Wishlist_app.Services {
 
             var lookupResult = await _amazonClient.ItemLookupAsync(new ItemLookupRequest1 { ItemLookup = itemLookup });
             var items = lookupResult.ItemLookupResponse.Items[0].Item;
-            return items.Select(item => new Item {
+            return items.Select(item => ToRetailerItem(item)).ToArray();
+        }
+
+        private static Item ToRetailerItem(AmazonItem item) {
+            return new Item {
                 Id = item.ASIN,
-                ListPrice = decimal.Parse(item.ItemAttributes.ListPrice.Amount),
+                ListPrice = ToDecimalPrice(item.ItemAttributes.ListPrice),
                 Title = item.ItemAttributes.Title,
                 ListingUrl = item.DetailPageURL,
-                ImageUrl = item.SmallImage == null ? "" : item.SmallImage.URL
-            }).ToArray();
+                ImageUrl = item.SmallImage == null ? "" : item.SmallImage.URL,
+                MinAgeMonths = ToAgeMonths(item.ItemAttributes.ManufacturerMinimumAge),
+                MaxAgeMonths = ToAgeMonths(item.ItemAttributes.ManufacturerMaximumAge),
+            };
+        }
+
+        private static decimal ToDecimalPrice(Price price) {
+            return price == null ? 0 : decimal.Parse(price.Amount) / 100;
+        }
+
+        private static int ToAgeMonths(DecimalWithUnits age) {
+            return age == null ? 0 : (int) age.Value;
         }
     }
 }

@@ -169,7 +169,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\ItemsController.cs" />
+    <Compile Include="Controllers\ItemController.cs" />
     <Compile Include="DAL\WishlistContext.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -328,14 +328,10 @@
     <Content Include="Views\Account\RoleIndex.cshtml" />
     <Content Include="Views\Account\RoleAddToUser.cshtml" />
     <Content Include="Views\Account\RoleCreate.cshtml" />
-    <Content Include="Views\Home\Items.cshtml" />
-    <Content Include="Views\Items\Create.cshtml" />
-    <Content Include="Views\Items\Delete.cshtml" />
-    <Content Include="Views\Items\Details.cshtml" />
-    <Content Include="Views\Items\Edit.cshtml" />
-    <Content Include="Views\Items\Index.cshtml" />
     <None Include="Service References\Services.Amazon\AWSECommerceService.wsdl" />
     <Content Include="Views\Shared\Info.cshtml" />
+    <Content Include="Views\Item\_SearchResults.cshtml" />
+    <Content Include="Views\Item\Find.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
@@ -367,6 +363,7 @@
   <ItemGroup>
     <WCFMetadataStorage Include="Service References\Services.Amazon\" />
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
