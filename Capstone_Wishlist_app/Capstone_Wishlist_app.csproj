@@ -194,10 +194,21 @@
     <Compile Include="Migrations\201510100250284_added maxlength to ASIN.Designer.cs">
       <DependentUpon>201510100250284_added maxlength to ASIN.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201510281837537_added family to DB.cs" />
+    <Compile Include="Migrations\201510281837537_added family to DB.Designer.cs">
+      <DependentUpon>201510281837537_added family to DB.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201510281912401_added child to DB.cs" />
+    <Compile Include="Migrations\201510281912401_added child to DB.Designer.cs">
+      <DependentUpon>201510281912401_added child to DB.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\Child.cs" />
+    <Compile Include="Models\Family.cs" />
     <Compile Include="Models\IdentityModels.cs" />
-    <Compile Include="Models\Item.cs" />
+    <Compile Include="Models\WishItem.cs" />
+    <Compile Include="Models\Wishlist.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service References\Services.Amazon\Reference.cs">
       <AutoGen>True</AutoGen>
@@ -358,6 +369,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201510100250284_added maxlength to ASIN.resx">
       <DependentUpon>201510100250284_added maxlength to ASIN.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201510281837537_added family to DB.resx">
+      <DependentUpon>201510281837537_added family to DB.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201510281912401_added child to DB.resx">
+      <DependentUpon>201510281912401_added child to DB.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
