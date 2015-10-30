@@ -1,0 +1,89 @@
+﻿@model Capstone_Wishlist_app.Models.Family
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Family</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ParentFirstName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ParentFirstName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ParentLastName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ParentLastName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Shipping_address)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Shipping_address)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Shipping_city)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Shipping_city)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Shipping_state)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Shipping_state)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Shipping_zipCode)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Shipping_zipCode)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Phone)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Phone)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

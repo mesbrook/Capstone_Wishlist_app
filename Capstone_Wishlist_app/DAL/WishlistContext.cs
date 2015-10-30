@@ -23,5 +23,7 @@ namespace Capstone_Wishlist_app.DAL
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
         }
+
+        public System.Data.Entity.DbSet<Capstone_Wishlist_app.ViewModels.CreateFamilyProfile> CreateFamilyProfiles { get; set; }
     }
 }

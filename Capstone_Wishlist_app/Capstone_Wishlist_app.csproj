@@ -168,6 +168,8 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\CreateFamilyController.cs" />
+    <Compile Include="Controllers\FamilyController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ItemController.cs" />
     <Compile Include="DAL\WishlistContext.cs" />
@@ -202,6 +204,14 @@
     <Compile Include="Migrations\201510281912401_added child to DB.Designer.cs">
       <DependentUpon>201510281912401_added child to DB.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201510291857129_family-child_link.cs" />
+    <Compile Include="Migrations\201510291857129_family-child_link.Designer.cs">
+      <DependentUpon>201510291857129_family-child_link.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201510301523597_added family profiles with child.cs" />
+    <Compile Include="Migrations\201510301523597_added family profiles with child.Designer.cs">
+      <DependentUpon>201510301523597_added family profiles with child.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Child.cs" />
@@ -222,6 +232,7 @@
     <Compile Include="Services\IRetailer.cs" />
     <Compile Include="Services\MockRetailer.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="ViewModels\CreateFamilyProfile.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
@@ -306,7 +317,9 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -343,6 +356,12 @@
     <Content Include="Views\Shared\Info.cshtml" />
     <Content Include="Views\Item\_SearchResults.cshtml" />
     <Content Include="Views\Item\Find.cshtml" />
+    <Content Include="Views\Family\Create.cshtml" />
+    <Content Include="Views\Family\Delete.cshtml" />
+    <Content Include="Views\Family\Details.cshtml" />
+    <Content Include="Views\Family\Edit.cshtml" />
+    <Content Include="Views\Family\Index.cshtml" />
+    <Content Include="Views\CreateFamily\CreateFamily.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
@@ -375,6 +394,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201510281912401_added child to DB.resx">
       <DependentUpon>201510281912401_added child to DB.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201510291857129_family-child_link.resx">
+      <DependentUpon>201510291857129_family-child_link.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201510301523597_added family profiles with child.resx">
+      <DependentUpon>201510301523597_added family profiles with child.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
