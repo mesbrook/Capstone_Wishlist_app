@@ -345,9 +345,9 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
-    <Content Include="Web.config">
-      <SubType>Designer</SubType>
-    </Content>
+    <Content Include="Views\Account\Register.cshtml" />
+    <Content Include="Web.config" />
+
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -372,7 +372,6 @@
     <Content Include="Views\Account\ForgotPasswordConfirmation.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Account\Manage.cshtml" />
-    <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Account\ResetPassword.cshtml" />
     <Content Include="Views\Account\ResetPasswordConfirmation.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
@@ -381,6 +380,7 @@
     <Content Include="Views\Account\RoleCreate.cshtml" />
     <None Include="Service References\Services.Amazon\AWSECommerceService.wsdl" />
     <Content Include="Views\Shared\Info.cshtml" />
+
     <Content Include="Views\Item\_SearchResults.cshtml" />
     <Content Include="Views\Item\Find.cshtml" />
     <Content Include="Views\Family\Create.cshtml" />
@@ -389,6 +389,8 @@
     <Content Include="Views\Family\Edit.cshtml" />
     <Content Include="Views\Family\Index.cshtml" />
     <Content Include="Views\CreateFamily\CreateFamily.cshtml" />
+    <Content Include="Views\Account\RegisterStaff.cshtml" />
+
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
