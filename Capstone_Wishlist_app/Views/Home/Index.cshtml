@@ -8,8 +8,15 @@
         <h1>Santa's Wishlist</h1>
         <div class="col-md-8">
             <p class="lead">Make A Difference Today.</p>
-            @*----------------------need to add link to donor form---------------------------------*@
-            <p><a href="" class="btn btn-primary btn-lg">Give a Gift &raquo;</a></p>
+            @*----------------------Url.Action("Register", "Account")---------------------------------*@
+            @if (Request.IsAuthenticated)
+            {
+                <p><a href="" class="btn btn-primary btn-lg">Give a Gift &raquo;</a></p>
+            }
+            else
+            {
+                <p><a href="@Url.Action("Register", "Account")" class="btn btn-primary btn-lg">Register as a Donor &raquo;</a></p>
+            }
         </div>
         <div class="col-md-4"><img src="~/Content/images/santa_gift.jpg" height="266" width="400" /></div>
     </div>
@@ -77,20 +84,20 @@
             <p><a class="btn btn-default" href="@Url.Action("RoleIndex", "Account")">Role Index &raquo;</a></p>
         </div>
         <div>
-        <h2>Approve Wishlists Items</h2>
-        <p>
-            To create new profiles and wishlists
-        </p>
-        @*-------------------------need to add link to wishlist form---------------------------*@
-        <p><a class="btn btn-default" href="@Url.Action("Index", "Items")">Approve Wishlist Items&raquo;</a></p>
-    </div>
-    <div>
-        <h2>Add Wishlists</h2>
-        <p>
-            To create new profiles and wishlists
-        </p>
-        @*-------------------------need to add link to wishlist form---------------------------*@
-        <p><a class="btn btn-default" href="">Add Wishlist &raquo;</a></p>
-    </div>
+            <h2>Approve Wishlists Items</h2>
+            <p>
+                To create new profiles and wishlists
+            </p>
+            @*-------------------------need to add link to wishlist form---------------------------*@
+            <p><a class="btn btn-default" href="@Url.Action("Index", "Items")">Approve Wishlist Items&raquo;</a></p>
+        </div>
+        <div>
+            <h2>Add Wishlists</h2>
+            <p>
+                To create new profiles and wishlists
+            </p>
+            @*-------------------------need to add link to wishlist form---------------------------*@
+            <p><a class="btn btn-default" href="">Add Wishlist &raquo;</a></p>
+        </div>
     }
 </div>

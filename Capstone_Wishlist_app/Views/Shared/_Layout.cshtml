@@ -24,6 +24,14 @@
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
                     <li>@Html.ActionLink("About", "About", "Home")</li>
                     <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                    
+                        @if (this.User.IsInRole("Admin"))
+                        {
+                            <li>@Html.ActionLink("Register Staff", "RegisterStaff", "Account")</li>
+                            //<li><a href="@Url.Action("Register", "Account")">Register Staff</a></li>
+                        }
+                        
+                   
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>

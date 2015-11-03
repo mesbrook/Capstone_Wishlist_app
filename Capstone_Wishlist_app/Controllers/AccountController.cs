@@ -85,6 +85,14 @@ namespace Capstone_Wishlist_app.Controllers
         //
         // GET: /Account/Register
         [AllowAnonymous]
+        public ActionResult RegisterStaff()
+        {
+            return View();
+        }
+
+        //
+        // GET: /Account/Register
+        [AllowAnonymous]
         public ActionResult Register()
         {
             return View();
