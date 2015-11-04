@@ -13,23 +13,6 @@ using Capstone_Wishlist_app.Services;
 
 namespace Capstone_Wishlist_app.Controllers {
     public class HomeController : Controller {
-        private static string AmazonAccessKey {
-            get {
-                return ConfigurationManager.AppSettings["AWSAccessKeyId"];
-            }
-        }
-
-        private static string AmazonAssociateTag {
-            get {
-                return ConfigurationManager.AppSettings["AWSAssociatesId"];
-            }
-        }
-
-        private IRetailer _retailer;
-
-        private IRetailer Retailer {
-            get { return _retailer ?? new AmazonRetailer(AmazonAssociateTag, AmazonAccessKey, "AWSECommerceServicePort"); }
-        }
 
         public ActionResult Index() {
             //*********************************This section of code is only used in the initial launch to assign the first user to use
@@ -64,11 +47,6 @@ namespace Capstone_Wishlist_app.Controllers {
             //ViewBag.Message = "Your contact page.";
 
             return View();
-        }
-
-        public async Task<ActionResult> Items() {
-            var items = await Retailer.FindItemsAsync(ItemCategory.Toys, "minecraft lego set");
-            return View(items);
         }
     }
 }

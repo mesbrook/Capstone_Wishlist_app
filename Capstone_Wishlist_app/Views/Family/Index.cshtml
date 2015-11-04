@@ -1,0 +1,76 @@
+﻿@model IEnumerable<Capstone_Wishlist_app.Models.Family>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.ParentFirstName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ParentLastName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Shipping_address)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Shipping_city)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Shipping_state)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Shipping_zipCode)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Phone)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Email)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.ParentFirstName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ParentLastName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Shipping_address)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Shipping_city)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Shipping_state)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Shipping_zipCode)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Phone)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Email)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.Family_ID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.Family_ID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.Family_ID })
+        </td>
+    </tr>
+}
+
+</table>

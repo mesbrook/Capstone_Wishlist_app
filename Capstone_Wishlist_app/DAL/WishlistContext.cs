@@ -13,11 +13,17 @@ namespace Capstone_Wishlist_app.DAL
 
         public WishlistContext() : base("WishlistContext") { }
 
-        public DbSet<Item> Items { get; set; }
+        public DbSet<WishItem> Items { get; set; }
+        public DbSet<Wishlist> WishLists { get; set; }
+        public DbSet<Child> Children { get; set; }
+        public DbSet<Family> Families { get; set; }
+        
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
         }
+
+        public System.Data.Entity.DbSet<Capstone_Wishlist_app.ViewModels.CreateFamilyProfile> CreateFamilyProfiles { get; set; }
     }
 }

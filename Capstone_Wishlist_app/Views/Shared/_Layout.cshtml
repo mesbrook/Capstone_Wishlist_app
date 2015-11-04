@@ -40,5 +40,23 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
+
+    <script type="text/javascript">
+    $(document).ready(function () {
+
+        if ('@TempData["Message"]' == 'Quote was edited successfully') {
+            alert('Quote was edited successfully');
+        }
+        if ('@TempData["Message"]' == 'Quote was deleted successfully') {
+            alert('Quote was deleted successfully');
+        }
+        if ('@TempData["Message"]' == 'Family and Child added successfully') {
+            alert('Quote was added successfully');
+        }
+        if ('@TempData["Message"]' == 'Error. Object is not valid') {
+            alert('Error. Object is not valid');
+        }
+    });
+    </script>
 </body>
 </html>
