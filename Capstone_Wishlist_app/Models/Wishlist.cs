@@ -32,5 +32,12 @@ namespace Capstone_Wishlist_app.Models
         {
             Filled = false;
         }
+
+        //The possible order statuses for a wishlist
+        public enum ItemStatus { Unapproved, Avaliable, Ordered, Shipping, Delivered };
+
+        //The order status of the wishlist, obtained from the status of the WishItem(s) in the wishlist
+        //The possible statuses are Unapproved, Avaliable, Ordered, Shipping, Delivered
+        public ItemStatus Status { get; set; }
     }
 }
