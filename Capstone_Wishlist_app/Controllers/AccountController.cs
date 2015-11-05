@@ -85,6 +85,14 @@ namespace Capstone_Wishlist_app.Controllers
         //
         // GET: /Account/Register
         [AllowAnonymous]
+        public ActionResult RegisterStaff()
+        {
+            return View();
+        }
+
+        //
+        // GET: /Account/Register
+        [AllowAnonymous]
         public ActionResult Register()
         {
             return View();
@@ -99,7 +107,8 @@ namespace Capstone_Wishlist_app.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser() { UserName = model.Email, Email = model.Email };
+               
+                var user = new ApplicationUser() { UserName = model.Email, Email = model.Email, Name = model.Name };
                 IdentityResult result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
