@@ -11,27 +11,28 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Owin;
 using Capstone_Wishlist_app.Models;
+using Capstone_Wishlist_app.DAL;
 
 namespace Capstone_Wishlist_app.Controllers
 {
     [Authorize]
     public class AccountController : Controller
     {
-        private ApplicationUserManager _userManager;
+        private WishlistUserManager _userManager;
 
         public AccountController()
         {
         }
 
-        public AccountController(ApplicationUserManager userManager)
+        public AccountController(WishlistUserManager userManager)
         {
             UserManager = userManager;
         }
 
-        public ApplicationUserManager UserManager {
+        public WishlistUserManager UserManager {
             get
             {
-                return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
+                return _userManager ?? HttpContext.GetOwinContext().GetUserManager<WishlistUserManager>();
             }
             private set
             {
@@ -108,7 +109,7 @@ namespace Capstone_Wishlist_app.Controllers
             if (ModelState.IsValid)
             {
                
-                var user = new ApplicationUser() { UserName = model.Email, Email = model.Email, Name = model.Name };
+                var user = new WishlistUser() { UserName = model.Email, Email = model.Email, Name = model.Name };
                 IdentityResult result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
@@ -430,7 +431,7 @@ namespace Capstone_Wishlist_app.Controllers
                 {
                     return View("ExternalLoginFailure");
                 }
-                var user = new ApplicationUser() { UserName = model.Email, Email = model.Email };
+                var user = new WishlistUser() { UserName = model.Email, Email = model.Email };
                 IdentityResult result = await UserManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
@@ -503,7 +504,7 @@ namespace Capstone_Wishlist_app.Controllers
             }
         }
 
-        private async Task SignInAsync(ApplicationUser user, bool isPersistent)
+        private async Task SignInAsync(WishlistUser user, bool isPersistent)
         {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ExternalCookie);
             AuthenticationManager.SignIn(new AuthenticationProperties() { IsPersistent = isPersistent }, await user.GenerateUserIdentityAsync(UserManager));
@@ -593,7 +594,7 @@ namespace Capstone_Wishlist_app.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult RoleCreate(string roleName)
         {
-            using (var context = new ApplicationDbContext())
+            using (var context = new WishlistContext())
             {
                 var roleStore = new RoleStore<IdentityRole>(context);
                 var roleManager = new RoleManager<IdentityRole>(roleStore);
@@ -610,7 +611,7 @@ namespace Capstone_Wishlist_app.Controllers
         public ActionResult RoleIndex()
         {
             List<string> roles;
-            using (var context = new ApplicationDbContext())
+            using (var context = new WishlistContext())
             {
                 var roleStore = new RoleStore<IdentityRole>(context);
                 var roleManager = new RoleManager<IdentityRole>(roleStore);
@@ -624,7 +625,7 @@ namespace Capstone_Wishlist_app.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult RoleDelete(string roleName)
         {
-            using (var context = new ApplicationDbContext())
+            using (var context = new WishlistContext())
             {
                 var roleStore = new RoleStore<IdentityRole>(context);
                 var roleManager = new RoleManager<IdentityRole>(roleStore);
@@ -643,13 +644,13 @@ namespace Capstone_Wishlist_app.Controllers
         {
             List<string> roles;
             List<string> users;
-            using (var context = new ApplicationDbContext())
+            using (var context = new WishlistContext())
             {
                 var roleStore = new RoleStore<IdentityRole>(context);
                 var roleManager = new RoleManager<IdentityRole>(roleStore);
 
-                var userStore = new UserStore<ApplicationUser>(context);
-                var userManager = new UserManager<ApplicationUser>(userStore);
+                var userStore = new UserStore<WishlistUser>(context);
+                var userManager = new UserManager<WishlistUser>(userStore);
 
                 users = (from u in userManager.Users select u.UserName).ToList();
                 roles = (from r in roleManager.Roles select r.Name).ToList();
@@ -667,13 +668,13 @@ namespace Capstone_Wishlist_app.Controllers
         {
             List<string> roles;
             List<string> users;
-            using (var context = new ApplicationDbContext())
+            using (var context = new WishlistContext())
             {
                 var roleStore = new RoleStore<IdentityRole>(context);
                 var roleManager = new RoleManager<IdentityRole>(roleStore);
 
-                var userStore = new UserStore<ApplicationUser>(context);
-                var userManager = new UserManager<ApplicationUser>(userStore);
+                var userStore = new UserStore<WishlistUser>(context);
+                var userManager = new UserManager<WishlistUser>(userStore);
 
                 users = (from u in userManager.Users select u.UserName).ToList();
 
@@ -715,15 +716,15 @@ namespace Capstone_Wishlist_app.Controllers
                 List<string> userRoles;
                 List<string> roles;
                 List<string> users;
-                using (var context = new ApplicationDbContext())
+                using (var context = new WishlistContext())
                 {
                     var roleStore = new RoleStore<IdentityRole>(context);
                     var roleManager = new RoleManager<IdentityRole>(roleStore);
 
                     roles = (from r in roleManager.Roles select r.Name).ToList();
 
-                    var userStore = new UserStore<ApplicationUser>(context);
-                    var userManager = new UserManager<ApplicationUser>(userStore);
+                    var userStore = new UserStore<WishlistUser>(context);
+                    var userManager = new UserManager<WishlistUser>(userStore);
 
                     users = (from u in userManager.Users select u.UserName).ToList();
 
@@ -753,15 +754,15 @@ namespace Capstone_Wishlist_app.Controllers
             List<string> userRoles;
             List<string> roles;
             List<string> users;
-            using (var context = new ApplicationDbContext())
+            using (var context = new WishlistContext())
             {
                 var roleStore = new RoleStore<IdentityRole>(context);
                 var roleManager = new RoleManager<IdentityRole>(roleStore);
 
                 roles = (from r in roleManager.Roles select r.Name).ToList();
 
-                var userStore = new UserStore<ApplicationUser>(context);
-                var userManager = new UserManager<ApplicationUser>(userStore);
+                var userStore = new UserStore<WishlistUser>(context);
+                var userManager = new UserManager<WishlistUser>(userStore);
 
                 users = (from u in userManager.Users select u.UserName).ToList();
 

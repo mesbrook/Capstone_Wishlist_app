@@ -189,7 +189,6 @@
     <Compile Include="Controllers\ItemController.cs" />
     <Compile Include="Controllers\WishlistController.cs" />
     <Compile Include="DAL\WishlistContext.cs" />
-    <Compile Include="DAL\WishlistInitializer.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
