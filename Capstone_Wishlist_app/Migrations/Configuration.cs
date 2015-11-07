@@ -1,7 +1,5 @@
 namespace Capstone_Wishlist_app.Migrations
 {
-    using Capstone_Wishlist_app.Models;
-    using System.Collections.Generic;
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
@@ -11,8 +9,7 @@ namespace Capstone_Wishlist_app.Migrations
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = false;
-            ContextKey = "Capstone_Wishlist_app.DAL.WishlistContext";
+            AutomaticMigrationsEnabled = true;
         }
 
         protected override void Seed(Capstone_Wishlist_app.DAL.WishlistContext context)

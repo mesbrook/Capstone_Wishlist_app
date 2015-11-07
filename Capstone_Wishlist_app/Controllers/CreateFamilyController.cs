@@ -51,9 +51,9 @@ namespace Capstone_Wishlist_app.Controllers
 
             var child = new Child()
             {
-                Family_ID = viewModel.Family_ID,
-                Child_FirstName = viewModel.Child_FirstName,
-                Child_LastName = viewModel.Child_LastName,
+                FamilyId = viewModel.Family_ID,
+                FirstName = viewModel.Child_FirstName,
+                LastName = viewModel.Child_LastName,
                 Age = viewModel.Age,
                 Gender = viewModel.Gender
             };

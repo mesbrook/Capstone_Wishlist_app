@@ -35,11 +35,6 @@ namespace Capstone_Wishlist_app.Controllers
         }
 
         [HttpGet]
-        public ActionResult Find() {
-            return View();
-        }
-
-        [HttpGet]
         public async Task<ActionResult> Search(ItemCategory category, string keywords) {
             var items = await _retailer.FindItemsAsync(category, keywords);
             return PartialView("_SearchResults", items);

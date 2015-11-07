@@ -11,7 +11,7 @@ namespace Capstone_Wishlist_app.Models
     public class Family
     {
         [Key]
-        public int Family_ID { get; set; }
+        public int Id { get; set; }
 
         [Required]
         [Display(Name = "Parent's First Name")]
@@ -38,7 +38,6 @@ namespace Capstone_Wishlist_app.Models
 
         [EmailAddress]
         public string Email { get; set; }
-
 
         public virtual ICollection<Child> Children { get; set; }
     }

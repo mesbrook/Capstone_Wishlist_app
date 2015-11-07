@@ -13,8 +13,8 @@ namespace Capstone_Wishlist_app.DAL
 
         public WishlistContext() : base("WishlistContext") { }
 
-        public DbSet<WishItem> Items { get; set; }
         public DbSet<Wishlist> WishLists { get; set; }
+        public DbSet<WishlistItem> WishlistItems { get; set; }
         public DbSet<Child> Children { get; set; }
         public DbSet<Family> Families { get; set; }
         

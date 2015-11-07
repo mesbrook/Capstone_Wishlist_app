@@ -11,24 +11,24 @@ namespace Capstone_Wishlist_app.Models
     public class Child
     {
         [Key]        
-        public int Child_ID { get; set; }
+        public int Id { get; set; }
 
-        [ForeignKey("Family")]
         [Required]
-        public int Family_ID { get; set; }
+        public int FamilyId { get; set; }
 
          [Required]
          [Display(Name = "Child's First Name")]
-        public string Child_FirstName { get; set; }
+        public string FirstName { get; set; }
 
          [Required]
         [Display(Name= "Child's Last Name")]
-        public string Child_LastName { get; set; }
+        public string LastName { get; set; }
 
         public int Age { get; set; }
 
         public char Gender { get; set; }
 
+        [ForeignKey("FamilyId")]
         public virtual Family Family { get; set; }
     }
 }
