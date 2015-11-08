@@ -58,7 +58,7 @@ namespace Capstone_Wishlist_app.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = await UserManager.FindAsync(model.Email, model.Password);
+                var user = await UserManager.FindAsync(model.Username, model.Password);
                 if (user != null)
                 {
                     
