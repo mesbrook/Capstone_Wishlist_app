@@ -18,6 +18,7 @@ namespace Capstone_Wishlist_app.DAL
         public DbSet<WishlistItem> WishlistItems { get; set; }
         public DbSet<Child> Children { get; set; }
         public DbSet<Family> Families { get; set; }
+        public DbSet<Address> Addresses { get; set; }
         
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

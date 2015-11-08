@@ -16,16 +16,22 @@ namespace Capstone_Wishlist_app.Migrations {
         }
 
         protected override void Seed(WishlistContext context) {
+            var address = new Address {
+                Id = 1,
+                LineOne = "1100 South Marietta Pkwy",
+                LineTwo = "",
+                City = "Marietta",
+                State = "Georgia",
+                PostalCode = "30064"
+            };
+
+            context.Addresses.AddOrUpdate(address);
             var family = new Family {
                 Id = 1,
                 ParentFirstName = "Robert",
                 ParentLastName = "Cratchet",
-                Shipping_address = "1100 South Marietta Pkwy",
-                Shipping_city = "Marietta",
-                Shipping_state = "Georgia",
-                Shipping_zipCode = "30064"
+                ShippingAddressId = 1
             };
-
             context.Families.AddOrUpdate(family);
 
             var child = new Child {
@@ -49,6 +55,7 @@ namespace Capstone_Wishlist_app.Migrations {
 
             SeedRoles(context);
             SeedUserAccounts(context);
+            base.Seed(context);
         }
 
         private static void SeedRoles(WishlistContext context) {
@@ -56,6 +63,9 @@ namespace Capstone_Wishlist_app.Migrations {
             var roleManager = new RoleManager<IdentityRole>(roleStore);
             roleManager.Create(new IdentityRole {
                 Name = "Admin"
+            });
+            roleManager.Create(new IdentityRole {
+                Name = "Family"
             });
         }
 
