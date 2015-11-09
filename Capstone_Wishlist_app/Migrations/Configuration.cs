@@ -6,6 +6,7 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity;
 using Capstone_Wishlist_app.DAL;
 using Capstone_Wishlist_app.Models;
+using System.Security.Claims;
 
 
 namespace Capstone_Wishlist_app.Migrations {
@@ -80,8 +81,19 @@ namespace Capstone_Wishlist_app.Migrations {
                 Name = "Eric",
             }, "OweBahama14");
 
+            userManager.Create(new WishlistUser {
+                UserName = "cratchet",
+                Email = "rcratchet@example.com",
+                EmailConfirmed = true,
+                Name = "Robert"
+            }, "SwazyDoze14");
+
             var ericUser = userManager.FindByName("eoneill");
             userManager.AddToRoles(ericUser.Id, "Admin");
+
+            var bobUser = userManager.FindByName("cratchet");
+            userManager.AddToRole(bobUser.Id, "Family");
+            userManager.AddClaim(bobUser.Id, new Claim("Family", (1).ToString()));
         }
     }
 }

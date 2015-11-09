@@ -32,6 +32,7 @@ namespace Capstone_Wishlist_app.Models {
 
     public class FindGiftsViewModel {
         public int WishlistId { get; set; }
+        public string ChildFirstName { get; set; }
     }
 
     public class FindGiftsResultsViewModel {

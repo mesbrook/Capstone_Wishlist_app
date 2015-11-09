@@ -14,36 +14,29 @@ using System.Security.Claims;
 using Capstone_Wishlist_app.DAL;
 using Capstone_Wishlist_app.Models;
 
-namespace Capstone_Wishlist_app.Controllers
-{
-    public class FamilyController : Controller
-    {
+namespace Capstone_Wishlist_app.Controllers {
+    public class FamilyController : Controller {
         private WishlistContext _db = new WishlistContext();
 
         // GET: Family
-        public ActionResult Index()
-        {
+        public ActionResult Index() {
             return View(_db.Families.ToList());
         }
 
         // GET: Family/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
+        public ActionResult Details(int? id) {
+            if (id == null) {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Family family = _db.Families.Find(id);
-            if (family == null)
-            {
+            if (family == null) {
                 return HttpNotFound();
             }
             return View(family);
         }
 
         // GET: Family/Create
-        public ActionResult Create()
-        {
+        public ActionResult Create() {
             //List<Child> ci = new List<Child> { new Child { Child_ID = 0, Child_FirstName = "", Child_LastName = "", Age = 0 } };
             return View();
         }
@@ -53,10 +46,8 @@ namespace Capstone_Wishlist_app.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Family_ID,ParentFirstName,ParentLastName,Shipping_address,Shipping_city,Shipping_state,Shipping_zipCode,Phone,Email")] Family family)
-        {
-            if (ModelState.IsValid)
-            {
+        public ActionResult Create([Bind(Include = "Family_ID,ParentFirstName,ParentLastName,Shipping_address,Shipping_city,Shipping_state,Shipping_zipCode,Phone,Email")] Family family) {
+            if (ModelState.IsValid) {
                 _db.Families.Add(family);
                 _db.SaveChanges();
                 return RedirectToAction("Index");
@@ -66,15 +57,12 @@ namespace Capstone_Wishlist_app.Controllers
         }
 
         // GET: Family/Edit/5
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
+        public ActionResult Edit(int? id) {
+            if (id == null) {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Family family = _db.Families.Find(id);
-            if (family == null)
-            {
+            if (family == null) {
                 return HttpNotFound();
             }
             return View(family);
@@ -85,10 +73,8 @@ namespace Capstone_Wishlist_app.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Family_ID,ParentFirstName,ParentLastName,Shipping_address,Shipping_city,Shipping_state,Shipping_zipCode,Phone,Email")] Family family)
-        {
-            if (ModelState.IsValid)
-            {
+        public ActionResult Edit([Bind(Include = "Family_ID,ParentFirstName,ParentLastName,Shipping_address,Shipping_city,Shipping_state,Shipping_zipCode,Phone,Email")] Family family) {
+            if (ModelState.IsValid) {
                 _db.Entry(family).State = EntityState.Modified;
                 _db.SaveChanges();
                 return RedirectToAction("Index");
@@ -112,7 +98,7 @@ namespace Capstone_Wishlist_app.Controllers
 
             TempData["firstTimeRegistration"] = true;
             TempData["familyCredentials"] = familyCredentials;
-            
+
             return RedirectToAction("RegisterChild", new { id = family.Id });
         }
 
@@ -193,16 +179,20 @@ namespace Capstone_Wishlist_app.Controllers
             };
 
             _db.Children.Add(child);
+
+            var wishlist = new Wishlist {
+                Child = child
+            };
+
+            _db.WishLists.Add(wishlist);
             await _db.SaveChangesAsync();
 
             TempData["registeredChild"] = child;
             return RedirectToAction("RegisterChild", new { id = registration.FamilyId });
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
+        protected override void Dispose(bool disposing) {
+            if (disposing) {
                 _db.Dispose();
             }
             base.Dispose(disposing);

@@ -19,6 +19,7 @@ namespace Capstone_Wishlist_app.DAL
         public DbSet<Child> Children { get; set; }
         public DbSet<Family> Families { get; set; }
         public DbSet<Address> Addresses { get; set; }
+        public DbSet<ChildBiography> Biographies { get; set; }
         
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
