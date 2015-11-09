@@ -38,7 +38,12 @@ namespace Capstone_Wishlist_app.Controllers {
         }
 
         public ActionResult FindGifts(int id) {
-            return View(new FindGiftsViewModel { WishlistId = id });
+            var wishlist = _context.WishLists.Find(id);
+
+            return View(new FindGiftsViewModel {
+                WishlistId = id,
+                ChildFirstName = wishlist.Child.FirstName
+            });
         }
 
         [HttpGet]
