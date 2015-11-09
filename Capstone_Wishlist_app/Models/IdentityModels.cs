@@ -3,6 +3,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System;
+using System.Linq;
+using System.Web.Mvc;
 
 namespace Capstone_Wishlist_app.Models
 {
@@ -17,6 +19,19 @@ namespace Capstone_Wishlist_app.Models
             var userIdentity = await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie);
             // Add custom user claims here
             return userIdentity;
+        }
+    }
+
+    public class FamilyAuthorizeAttribute : AuthorizeAttribute {
+        public override void OnAuthorization(AuthorizationContext context) {
+            var id = context.RequestContext.RouteData.Values["id"];
+            var claimsUser = (ClaimsPrincipal)context.HttpContext.User;
+
+            if (!claimsUser.HasClaim("Family", id.ToString()) && !claimsUser.IsInRole("Admin")) {
+                HandleUnauthorizedRequest(context);
+            }
+
+            base.OnAuthorization(context);
         }
     }
 }
