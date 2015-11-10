@@ -161,11 +161,14 @@ namespace Capstone_Wishlist_app.Controllers {
         public async Task<ActionResult> RegisterChild(int id) {
             var family = await _db.Families.FindAsync(id);
 
-            return View(new RegisterChildModel { FamilyId = id, FamilyName = family.ParentLastName });
+            return View(new RegisterChildModel {
+                FamilyId = id,
+                FamilyName = family.ParentLastName
+            });
         }
 
         [HttpPost]
-        public async Task<ActionResult> RegisterChild(RegisterChildModel registration) {
+        public async Task<ActionResult> RegisterChild(int id, RegisterChildModel registration) {
             if (!ModelState.IsValid) {
                 return View(registration);
             }
@@ -179,6 +182,14 @@ namespace Capstone_Wishlist_app.Controllers {
             };
 
             _db.Children.Add(child);
+
+            var bio = new ChildBiography {
+                Child = child,
+                CreationDate = DateTime.Now,
+                Text = registration.BiographyText
+            };
+
+            _db.Biographies.Add(bio);
 
             var wishlist = new Wishlist {
                 Child = child

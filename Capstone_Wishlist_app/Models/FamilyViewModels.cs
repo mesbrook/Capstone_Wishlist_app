@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Capstone_Wishlist_app.Models {
     public class RegisterFamilyModel {
@@ -42,7 +43,6 @@ namespace Capstone_Wishlist_app.Models {
     }
 
     public class RegisterChildModel {
-        [Required]
         public int FamilyId { get; set; }
 
         public string FamilyName { get; set; }
@@ -60,6 +60,10 @@ namespace Capstone_Wishlist_app.Models {
 
         [Required]
         public Gender Gender { get; set; }
+
+        [Required]
+        [Display(Name = "Short Biography")]
+        public string BiographyText { get; set; }
     }
 
     public class RegisteredFamilyViewModel {
