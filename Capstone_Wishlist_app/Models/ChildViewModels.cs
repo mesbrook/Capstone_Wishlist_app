@@ -23,7 +23,7 @@ namespace Capstone_Wishlist_app.Models {
         public string FirstName { get; set; }
 
         public int Age { get; set; }
-        public char Gender { get; set; }
+        public Gender Gender { get; set; }
 
         [Display(Name = "Short Biography")]
         public string BiographyText { get; set; }

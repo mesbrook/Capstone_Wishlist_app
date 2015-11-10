@@ -41,7 +41,7 @@ namespace Capstone_Wishlist_app.Migrations {
                 FirstName = "Tim",
                 LastName = "Cratchet",
                 Age = 7,
-                Gender = 'M'
+                Gender = Gender.Male
             };
 
             context.Children.AddOrUpdate(child);

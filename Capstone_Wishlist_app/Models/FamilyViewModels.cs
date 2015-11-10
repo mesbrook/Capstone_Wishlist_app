@@ -59,8 +59,7 @@ namespace Capstone_Wishlist_app.Models {
         public int Age { get; set; }
 
         [Required]
-        [RegularExpression("[mMfFuU]", ErrorMessage="Please enter gender as 'm' for male, 'f' for female, or 'u' for unspecified.")]
-        public char Gender { get; set; }
+        public Gender Gender { get; set; }
     }
 
     public class RegisteredFamilyViewModel {

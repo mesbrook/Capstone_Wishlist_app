@@ -57,15 +57,15 @@
                 @Html.DropDownListFor(model => model.Gender, new SelectListItem[] { 
                     new SelectListItem {
                         Text = "Male",
-                        Value = "M"
+                        Value = Gender.Male.ToString()
                     },
                     new SelectListItem {
                         Text = "Female",
-                        Value = "F"
+                        Value = Gender.Female.ToString()
                     },
                     new SelectListItem {
                         Text = "Unspecified",
-                        Value = "U"
+                        Value = Gender.Unspecified.ToString()
                     }
                 }, new { @class = "form-control"})
                 @Html.ValidationMessageFor(model => model.Gender, "", new { @class = "text-danger" })
