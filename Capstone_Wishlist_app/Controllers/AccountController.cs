@@ -583,13 +583,13 @@ namespace Capstone_Wishlist_app.Controllers
         #endregion
 
 
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         public ActionResult RoleCreate()
         {
             return View();
         }
 
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult RoleCreate(string roleName)
@@ -607,7 +607,7 @@ namespace Capstone_Wishlist_app.Controllers
             return RedirectToAction("RoleIndex", "Account");
         }
 
-        [Authorize(Roles = "Admin")]
+       // [Authorize(Roles = "Admin")]
         public ActionResult RoleIndex()
         {
             List<string> roles;
@@ -639,7 +639,7 @@ namespace Capstone_Wishlist_app.Controllers
             return RedirectToAction("RoleIndex", "Account");
         }
 
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         public ActionResult RoleAddToUser()
         {
             List<string> roles;
@@ -661,7 +661,7 @@ namespace Capstone_Wishlist_app.Controllers
             return View();
         }
 
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult RoleAddToUser(string roleName, string userName)
@@ -706,7 +706,7 @@ namespace Capstone_Wishlist_app.Controllers
             return View();
         }
 
-        [Authorize(Roles = "Admin")]
+       // [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult GetRoles(string userName)
@@ -747,7 +747,7 @@ namespace Capstone_Wishlist_app.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteRoleForUser(string userName, string roleName)
         {

@@ -192,6 +192,10 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201511110126255_adding table.cs" />
+    <Compile Include="Migrations\201511110126255_adding table.Designer.cs">
+      <DependentUpon>201511110126255_adding table.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Address.cs" />
@@ -377,6 +381,11 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Item\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201511110126255_adding table.resx">
+      <DependentUpon>201511110126255_adding table.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
