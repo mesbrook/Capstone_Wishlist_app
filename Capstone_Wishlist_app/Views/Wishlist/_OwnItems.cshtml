@@ -10,7 +10,7 @@
         <th>
             @Html.DisplayNameFor(model => model.ListPrice)
         </th>
-        <th>Age Range</th>
+        <th>Recommended Ages</th>
         <th></th>
     </tr>
 
@@ -25,7 +25,10 @@
         </td>
         <td>@AgeRange.FormatAgeRange(item.MinAgeMonths, item.MaxAgeMonths)</td>
         <td>
-            @Html.ActionLink("Remove", "RemoveItem", new { id = item.WishlistId, itemId = item.Id }, new { @class = "btn btn-default" })
+            <button type="button" class="btn btn-default" onclick="removeItem(this, @item.WishlistId, @item.Id)">
+                <span class="glyphicon glyphicon-remove"></span>
+                Remove this item
+            </button>
         </td>
     </tr>
 }
