@@ -40,4 +40,26 @@ namespace Capstone_Wishlist_app.Models {
         public IList<Item> Results { get; set; }
         public ICollection<string> ExistingItemIds { get; set; }
     }
+
+    public class OwnWishlistViewModel {
+        public int WishlistId { get; set; }
+        public int ChildId { get; set; }
+        public int FamilyId { get; set; }
+        public string ChildFirstName { get; set; }
+        public string ChildLastName { get; set; }
+        public IList<WishlistItemViewModel> Items { get; set; }
+    }
+
+    public class WishlistItemViewModel {
+        public int Id { get; set; }
+        public int WishlistId { get; set; }
+        public string ItemId { get; set; }
+        public string Title { get; set; }
+        public decimal ListPrice { get; set; }
+        public string ImageUrl { get; set; }
+        public string ListingUrl { get; set; }
+        public int MinAgeMonths { get; set; }
+        public int MaxAgeMonths { get; set; }
+        public WishlistItemStatus Status { get; set; }
+    }
 }

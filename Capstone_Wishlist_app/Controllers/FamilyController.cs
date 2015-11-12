@@ -202,6 +202,20 @@ namespace Capstone_Wishlist_app.Controllers {
             return RedirectToAction("RegisterChild", new { id = registration.FamilyId });
         }
 
+        [HttpGet]
+        public ActionResult ViewWishlists(int id) {
+            var wishlists = (
+                from w in _db.WishLists
+                where w.Child.FamilyId == id
+                select w).ToList();
+
+            return View(wishlists.Select(w => new FamilyWishlistViewModel {
+                WishlistId = w.Id,
+                ChildId = w.ChildId,
+                ChildFirstName = w.Child.FirstName,
+                Items = new List<WishlistItem>(w.Items)
+            }));
+        }
         protected override void Dispose(bool disposing) {
             if (disposing) {
                 _db.Dispose();
