@@ -2,22 +2,22 @@
 using Capstone_Wishlist_app.Services;
 
 namespace Capstone_Wishlist_app.Models {
-    public static class ItemViewExtensions {
-        public static string GetFormattedAgeRange(this Item item) {
-            if (item.MinAgeMonths == 0 && item.MaxAgeMonths == 0) {
+    public static class AgeRange {
+        public static string FormatAgeRange(int minAgeMonths, int maxAgeMonths) {
+            if (minAgeMonths == 0 && maxAgeMonths == 0) {
                 return "all ages";
             }
-            if (item.MinAgeMonths == 0) {
-                return "up to " + FormatAge(item.MaxAgeMonths);
+            if (minAgeMonths == 0) {
+                return "up to " + FormatAge(maxAgeMonths);
             }
-            if (item.MaxAgeMonths == 0) {
-                return FormatAge(item.MinAgeMonths) + " and up";
+            if (maxAgeMonths == 0) {
+                return FormatAge(minAgeMonths) + " and up";
             }
 
-            return FormatAge(item.MinAgeMonths) + " to " + FormatAge(item.MaxAgeMonths);
+            return FormatAge(minAgeMonths) + " to " + FormatAge(maxAgeMonths);
         }
 
-        private static string FormatAge(int ageMonths) {
+        public static string FormatAge(int ageMonths) {
             if (ageMonths < 24) {
                 return string.Format("{0} months");
             }
