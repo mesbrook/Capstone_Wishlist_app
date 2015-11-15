@@ -1,0 +1,55 @@
+﻿@using Capstone_Wishlist_app.Services
+@using Capstone_Wishlist_app.Models
+@model IEnumerable<Capstone_Wishlist_app.Models.Wishlist>
+
+@{
+    ViewBag.Title = "WishlistIndex";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            Child's Name
+        </th>        
+        <th>
+            Child's AGe
+        </th>
+        <th>
+            Child's Gender
+        </th>
+        <th>
+        Child's Bio
+        </th>
+        <th>
+            Whishlist
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(m => item.)
+        </td>        
+        <td>
+            @Html.DisplayFor(m => child.Age)
+        </td>
+        <td>
+            @Html.DisplayFor(m => child.Gender)
+        </td>
+        <td>
+            @Html.DisplayFor(m => child.Biographies)
+        </td>
+        <td>            
+            @*@Html.ActionLink("Details", "Details", new { id=item.Id })*@            
+        </td>
+    </tr>
+}
+
+</table>
