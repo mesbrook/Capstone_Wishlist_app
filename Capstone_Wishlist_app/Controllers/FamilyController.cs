@@ -160,6 +160,36 @@ namespace Capstone_Wishlist_app.Controllers {
         }
 
         [HttpGet]
+        public ActionResult Administer(int id) {
+            var family = _db.Families.Where(f => f.Id == id)
+                .Include(f => f.Children)
+                .Single();
+
+            return View(family);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> ResetPassword(int id) {
+            var familyUser = await _db.Users.Where(
+                u => u.Claims.Any(c => c.ClaimType == "Family" && c.ClaimValue == id.ToString())
+                ).FirstAsync();
+
+            using (var userStore = new UserStore<WishlistUser>(_db))
+            using (var userManager = new WishlistUserManager(userStore)) {
+                var password = GenerateRandomPassword(6);
+                var hashedPassword = userManager.PasswordHasher.HashPassword(password);
+                await userStore.SetPasswordHashAsync(familyUser, hashedPassword);
+                await userStore.UpdateAsync(familyUser);
+
+                TempData["familyCredentials"] = new FamilyCredentials {
+                    Username = familyUser.UserName,
+                    Password = password
+                };
+                return RedirectToAction("Administer", new { id = id });
+            }
+        }
+
+        [HttpGet]
         [FamilyAuthorize(Entity="Family")]
         public async Task<ActionResult> RegisterChild(int id) {
             var family = await _db.Families.FindAsync(id);
@@ -201,9 +231,22 @@ namespace Capstone_Wishlist_app.Controllers {
 
             _db.WishLists.Add(wishlist);
             await _db.SaveChangesAsync();
+            await AuthorizeChildAndWishlistForFamilyUser(child, wishlist);
 
             TempData["registeredChild"] = child;
             return RedirectToAction("RegisterChild", new { id = registration.FamilyId });
+        }
+
+        private async Task AuthorizeChildAndWishlistForFamilyUser(Child child, Wishlist wishlist) {
+            var familyUser = await _db.Users.Where(
+                u => u.Claims.Any(c => c.ClaimType == "Family" && c.ClaimValue == child.FamilyId.ToString())
+                ).FirstAsync();
+
+            using (var userStore = new UserStore<WishlistUser>(_db))
+            using (var userManager = new WishlistUserManager(userStore)) {
+                await userManager.AddClaimAsync(familyUser.Id, new Claim("Child", child.Id.ToString()));
+                await userManager.AddClaimAsync(familyUser.Id, new Claim("Wishlist", wishlist.Id.ToString()));
+            }
         }
 
         [HttpGet]
