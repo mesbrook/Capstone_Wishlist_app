@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Capstone_Wishlist_app.Services;
+using System.ComponentModel.DataAnnotations;
 
 namespace Capstone_Wishlist_app.Models {
     public static class ItemViewExtensions {
@@ -39,5 +40,23 @@ namespace Capstone_Wishlist_app.Models {
         public int WishlistId { get; set; }
         public IList<Item> Results { get; set; }
         public ICollection<string> ExistingItemIds { get; set; }
+    }
+
+    public class DonorListViewModel
+    {
+        public int ChildId { get; set; }
+        public int FamilyId { get; set; }
+        public int WishlistId { get; set; }
+
+        [Display(Name = "Name")]
+        public string FirstName { get; set; }
+
+        public int Age { get; set; }
+        public char Gender { get; set; }
+
+        [Display(Name = "Short Biography")]
+        public string BiographyText { get; set; }
+
+        IList<Item> items { get; set; }
     }
 }

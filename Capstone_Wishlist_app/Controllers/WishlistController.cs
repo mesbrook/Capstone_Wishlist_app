@@ -33,9 +33,25 @@ namespace Capstone_Wishlist_app.Controllers {
             _retailer = new AmazonRetailer(AmazonAssociateTag, AmazonAccessKey, "AWSECommerceServicePort");
         }
 
-        public ActionResult Index(int id) {
+        public ActionResult WishlistIndex() {
+
+            var results = from we in _context.WishLists.Include(c => c.Child)
+                                 join b in _context.Biographies on we.ChildId equals b.ChildId
+                                 //join i in _context.WishlistItems on new { WishlistID = we.Id } equals new { WishlistID = i.WishlistId}
+                                 select we;
+            var list = new List<DonorListViewModel>();
+            foreach (var item in results)
+            {
+                list.Add(new DonorListViewModel()
+                    {
+                       ChildId = item.ChildId,
+                       FirstName = item
+                    })
+            }
             return View();
         }
+
+        
 
         public ActionResult FindGifts(int id) {
             var wishlist = _context.WishLists.Find(id);
