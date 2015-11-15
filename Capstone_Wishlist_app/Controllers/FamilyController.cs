@@ -13,6 +13,8 @@ using System.Security.Cryptography;
 using System.Security.Claims;
 using Capstone_Wishlist_app.DAL;
 using Capstone_Wishlist_app.Models;
+using Microsoft.Owin.Security;
+using Microsoft.AspNet.Identity;
 
 namespace Capstone_Wishlist_app.Controllers {
     public class FamilyController : Controller {
@@ -83,13 +85,13 @@ namespace Capstone_Wishlist_app.Controllers {
         }
 
         [HttpGet]
-        [Authorize(Roles="Admin")]
+        [Authorize(Roles = "Admin")]
         public ActionResult Register() {
             return View(new RegisterFamilyModel { ShippingAddress = new CreateAddressModel { } });
         }
 
         [HttpPost]
-        [Authorize(Roles="Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> Register(RegisterFamilyModel registration) {
             if (!ModelState.IsValid) {
                 return View(registration);
@@ -133,7 +135,7 @@ namespace Capstone_Wishlist_app.Controllers {
                 .Where(c => char.IsLetter(c))
                 .ToArray();
             var userName = new string(userNameChars);
-            var password = GenerateRandomPassword(6);
+            var password = GenerateRandomPassword(8);
             var userStore = new UserStore<WishlistUser>(_db);
             var userManager = new WishlistUserManager(userStore);
             await userManager.CreateAsync(new WishlistUser {
@@ -152,9 +154,9 @@ namespace Capstone_Wishlist_app.Controllers {
             };
         }
 
-        private static string GenerateRandomPassword(int length) {
+        private static string GenerateRandomPassword(int maxLength) {
             var cryptoProvider = new RNGCryptoServiceProvider();
-            var randomBytes = new byte[length];
+            var randomBytes = new byte[(maxLength / 4) * 3];
             cryptoProvider.GetBytes(randomBytes);
             return Convert.ToBase64String(randomBytes);
         }
@@ -176,7 +178,7 @@ namespace Capstone_Wishlist_app.Controllers {
 
             using (var userStore = new UserStore<WishlistUser>(_db))
             using (var userManager = new WishlistUserManager(userStore)) {
-                var password = GenerateRandomPassword(6);
+                var password = GenerateRandomPassword(8);
                 var hashedPassword = userManager.PasswordHasher.HashPassword(password);
                 await userStore.SetPasswordHashAsync(familyUser, hashedPassword);
                 await userStore.UpdateAsync(familyUser);
@@ -190,7 +192,7 @@ namespace Capstone_Wishlist_app.Controllers {
         }
 
         [HttpGet]
-        [FamilyAuthorize(Entity="Family")]
+        [FamilyAuthorize(Entity = "Family")]
         public async Task<ActionResult> RegisterChild(int id) {
             var family = await _db.Families.FindAsync(id);
 
@@ -201,7 +203,7 @@ namespace Capstone_Wishlist_app.Controllers {
         }
 
         [HttpPost]
-        [FamilyAuthorize(Entity="Family")]
+        [FamilyAuthorize(Entity = "Family")]
         public async Task<ActionResult> RegisterChild(int id, RegisterChildModel registration) {
             if (!ModelState.IsValid) {
                 return View(registration);
@@ -246,11 +248,18 @@ namespace Capstone_Wishlist_app.Controllers {
             using (var userManager = new WishlistUserManager(userStore)) {
                 await userManager.AddClaimAsync(familyUser.Id, new Claim("Child", child.Id.ToString()));
                 await userManager.AddClaimAsync(familyUser.Id, new Claim("Wishlist", wishlist.Id.ToString()));
+
+                if (User.Identity.GetUserId() == familyUser.Id) {
+                    var claimsIdenity = (ClaimsIdentity) User.Identity;
+                    claimsIdenity.AddClaim(new Claim("Child", child.Id.ToString()));
+                    claimsIdenity.AddClaim(new Claim("Wishlist", wishlist.Id.ToString()));
+                    HttpContext.GetOwinContext().Authentication.SignIn(claimsIdenity);
+                }
             }
         }
 
         [HttpGet]
-        [FamilyAuthorize(Entity="Family")]
+        [FamilyAuthorize(Entity = "Family")]
         public ActionResult ViewWishlists(int id) {
             var wishlists = (
                 from w in _db.WishLists

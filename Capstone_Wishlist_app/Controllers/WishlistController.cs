@@ -37,6 +37,8 @@ namespace Capstone_Wishlist_app.Controllers {
             return View();
         }
 
+        [HttpGet]
+        [FamilyAuthorize(Entity="Wishlist")]
         public ActionResult FindGifts(int id) {
             var wishlist = _db.WishLists.Find(id);
 
@@ -47,6 +49,7 @@ namespace Capstone_Wishlist_app.Controllers {
         }
 
         [HttpGet]
+        [FamilyAuthorize(Entity="Wishlist")]
         public async Task<ActionResult> SearchItems(int id, ItemCategory category, string keywords) {
             var existingItemIds = await (
                 from wi in _db.WishlistItems
@@ -63,6 +66,7 @@ namespace Capstone_Wishlist_app.Controllers {
         }
 
         [HttpPost]
+        [FamilyAuthorize(Entity="Wishlist")]
         public async Task<ActionResult> AddItem(int id, string itemId) {
             var isItemOnWishlist = await (
                 from wi in _db.WishlistItems
@@ -87,6 +91,7 @@ namespace Capstone_Wishlist_app.Controllers {
         }
 
         [HttpGet]
+        [FamilyAuthorize(Entity="Wishlist")]
         public async Task<ActionResult> ViewOwn(int id) {
             var wishlist = _db.WishLists.Find(id);
             var items = await GetViewableItems(wishlist);
