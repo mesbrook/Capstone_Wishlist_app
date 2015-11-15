@@ -367,6 +367,7 @@
     <Content Include="Views\Family\ViewWishlists.cshtml" />
     <Content Include="Views\Wishlist\_OwnItems.cshtml" />
     <Content Include="Views\Wishlist\ViewOwn.cshtml" />
+    <Content Include="Views\Home\Unauthorized.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

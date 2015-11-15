@@ -83,11 +83,13 @@ namespace Capstone_Wishlist_app.Controllers {
         }
 
         [HttpGet]
+        [Authorize(Roles="Admin")]
         public ActionResult Register() {
             return View(new RegisterFamilyModel { ShippingAddress = new CreateAddressModel { } });
         }
 
         [HttpPost]
+        [Authorize(Roles="Admin")]
         public async Task<ActionResult> Register(RegisterFamilyModel registration) {
             if (!ModelState.IsValid) {
                 return View(registration);
@@ -158,6 +160,7 @@ namespace Capstone_Wishlist_app.Controllers {
         }
 
         [HttpGet]
+        [FamilyAuthorize(Entity="Family")]
         public async Task<ActionResult> RegisterChild(int id) {
             var family = await _db.Families.FindAsync(id);
 
@@ -168,6 +171,7 @@ namespace Capstone_Wishlist_app.Controllers {
         }
 
         [HttpPost]
+        [FamilyAuthorize(Entity="Family")]
         public async Task<ActionResult> RegisterChild(int id, RegisterChildModel registration) {
             if (!ModelState.IsValid) {
                 return View(registration);
@@ -203,6 +207,7 @@ namespace Capstone_Wishlist_app.Controllers {
         }
 
         [HttpGet]
+        [FamilyAuthorize(Entity="Family")]
         public ActionResult ViewWishlists(int id) {
             var wishlists = (
                 from w in _db.WishLists
