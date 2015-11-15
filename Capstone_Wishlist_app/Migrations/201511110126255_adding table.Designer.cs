@@ -6,14 +6,14 @@ namespace Capstone_Wishlist_app.Migrations
     using System.Data.Entity.Migrations.Infrastructure;
     using System.Resources;
     
-    [GeneratedCode("EntityFramework.Migrations", "6.1.0-30225")]
-    public sealed partial class addedmaxlengthtoASIN : IMigrationMetadata
+    [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
+    public sealed partial class addingtable : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(addedmaxlengthtoASIN));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(addingtable));
         
         string IMigrationMetadata.Id
         {
-            get { return "201510100250284_added maxlength to ASIN"; }
+            get { return "201511110126255_adding table"; }
         }
         
         string IMigrationMetadata.Source

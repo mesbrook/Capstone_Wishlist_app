@@ -8,23 +8,24 @@ using SendGrid;
 using System.Net;
 using System.Configuration;
 using System.Diagnostics;
+using Capstone_Wishlist_app.DAL;
 
 namespace Capstone_Wishlist_app
 {
     // Configure the application user manager used in this application. UserManager is defined in ASP.NET Identity and is used by the application.
 
-    public class ApplicationUserManager : UserManager<ApplicationUser>
+    public class WishlistUserManager : UserManager<WishlistUser>
     {
-        public ApplicationUserManager(IUserStore<ApplicationUser> store)
+        public WishlistUserManager(IUserStore<WishlistUser> store)
             : base(store)
         {
         }
 
-        public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context) 
+        public static WishlistUserManager Create(IdentityFactoryOptions<WishlistUserManager> options, IOwinContext context) 
         {
-            var manager = new ApplicationUserManager(new UserStore<ApplicationUser>(context.Get<ApplicationDbContext>()));
+            var manager = new WishlistUserManager(new UserStore<WishlistUser>(context.Get<WishlistContext>()));
             // Configure validation logic for usernames
-            manager.UserValidator = new UserValidator<ApplicationUser>(manager)
+            manager.UserValidator = new UserValidator<WishlistUser>(manager)
             {
                 AllowOnlyAlphanumericUserNames = false,
                 RequireUniqueEmail = true
@@ -40,11 +41,11 @@ namespace Capstone_Wishlist_app
             };
             // Register two factor authentication providers. This application uses Phone and Emails as a step of receiving a code for verifying the user
             // You can write your own provider and plug in here.
-            manager.RegisterTwoFactorProvider("PhoneCode", new PhoneNumberTokenProvider<ApplicationUser>
+            manager.RegisterTwoFactorProvider("PhoneCode", new PhoneNumberTokenProvider<WishlistUser>
             {
                 MessageFormat = "Your security code is: {0}"
             });
-            manager.RegisterTwoFactorProvider("EmailCode", new EmailTokenProvider<ApplicationUser>
+            manager.RegisterTwoFactorProvider("EmailCode", new EmailTokenProvider<WishlistUser>
             {
                 Subject = "Security Code",
                 BodyFormat = "Your security code is: {0}"
@@ -54,7 +55,7 @@ namespace Capstone_Wishlist_app
             var dataProtectionProvider = options.DataProtectionProvider;
             if (dataProtectionProvider != null)
             {
-                manager.UserTokenProvider = new DataProtectorTokenProvider<ApplicationUser>(dataProtectionProvider.Create("ASP.NET Identity"));
+                manager.UserTokenProvider = new DataProtectorTokenProvider<WishlistUser>(dataProtectionProvider.Create("ASP.NET Identity"));
             }
             return manager;
         }

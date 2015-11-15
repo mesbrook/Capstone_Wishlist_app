@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Data.Entity;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 
 namespace Capstone_Wishlist_app.Models
@@ -11,7 +12,7 @@ namespace Capstone_Wishlist_app.Models
     public class Family
     {
         [Key]
-        public int Family_ID { get; set; }
+        public int Id { get; set; }
 
         [Required]
         [Display(Name = "Parent's First Name")]
@@ -21,17 +22,7 @@ namespace Capstone_Wishlist_app.Models
         [Display(Name = "Parent's Last Name")]
         public string ParentLastName { get; set; }
 
-        [Required]
-        public string Shipping_address { get; set; }
-
-        [Required]
-        public string Shipping_city { get; set; }
-
-        [Required]
-        public string Shipping_state { get; set; }
-
-        [Required]
-        public string Shipping_zipCode { get; set; }
+        public int? ShippingAddressId { get; set; }
 
         [Phone]
         public string Phone { get; set; }
@@ -39,6 +30,8 @@ namespace Capstone_Wishlist_app.Models
         [EmailAddress]
         public string Email { get; set; }
 
+        [ForeignKey("ShippingAddressId")]
+        public virtual Address ShippingAddress { get; set; }
 
         public virtual ICollection<Child> Children { get; set; }
     }

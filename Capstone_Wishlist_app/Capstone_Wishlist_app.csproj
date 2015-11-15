@@ -183,57 +183,31 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Controllers\CreateFamilyController.cs" />
+    <Compile Include="Controllers\ChildController.cs" />
     <Compile Include="Controllers\FamilyController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ItemController.cs" />
+    <Compile Include="Controllers\WishlistController.cs" />
     <Compile Include="DAL\WishlistContext.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201510042149110_InitialCreate.cs" />
-    <Compile Include="Migrations\201510042149110_InitialCreate.Designer.cs">
-      <DependentUpon>201510042149110_InitialCreate.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201510100146443_change_database.cs" />
-    <Compile Include="Migrations\201510100146443_change_database.Designer.cs">
-      <DependentUpon>201510100146443_change_database.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201510100150044_edit_item_model.cs" />
-    <Compile Include="Migrations\201510100150044_edit_item_model.Designer.cs">
-      <DependentUpon>201510100150044_edit_item_model.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201510100205392_added Title to items table.cs" />
-    <Compile Include="Migrations\201510100205392_added Title to items table.Designer.cs">
-      <DependentUpon>201510100205392_added Title to items table.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201510100250284_added maxlength to ASIN.cs" />
-    <Compile Include="Migrations\201510100250284_added maxlength to ASIN.Designer.cs">
-      <DependentUpon>201510100250284_added maxlength to ASIN.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201510281837537_added family to DB.cs" />
-    <Compile Include="Migrations\201510281837537_added family to DB.Designer.cs">
-      <DependentUpon>201510281837537_added family to DB.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201510281912401_added child to DB.cs" />
-    <Compile Include="Migrations\201510281912401_added child to DB.Designer.cs">
-      <DependentUpon>201510281912401_added child to DB.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201510291857129_family-child_link.cs" />
-    <Compile Include="Migrations\201510291857129_family-child_link.Designer.cs">
-      <DependentUpon>201510291857129_family-child_link.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201510301523597_added family profiles with child.cs" />
-    <Compile Include="Migrations\201510301523597_added family profiles with child.Designer.cs">
-      <DependentUpon>201510301523597_added family profiles with child.cs</DependentUpon>
+    <Compile Include="Migrations\201511110126255_adding table.cs" />
+    <Compile Include="Migrations\201511110126255_adding table.Designer.cs">
+      <DependentUpon>201511110126255_adding table.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\Address.cs" />
     <Compile Include="Models\Child.cs" />
+    <Compile Include="Models\ChildBiography.cs" />
+    <Compile Include="Models\ChildViewModels.cs" />
     <Compile Include="Models\Family.cs" />
+    <Compile Include="Models\FamilyViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
-    <Compile Include="Models\WishItem.cs" />
+    <Compile Include="Models\WishlistItem.cs" />
     <Compile Include="Models\Wishlist.cs" />
+    <Compile Include="Models\WishlistViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service References\Services.Amazon\Reference.cs">
       <AutoGen>True</AutoGen>
@@ -247,7 +221,6 @@
     <Compile Include="Services\IRetailer.cs" />
     <Compile Include="Services\MockRetailer.cs" />
     <Compile Include="Startup.cs" />
-    <Compile Include="ViewModels\CreateFamilyProfile.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-theme.css" />
@@ -346,7 +319,9 @@
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
     <Content Include="Views\Account\Register.cshtml" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -379,8 +354,8 @@
     <Content Include="Views\Account\RoleCreate.cshtml" />
     <None Include="Service References\Services.Amazon\AWSECommerceService.wsdl" />
     <Content Include="Views\Shared\Info.cshtml" />
-    <Content Include="Views\Item\_SearchResults.cshtml" />
-    <Content Include="Views\Item\Find.cshtml" />
+    <Content Include="Views\Wishlist\_SearchResults.cshtml" />
+    <Content Include="Views\Wishlist\FindGifts.cshtml" />
     <Content Include="Views\Family\Create.cshtml" />
     <Content Include="Views\Family\Delete.cshtml" />
     <Content Include="Views\Family\Details.cshtml" />
@@ -388,6 +363,11 @@
     <Content Include="Views\Family\Index.cshtml" />
     <Content Include="Views\CreateFamily\CreateFamily.cshtml" />
     <Content Include="Views\Account\RegisterStaff.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\_Address.cshtml" />
+    <Content Include="Views\Family\Register.cshtml" />
+    <Content Include="Views\Family\RegisterChild.cshtml" />
+    <Content Include="Views\Child\EditProfile.cshtml" />
+    <Content Include="Views\Child\ViewProfile.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
@@ -397,38 +377,16 @@
     <None Include="Project_Readme.html" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201510042149110_InitialCreate.resx">
-      <DependentUpon>201510042149110_InitialCreate.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201510100146443_change_database.resx">
-      <DependentUpon>201510100146443_change_database.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201510100150044_edit_item_model.resx">
-      <DependentUpon>201510100150044_edit_item_model.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201510100205392_added Title to items table.resx">
-      <DependentUpon>201510100205392_added Title to items table.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201510100250284_added maxlength to ASIN.resx">
-      <DependentUpon>201510100250284_added maxlength to ASIN.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201510281837537_added family to DB.resx">
-      <DependentUpon>201510281837537_added family to DB.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201510281912401_added child to DB.resx">
-      <DependentUpon>201510281912401_added child to DB.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201510291857129_family-child_link.resx">
-      <DependentUpon>201510291857129_family-child_link.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201510301523597_added family profiles with child.resx">
-      <DependentUpon>201510301523597_added family profiles with child.cs</DependentUpon>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
     <WCFMetadataStorage Include="Service References\Services.Amazon\" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Views\Item\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201511110126255_adding table.resx">
+      <DependentUpon>201511110126255_adding table.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

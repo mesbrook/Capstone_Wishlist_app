@@ -1,34 +1,99 @@
-namespace Capstone_Wishlist_app.Migrations
-{
-    using Capstone_Wishlist_app.Models;
-    using System.Collections.Generic;
-    using System;
-    using System.Data.Entity;
-    using System.Data.Entity.Migrations;
-    using System.Linq;
+using System;
+using System.Data.Entity;
+using System.Data.Entity.Migrations;
+using System.Linq;
+using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNet.Identity;
+using Capstone_Wishlist_app.DAL;
+using Capstone_Wishlist_app.Models;
+using System.Security.Claims;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<Capstone_Wishlist_app.DAL.WishlistContext>
-    {
-        public Configuration()
-        {
-            AutomaticMigrationsEnabled = false;
-            ContextKey = "Capstone_Wishlist_app.DAL.WishlistContext";
+
+namespace Capstone_Wishlist_app.Migrations {
+    internal sealed class Configuration : DbMigrationsConfiguration<WishlistContext> {
+        public Configuration() {
+            AutomaticMigrationsEnabled = true;
+            AutomaticMigrationDataLossAllowed = true;
         }
 
-        protected override void Seed(Capstone_Wishlist_app.DAL.WishlistContext context)
-        {
-            //  This method will be called after migrating to the latest version.
+        protected override void Seed(WishlistContext context) {
+            var address = new Address {
+                Id = 1,
+                LineOne = "1100 South Marietta Pkwy",
+                LineTwo = "",
+                City = "Marietta",
+                State = "Georgia",
+                PostalCode = "30064"
+            };
 
-            //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
-            //  to avoid creating duplicate seed data. E.g.
-            //
-            //    context.People.AddOrUpdate(
-            //      p => p.FullName,
-            //      new Person { FullName = "Andrew Peters" },
-            //      new Person { FullName = "Brice Lambson" },
-            //      new Person { FullName = "Rowan Miller" }
-            //    );
-            //
+            context.Addresses.AddOrUpdate(address);
+            var family = new Family {
+                Id = 1,
+                ParentFirstName = "Robert",
+                ParentLastName = "Cratchet",
+                ShippingAddressId = 1
+            };
+            context.Families.AddOrUpdate(family);
+
+            var child = new Child {
+                Id = 1,
+                FamilyId = 1,
+                FirstName = "Tim",
+                LastName = "Cratchet",
+                Age = 7,
+                Gender = 'M'
+            };
+
+            context.Children.AddOrUpdate(child);
+
+            var wishlist = new Wishlist {
+                Id = 1,
+                ChildId = 1
+            };
+
+            context.WishLists.AddOrUpdate(wishlist);
+            context.SaveChanges();
+
+            SeedRoles(context);
+            SeedUserAccounts(context);
+            base.Seed(context);
+        }
+
+        private static void SeedRoles(WishlistContext context) {
+            var roleStore = new RoleStore<IdentityRole>(context);
+            var roleManager = new RoleManager<IdentityRole>(roleStore);
+            roleManager.Create(new IdentityRole {
+                Name = "Admin"
+            });
+            roleManager.Create(new IdentityRole {
+                Name = "Family"
+            });
+        }
+
+        private static void SeedUserAccounts(WishlistContext context) {
+            var userStore = new UserStore<WishlistUser>(context);
+            var userManager = new WishlistUserManager(userStore);
+
+            userManager.Create(new WishlistUser {
+                UserName = "eoneill",
+                Email = "eoneillspsu@gmail.com",
+                EmailConfirmed = true,
+                Name = "Eric",
+            }, "OweBahama14");
+
+            userManager.Create(new WishlistUser {
+                UserName = "cratchet",
+                Email = "rcratchet@example.com",
+                EmailConfirmed = true,
+                Name = "Robert"
+            }, "SwazyDoze14");
+
+            var ericUser = userManager.FindByName("eoneill");
+            userManager.AddToRoles(ericUser.Id, "Admin");
+
+            var bobUser = userManager.FindByName("cratchet");
+            userManager.AddToRole(bobUser.Id, "Family");
+            userManager.AddClaim(bobUser.Id, new Claim("Family", (1).ToString()));
         }
     }
 }
