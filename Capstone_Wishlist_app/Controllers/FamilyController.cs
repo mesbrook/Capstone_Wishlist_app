@@ -100,10 +100,14 @@ namespace Capstone_Wishlist_app.Controllers {
             var family = await CreateFamilyModel(registration);
             var familyCredentials = await CreateFamilyAccount(family);
 
-            TempData["firstTimeRegistration"] = true;
-            TempData["familyCredentials"] = familyCredentials;
+            TempData["registeredFamily"] = new RegisteredFamilyViewModel {
+                Id = family.Id,
+                LastName = family.ParentLastName,
+                Username = familyCredentials.Username,
+                Password = familyCredentials.Password
+            };
 
-            return RedirectToAction("RegisterChild", new { id = family.Id });
+            return RedirectToAction("Register");
         }
 
         private async Task<Family> CreateFamilyModel(RegisterFamilyModel registration) {
