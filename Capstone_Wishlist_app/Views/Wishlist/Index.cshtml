@@ -1,6 +1,6 @@
 ﻿@using Capstone_Wishlist_app.Services
 @using Capstone_Wishlist_app.Models
-@model IEnumerable<Capstone_Wishlist_app.Models.Wishlist>
+@model List<Capstone_Wishlist_app.Models.DonorListViewModel>
 
 @{
     ViewBag.Title = "WishlistIndex";
@@ -18,7 +18,7 @@
             Child's Name
         </th>        
         <th>
-            Child's AGe
+            Child's Age
         </th>
         <th>
             Child's Gender
@@ -35,16 +35,16 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(m => item.)
+            @Html.DisplayFor(model => item.FirstName)
         </td>        
         <td>
-            @Html.DisplayFor(m => child.Age)
+            @Html.DisplayFor(model => item.Age)
         </td>
         <td>
-            @Html.DisplayFor(m => child.Gender)
+            @Html.DisplayFor(model => item.Gender)
         </td>
         <td>
-            @Html.DisplayFor(m => child.Biographies)
+            @Html.DisplayFor(m => item.BiographyText)
         </td>
         <td>            
             @*@Html.ActionLink("Details", "Details", new { id=item.Id })*@            

@@ -33,22 +33,30 @@ namespace Capstone_Wishlist_app.Controllers {
             _retailer = new AmazonRetailer(AmazonAssociateTag, AmazonAccessKey, "AWSECommerceServicePort");
         }
 
-        public ActionResult WishlistIndex() {
+        public ActionResult Index() {
 
-            var results = from we in _context.WishLists.Include(c => c.Child)
-                                 join b in _context.Biographies on we.ChildId equals b.ChildId
+            var results = from we in _context.WishLists.Include(c => c.Child).ToList()
+                                 //join b in _context.Biographies on we.ChildId equals b.ChildId
                                  //join i in _context.WishlistItems on new { WishlistID = we.Id } equals new { WishlistID = i.WishlistId}
-                                 select we;
-            var list = new List<DonorListViewModel>();
+                                 select new {we};
+            //List<Wishlist> w = results.ToList();
+            //DonorListViewModel dvm = results.Select();
+          var list = new List<DonorListViewModel>();
             foreach (var item in results)
             {
-                list.Add(new DonorListViewModel()
-                    {
-                       ChildId = item.ChildId,
-                       FirstName = item
-                    })
+                list.Add(new DonorListViewModel(){
+                    ChildId = item.we.ChildId,
+                    FamilyId = item.we.Child.FamilyId,
+                    Wishlists = item.we.Child.Wishlists.ToList(),
+                    FirstName = item.we.Child.FirstName,
+                    Age = item.we.Child.Age,
+                    Gender = item.we.Child.Gender,
+                    //items = item.we.Items.ToList()
+                    //Biographies = item.we.Child.Biographies.Select(Text)
+
+                });
             }
-            return View();
+            return View(list);
         }
 
         

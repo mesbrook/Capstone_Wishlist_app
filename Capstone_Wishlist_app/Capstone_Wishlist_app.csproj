@@ -368,7 +368,7 @@
     <Content Include="Views\Family\RegisterChild.cshtml" />
     <Content Include="Views\Child\EditProfile.cshtml" />
     <Content Include="Views\Child\ViewProfile.cshtml" />
-    <Content Include="Views\Wishlist\WishlistIndex.cshtml" />
+    <Content Include="Views\Wishlist\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
