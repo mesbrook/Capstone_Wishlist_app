@@ -35,24 +35,21 @@ namespace Capstone_Wishlist_app.Controllers {
 
         public ActionResult Index() {
 
-            var results = from we in _context.WishLists.Include(c => c.Child).ToList()
-                                 //join b in _context.Biographies on we.ChildId equals b.ChildId
-                                 //join i in _context.WishlistItems on new { WishlistID = we.Id } equals new { WishlistID = i.WishlistId}
-                                 select new {we};
-            //List<Wishlist> w = results.ToList();
-            //DonorListViewModel dvm = results.Select();
+            var results = _context.WishLists.Include(c => c.Child).Include(i => i.Items).Include(w => w.Child.Biographies).ToList();
+                                 
           var list = new List<DonorListViewModel>();
             foreach (var item in results)
             {
+                //string[] WLitems = new string[item.Items.Select(w => w.ItemId).Count()];
+                string[] WLitems = item.Items.Select(w => w.ItemId).ToArray();
                 list.Add(new DonorListViewModel(){
-                    ChildId = item.we.ChildId,
-                    FamilyId = item.we.Child.FamilyId,
-                    Wishlists = item.we.Child.Wishlists.ToList(),
-                    FirstName = item.we.Child.FirstName,
-                    Age = item.we.Child.Age,
-                    Gender = item.we.Child.Gender,
-                    //items = item.we.Items.ToList()
-                    //Biographies = item.we.Child.Biographies.Select(Text)
+                    ChildId = item.ChildId,
+                    FamilyId = item.Child.FamilyId,
+                    WishlistId = item.Id,
+                    FirstName = item.Child.FirstName,
+                    Age = item.Child.Age,
+                    Gender = item.Child.Gender,
+                    Biographies = item.Child.Biographies.OrderBy(b => b.CreationDate).First().Text
 
                 });
             }

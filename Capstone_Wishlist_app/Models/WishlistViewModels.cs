@@ -46,7 +46,7 @@ namespace Capstone_Wishlist_app.Models {
     {
         public int ChildId { get; set; }
         public int FamilyId { get; set; }
-        public List<Wishlist>  Wishlists { get; set; }
+        public int  WishlistId { get; set; }
 
         [Display(Name = "Name")]
         public string FirstName { get; set; }
