@@ -34,4 +34,12 @@
     </div>
 </div>
 
+<script type="text/javascript">
+    function removeItem(element, itemId) {
+        var removeUrl = '@Url.Action("RemoveItem", "Wishlist", new { id = @Model.WishlistId })';
+        $.post(removeUrl, { itemId : itemId }, function(result){
+            $("#ownItems").html(result);
+        }, "html");
+    }
+</script>
 

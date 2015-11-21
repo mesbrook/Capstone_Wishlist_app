@@ -90,6 +90,26 @@ namespace Capstone_Wishlist_app.Controllers {
             return Json(new { IsOnWishlist = true });
         }
 
+        [HttpPost]
+        [FamilyAuthorize(Entity="Wishlist")]
+        public async Task<ActionResult> RemoveItem(int id, int itemId) {
+            var wishItem = await _db.WishlistItems.Where(wi => wi.Id == itemId)
+                .FirstOrDefaultAsync();
+
+            if (wishItem != null) {
+                _db.WishlistItems.Remove(wishItem);
+                await _db.SaveChangesAsync();
+                TempData["itemRemoved"] = wishItem.ItemId;
+            }
+            
+            var wishlist = await _db.WishLists.Where(w => w.Id == id)
+                .Include(w => w.Items)
+                .FirstAsync();
+            var items = await GetViewableItems(wishlist);
+
+            return PartialView("_OwnItems", items);
+        }
+
         [HttpGet]
         [FamilyAuthorize(Entity="Wishlist")]
         public async Task<ActionResult> ViewOwn(int id) {

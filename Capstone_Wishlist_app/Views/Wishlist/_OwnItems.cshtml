@@ -1,8 +1,11 @@
 ﻿@model IEnumerable<Capstone_Wishlist_app.Models.WishlistItemViewModel>
 @using Capstone_Wishlist_app.Models
 
+@if (TempData.ContainsKey("removedItem")) {
+}
 <table class="table">
     <tr>
+        <th>Status</th>
         <th>Image</th>
         <th>
             @Html.DisplayNameFor(model => model.Title)
@@ -16,6 +19,16 @@
 
 @foreach (var item in Model) {
     <tr>
+        <td>
+            @switch (item.Status) {
+                case WishlistItemStatus.Unapproved:
+                    <text>
+                        <i class="fa fa-star-o"></i>
+                        Unapproved
+                    </text>
+                    break;
+            }
+        </td>
         <td><img src=@item.ImageUrl /></td>
         <td>
             <a href=@item.ListingUrl>@item.Title</a>
@@ -25,7 +38,7 @@
         </td>
         <td>@AgeRange.FormatAgeRange(item.MinAgeMonths, item.MaxAgeMonths)</td>
         <td>
-            <button type="button" class="btn btn-default" onclick="removeItem(this, @item.WishlistId, @item.Id)">
+            <button type="button" class="btn btn-default" onclick="removeItem(this, @item.Id)">
                 <span class="glyphicon glyphicon-remove"></span>
                 Remove this item
             </button>
