@@ -2,13 +2,14 @@
 @using Capstone_Wishlist_app.Models
 
 @{
+    ViewBag.FamilyId = Model.FamilyId;
     ViewBag.Title = "ViewWishlists";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="row">
     <div class="col-md-12">
-        <h2>Family Wishlists</h2>
+        <h2>@Model.FamilyName Family Wishlists</h2>
         @foreach(var wl in Model.Wishlists) {
             <hr/>
             @Html.DisplayFor(m => wl, "_FamilyWishlist");
