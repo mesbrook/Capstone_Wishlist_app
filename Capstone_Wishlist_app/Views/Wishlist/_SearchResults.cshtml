@@ -23,7 +23,7 @@
                     @string.Format("{0:C}", item.ListPrice)
                 </td>
                 <td>
-                    @item.GetFormattedAgeRange()
+                    @AgeRange.FormatAgeRange(item.MinAgeMonths, item.MaxAgeMonths)
                 </td>
                 <td>
                     @if (Model.ExistingItemIds.Contains(item.Id)) {

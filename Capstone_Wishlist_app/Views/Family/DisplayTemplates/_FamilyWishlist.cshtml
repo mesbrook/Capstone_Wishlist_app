@@ -1,0 +1,35 @@
+﻿@model Capstone_Wishlist_app.Models.FamilyWishlistViewModel
+@using Capstone_Wishlist_app.Models
+
+<h3>
+    <a href=@Url.Action("ViewOwn", "Wishlist", new {id = Model.WishlistId })>
+        @Model.ChildFirstName's Wishlist
+    </a>
+    @if (!Model.Items.Any()) {
+        <small class="text-warning">
+            <i class="fa fa-ban"></i>
+            No items on list!
+        </small>
+    } else {
+        <small>
+            <i class="fa fa-gift"></i>
+            @Model.Items.Count items
+        </small>
+    }
+</h3>
+<label class="control-label">Donation Progress</label>
+<div class="progress">
+    <div class="progress-bar progress-bar-striped active" role="progressbar" style="min-width:4em; width:@Model.Items.GetPercentDonated()%">
+        <i class="fa fa-gift"></i>
+        @Model.Items.GetCountDonated()
+    </div>
+</div>
+<div class="btn-group">
+    <a href=@Url.Action("FindGifts", "Wishlist", new { id = Model.WishlistId }) class="btn btn-default">
+        <i class="fa fa-gift"></i>
+        <i class="fa fa-search"></i>
+        Find gifts for @Model.ChildFirstName
+    </a>
+</div>
+
+

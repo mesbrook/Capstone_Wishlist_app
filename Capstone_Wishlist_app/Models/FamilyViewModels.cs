@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Capstone_Wishlist_app.Models {
     public class RegisterFamilyModel {
@@ -42,7 +43,6 @@ namespace Capstone_Wishlist_app.Models {
     }
 
     public class RegisterChildModel {
-        [Required]
         public int FamilyId { get; set; }
 
         public string FamilyName { get; set; }
@@ -59,12 +59,16 @@ namespace Capstone_Wishlist_app.Models {
         public int Age { get; set; }
 
         [Required]
-        [RegularExpression("[mMfFuU]", ErrorMessage="Please enter gender as 'm' for male, 'f' for female, or 'u' for unspecified.")]
-        public char Gender { get; set; }
+        public Gender Gender { get; set; }
+
+        [Required]
+        [Display(Name = "Short Biography")]
+        public string BiographyText { get; set; }
     }
 
     public class RegisteredFamilyViewModel {
-        public int FamilyId { get; set; }
+        public int Id { get; set; }
+        public string LastName { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
     }
@@ -72,5 +76,21 @@ namespace Capstone_Wishlist_app.Models {
     public class FamilyCredentials {
         public string Username { get; set; }
         public string Password { get; set; }
+    }
+
+    public class FamilyWishlistsViewModel {
+        public int FamilyId { get; set; }
+        public string FamilyName { get; set; }
+        public ICollection<FamilyWishlistViewModel> Wishlists { get; set; }
+    }
+
+    public class FamilyWishlistViewModel {
+        public int WishlistId { get; set; }
+        public int ChildId { get; set; }
+
+        [Display(Name = "Child's Name")]
+        public string ChildFirstName { get; set; }
+
+        public IList<WishlistItem> Items { get; set; }
     }
 }
