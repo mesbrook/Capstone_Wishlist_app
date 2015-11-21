@@ -3,15 +3,30 @@
 
 @{
     ViewBag.FamilyId = Model.FamilyId;
-    ViewBag.Title = "ViewWishlists";
+    ViewBag.Title = "Wishlists";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<h2>@Model.FamilyName Family Wishlists</h2>
 <div class="row">
     <div class="col-md-12">
-        <h2>@Model.FamilyName Family Wishlists</h2>
-        @foreach(var wl in Model.Wishlists) {
-            <hr/>
+        <ol class="breadcrumb">
+            <li>
+                <a href=@Url.Action("Index", "Home")>
+                    <i class="fa fa-home"></i>
+                    Home
+                </a>
+            </li>
+            <li class="active">
+                <i class="fa fa-file-text"></i>
+                Family Wishlists
+            </li>
+        </ol>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        @foreach (var wl in Model.Wishlists) {
             @Html.DisplayFor(m => wl, "_FamilyWishlist");
         }
     </div>
