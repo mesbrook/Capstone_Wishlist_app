@@ -24,12 +24,12 @@ namespace Capstone_Wishlist_app.Controllers {
             }
         }
 
-        private WishlistContext _context;
+        private WishlistContext _db;
         private IRetailer _retailer;
 
         public WishlistController()
             : base() {
-            _context = new WishlistContext();
+            _db = new WishlistContext();
             _retailer = new AmazonRetailer(AmazonAssociateTag, AmazonAccessKey, "AWSECommerceServicePort");
         }
 
@@ -56,10 +56,12 @@ namespace Capstone_Wishlist_app.Controllers {
             return View(WLlist);
         }
 
-        
+
+        [HttpGet]
+        [FamilyAuthorize(Entity="Wishlist")]
 
         public ActionResult FindGifts(int id) {
-            var wishlist = _context.WishLists.Find(id);
+            var wishlist = _db.WishLists.Find(id);
 
             return View(new FindGiftsViewModel {
                 WishlistId = id,
@@ -68,9 +70,10 @@ namespace Capstone_Wishlist_app.Controllers {
         }
 
         [HttpGet]
+        [FamilyAuthorize(Entity="Wishlist")]
         public async Task<ActionResult> SearchItems(int id, ItemCategory category, string keywords) {
             var existingItemIds = await (
-                from wi in _context.WishlistItems
+                from wi in _db.WishlistItems
                 where wi.WishlistId == id
                 select wi.ItemId).ToListAsync();
             var items = await _retailer.FindItemsAsync(category, keywords);
@@ -84,9 +87,10 @@ namespace Capstone_Wishlist_app.Controllers {
         }
 
         [HttpPost]
+        [FamilyAuthorize(Entity="Wishlist")]
         public async Task<ActionResult> AddItem(int id, string itemId) {
             var isItemOnWishlist = await (
-                from wi in _context.WishlistItems
+                from wi in _db.WishlistItems
                 where wi.WishlistId == id && wi.ItemId == itemId
                 select wi
                 ).AnyAsync();
@@ -101,10 +105,45 @@ namespace Capstone_Wishlist_app.Controllers {
                 Status = WishlistItemStatus.Unapproved,
             };
 
-            _context.WishlistItems.Add(wishItem);
-            await _context.SaveChangesAsync();
+            _db.WishlistItems.Add(wishItem);
+            await _db.SaveChangesAsync();
 
             return Json(new { IsOnWishlist = true });
+        }
+
+        [HttpGet]
+        [FamilyAuthorize(Entity="Wishlist")]
+        public async Task<ActionResult> ViewOwn(int id) {
+            var wishlist = _db.WishLists.Find(id);
+            var items = await GetViewableItems(wishlist);
+
+            return View(new OwnWishlistViewModel {
+                WishlistId = wishlist.Id,
+                ChildId = wishlist.ChildId,
+                FamilyId = wishlist.Child.FamilyId,
+                ChildFirstName = wishlist.Child.FirstName,
+                ChildLastName = wishlist.Child.LastName,
+                Items = items
+            });
+        }
+
+        private async Task<IList<WishlistItemViewModel>> GetViewableItems(Wishlist wishlist) {
+            var itemIds = wishlist.Items.Select(i => i.ItemId).ToArray();
+            var retailItems = await _retailer.LookupItemsAsync(itemIds);
+
+            return wishlist.Items.Join(retailItems, wi => wi.ItemId, ri => ri.Id,
+                (wi, ri) => new WishlistItemViewModel {
+                    Id = wi.Id,
+                    WishlistId = wi.WishlistId,
+                    ItemId = wi.ItemId,
+                    Status = wi.Status,
+                    Title = ri.Title,
+                    ListingUrl = ri.ListingUrl,
+                    ImageUrl = ri.ImageUrl,
+                    ListPrice = ri.ListPrice,
+                    MinAgeMonths = ri.MinAgeMonths,
+                    MaxAgeMonths = ri.MaxAgeMonths
+                }).ToList();
         }
     }
 }

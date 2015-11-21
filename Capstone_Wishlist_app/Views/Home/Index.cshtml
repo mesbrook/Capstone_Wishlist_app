@@ -2,50 +2,26 @@
     ViewBag.Title = "Home Page";
 }
 
-<div class="jumbotron">
-    <div class="container">
-
-        <h1>Santa's Wishlist</h1>
-        <div class="col-md-8">
-            <p class="lead">Make A Difference Today.</p>
-            @*----------------------Url.Action("Register", "Account")---------------------------------*@
-            @if (Request.IsAuthenticated)
-            {
-                <p><a href="" class="btn btn-primary btn-lg">Give a Gift &raquo;</a></p>
-            }
-            else
-            {
-                <p><a href="@Url.Action("Register", "Account")" class="btn btn-primary btn-lg">Register as a Donor &raquo;</a></p>
-            }
+@if (!User.Identity.IsAuthenticated || User.IsInRole("Donor")) {
+    <div class="jumbotron">
+        <div class="container">
+            <h1>Santa's Wishlist</h1>
+            <div class="col-md-8">
+                <p class="lead">Make A Difference Today.</p>
+                @*----------------------Url.Action("Register", "Account")---------------------------------*@
+                @if (Request.IsAuthenticated) {
+                    <p><a href="" class="btn btn-primary btn-lg">Give a Gift &raquo;</a></p>
+                } else {
+                    <p><a href="@Url.Action("Register", "Account")" class="btn btn-primary btn-lg">Register as a Donor &raquo;</a></p>
+                }
+            </div>
+            <div class="col-md-4"><img src="~/Content/images/santa_gift.jpg" height="266" width="400" class="img-responsive" /></div>
         </div>
-        <div class="col-md-4"><img src="~/Content/images/santa_gift.jpg" height="266" width="400" /></div>
     </div>
+}
 
-</div>
-
-<div class="row">
-    @if ((!(this.User.IsInRole("Admin"))) && (!(this.User.IsInRole("Moderator"))))
-    {
-        <div class="col-md-3, col-lg-4">
-            <h2>The Vision</h2>
-            <p>
-                The end of year holiday season is historically a difficult time for impoverished families that want to provide happy memories for their children.
-                This system is designed to help those children by facilitating gift-giving by charitable donors to children in need.
-            </p>
-            @*<p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>*@
-        </div>
-        <div class="col-md-6, col-lg-8">
-            <h2>Santa's Wishlist</h2>
-            <p>
-                The end of year holiday season is historically a difficult time for impoverished families that want to provide happy memories for their children.
-                This system is designed to help those children by facilitating gift-giving by charitable donors to children in need.
-            </p>
-            @*<p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>*@
-        </div>
-
-    }
-    else if (this.User.IsInRole("Moderator"))
-    {
+@if (this.User.IsInRole("Moderator")) {
+    <div class="row">
         <div class="col-md-3, col-lg-4">
             <h2>Add Wishlists</h2>
             <p>
@@ -55,17 +31,14 @@
             <p><a class="btn btn-default" href="">Add Wishlist &raquo;</a></p>
         </div>
 
-    <div class="col-md-3, col-lg-4">
-        <h2>Register a Family</h2>
-        <p>To register a family's and add a child's profile</p>
-        <p><a class="btn btn-default" href="@Url.Action("Register", "Family")">Family Registration &raquo;</a></p>
+        <div class="col-md-3, col-lg-4">
+            <h2>Adding a Family Profile</h2>
+            <p>To add a family's and child's profile</p>
+            <p><a class="btn btn-default" href="@Url.Action("CreateFamily", "CreateFamily")">Add Family Profile &raquo;</a></p>
+        </div>
     </div>
-
-
-
-    }
-    else if (this.User.IsInRole("Admin"))
-    {
+} else if (this.User.IsInRole("Admin")) {
+    <div class="row">
         <div class="col-md-4">
             <h2>Add Role to User</h2>
             <p>
@@ -97,7 +70,7 @@
     </div>
 
         <div class="col-md-4">
-		<h2>Approve Wishlists Items</h2>
+            <h2>Approve Wishlists Items</h2>
             <p>
                 To create new profiles and wishlists
             </p>
@@ -106,14 +79,61 @@
         </div>
 
         <div class="col-md-4">
-			<h2>Add Wishlists</h2>
+            <h2>Add Wishlists</h2>
             <p>
                 To create new profiles and wishlists
             </p>
             @*-------------------------need to add link to wishlist form---------------------------*@
             <p><a class="btn btn-default" href="">Add Wishlist &raquo;</a></p>
-		</div>
-
-            
-    }
-</div>
+        </div>
+    </div>
+} else if (ViewData.ContainsKey("FamilyId")) {
+    <br />
+    <div class="jumbotron">
+        <h1>Welcome To Santa's Wishlist</h1>
+        <p>See the quick links below to start creating wishlists.</p>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="list-group">
+                <a href=@Url.Action("RegisterChild", "Family", new { id = ViewBag.FamilyId }) class="list-group-item">
+                    <h4 class="list-group-item-heading">
+                        <i class="fa fa-user-plus"></i>
+                        Register a Child
+                    </h4>
+                    <p class="list-group-item-text">
+                        Set up a child's profile and create a wishlist.
+                    </p>
+                </a>
+            </div>
+            <div class="list-group">
+                <a href=@Url.Action("ViewWishlists", "Family", new { id = ViewBag.FamilyId }) class="list-group-item">
+                    <h4 class="list-group-item-heading">
+                        <i class="fa fa-file-text"></i>
+                        Family Wishlists
+                    </h4>
+                    <p class="list-group-item-text">
+                        See a list of all wishlists owned by the family.
+                    </p>
+                </a>
+            </div>
+        </div>
+    </div>
+} else {
+    <div class="row">
+        <div class="col-md-3, col-lg-4">
+            <h2>The Vision</h2>
+            <p>
+                The end of year holiday season is historically a difficult time for impoverished families that want to provide happy memories for their children.
+                This system is designed to help those children by facilitating gift-giving by charitable donors to children in need.
+            </p>
+        </div>
+        <div class="col-md-6, col-lg-8">
+            <h2>Santa's Wishlist</h2>
+            <p>
+                The end of year holiday season is historically a difficult time for impoverished families that want to provide happy memories for their children.
+                This system is designed to help those children by facilitating gift-giving by charitable donors to children in need.
+            </p>
+        </div>
+    </div>
+}

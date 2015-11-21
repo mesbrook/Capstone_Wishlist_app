@@ -24,7 +24,7 @@ namespace Capstone_Wishlist_app.Models {
 
         public int Age { get; set; }
 
-        public char Gender { get; set; }
+        public Gender Gender { get; set; }
 
         [ForeignKey("FamilyId")]
         public virtual Family Family { get; set; }
@@ -32,5 +32,11 @@ namespace Capstone_Wishlist_app.Models {
         public virtual ICollection<Wishlist> Wishlists { get; set; }
 
         public virtual ICollection<ChildBiography> Biographies { get; set; }
+    }
+
+    public enum Gender {
+        Unspecified = 0,
+        Male = 1,
+        Female = 2
     }
 }

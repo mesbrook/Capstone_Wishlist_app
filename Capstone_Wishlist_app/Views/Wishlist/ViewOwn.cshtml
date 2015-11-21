@@ -1,0 +1,37 @@
+﻿@model Capstone_Wishlist_app.Models.OwnWishlistViewModel
+
+@{
+    ViewBag.Title = "View Wishlist";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Gifts on @Model.ChildFirstName @Model.ChildLastName's Wishlist</h2>
+<div class="row">
+    <div class="col-md-12">
+        <ol class="breadcrumb">
+            <li>
+                <a href=@Url.Action("Index", "Home")>
+                    <i class="fa fa-home"></i>
+                    Home
+                </a>
+            </li>
+            <li class="active">
+                <a href=@Url.Action("ViewWishlists", "Family", new { id = Model.FamilyId })>
+                    <i class="fa fa-file-text"></i>
+                    Family Wishlists
+                </a>
+            </li>
+            <li class="active">@Model.ChildFirstName's Wishlist</li>
+        </ol>
+        <div id="ownItems">
+            @Html.Partial("_OwnItems", Model.Items)
+        </div>
+        <a href=@Url.Action("FindGifts", "Wishlist", new { id = Model.WishlistId }) class="btn btn-default">
+            <i class="fa fa-gift"></i>
+            <i class="fa fa-search"></i>
+            Find more gifts for @Model.ChildFirstName
+        </a>
+    </div>
+</div>
+
+

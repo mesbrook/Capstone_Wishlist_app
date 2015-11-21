@@ -1,0 +1,36 @@
+﻿@model IEnumerable<Capstone_Wishlist_app.Models.WishlistItemViewModel>
+@using Capstone_Wishlist_app.Models
+
+<table class="table">
+    <tr>
+        <th>Image</th>
+        <th>
+            @Html.DisplayNameFor(model => model.Title)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ListPrice)
+        </th>
+        <th>Recommended Ages</th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td><img src=@item.ImageUrl /></td>
+        <td>
+            <a href=@item.ListingUrl>@item.Title</a>
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ListPrice)
+        </td>
+        <td>@AgeRange.FormatAgeRange(item.MinAgeMonths, item.MaxAgeMonths)</td>
+        <td>
+            <button type="button" class="btn btn-default" onclick="removeItem(this, @item.WishlistId, @item.Id)">
+                <span class="glyphicon glyphicon-remove"></span>
+                Remove this item
+            </button>
+        </td>
+    </tr>
+}
+
+</table>
