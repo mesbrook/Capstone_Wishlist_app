@@ -48,5 +48,9 @@ namespace Capstone_Wishlist_app.Controllers {
 
             return View();
         }
+
+        public ActionResult Unauthorized() {
+            return View();
+        }
     }
 }

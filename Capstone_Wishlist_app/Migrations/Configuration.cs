@@ -25,8 +25,9 @@ namespace Capstone_Wishlist_app.Migrations {
                 State = "Georgia",
                 PostalCode = "30064"
             };
-
             context.Addresses.AddOrUpdate(address);
+            context.SaveChanges();
+
             var family = new Family {
                 Id = 1,
                 ParentFirstName = "Robert",
@@ -34,6 +35,7 @@ namespace Capstone_Wishlist_app.Migrations {
                 ShippingAddressId = 1
             };
             context.Families.AddOrUpdate(family);
+            context.SaveChanges();
 
             var child = new Child {
                 Id = 1,
@@ -41,16 +43,15 @@ namespace Capstone_Wishlist_app.Migrations {
                 FirstName = "Tim",
                 LastName = "Cratchet",
                 Age = 7,
-                Gender = 'M'
+                Gender = Gender.Male
             };
-
             context.Children.AddOrUpdate(child);
+            context.SaveChanges();
 
             var wishlist = new Wishlist {
                 Id = 1,
                 ChildId = 1
             };
-
             context.WishLists.AddOrUpdate(wishlist);
             context.SaveChanges();
 
@@ -75,25 +76,27 @@ namespace Capstone_Wishlist_app.Migrations {
             var userManager = new WishlistUserManager(userStore);
 
             userManager.Create(new WishlistUser {
-                UserName = "eoneill",
-                Email = "eoneillspsu@gmail.com",
+                UserName = "jmarley",
+                Email = "jmarley@santawishlist.com",
                 EmailConfirmed = true,
-                Name = "Eric",
+                Name = "Jacob Marley",
             }, "OweBahama14");
 
+            var jakeUser = userManager.FindByName("jmarley");
+            userManager.AddToRoles(jakeUser.Id, WishlistUser.AdminRole);
+
             userManager.Create(new WishlistUser {
-                UserName = "cratchet",
+                UserName = "rcratchet",
                 Email = "rcratchet@example.com",
                 EmailConfirmed = true,
                 Name = "Robert"
             }, "SwazyDoze14");
 
-            var ericUser = userManager.FindByName("eoneill");
-            userManager.AddToRoles(ericUser.Id, "Admin");
-
-            var bobUser = userManager.FindByName("cratchet");
+            var bobUser = userManager.FindByName("rcratchet");
             userManager.AddToRole(bobUser.Id, "Family");
             userManager.AddClaim(bobUser.Id, new Claim("Family", (1).ToString()));
+            userManager.AddClaim(bobUser.Id, new Claim("Child", (1).ToString()));
+            userManager.AddClaim(bobUser.Id, new Claim("Wishlist", (1).ToString()));
         }
     }
 }

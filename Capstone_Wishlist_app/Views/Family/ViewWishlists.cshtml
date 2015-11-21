@@ -1,0 +1,37 @@
+﻿@model IEnumerable<Capstone_Wishlist_app.Models.FamilyWishlistViewModel>
+@using Capstone_Wishlist_app.Models
+
+@{
+    ViewBag.Title = "ViewWishlists";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Family Wishlists</h2>
+
+<table class="table">
+    <tr>
+        <th>Wishlist</th>
+        <th>Items</th>
+        <th>Actions</th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>@item.ChildFirstName's Wishlist</td>
+        <td>
+            <span class="sw-gift-status glyphicon glyphicon-plus-sign"></span>
+            @item.Items.Count(w => w.Status == WishlistItemStatus.Unapproved)
+        </td>
+        <td>
+            @Html.ActionLink("Find Gifts for " + item.ChildFirstName, "FindGifts", "Wishlist", new { id = @item.WishlistId }, null)
+        </td>
+    </tr>
+}
+
+</table>
+
+<style type="text/css">
+    .sw-gift-status {
+        margin-right: 5px;
+    }
+</style>

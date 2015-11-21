@@ -1,9 +1,34 @@
 ﻿@model Capstone_Wishlist_app.Models.RegisterFamilyModel
+@using Capstone_Wishlist_app.Models
+
 @{
     ViewBag.Title = "Register a Family";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <h2>Register a Family</h2>
+@if (TempData["registeredFamily"] != null) {
+    var newFamily = (RegisteredFamilyViewModel) TempData["registeredFamily"];
+
+    <div class="well">
+        <p class="text-success">
+            <span class="glyphicon glyphicon-check"></span>
+            The @newFamily.LastName family has been successfully registered.
+        </p>
+        <p>
+            Family members can use the credentials below to log in.
+            Please note the password and pass it on to the family's representative immediately.
+            <b>The password below can not be recovered after this page is closed or reloaded.</b> 
+            It can be reset to a new value if the value below is lost.
+        </p>
+        <dl class="dl-horizontal">
+            <dt>UserName</dt>
+            <dd>@newFamily.Username</dd>
+            <dt>Password</dt>
+            <dd>@newFamily.Password</dd>
+        </dl>
+        <p>@Html.ActionLink("Register children for this family", "RegisterChild", new { id = newFamily.Id }, new { @class = "btn btn-default" })</p>
+    </div>
+}
 
 @using (Html.BeginForm()) {
     @Html.AntiForgeryToken()
