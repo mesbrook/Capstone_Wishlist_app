@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Linq;
+using System.Collections.Generic;
 using Capstone_Wishlist_app.Services;
 
 namespace Capstone_Wishlist_app.Models {
@@ -61,5 +63,22 @@ namespace Capstone_Wishlist_app.Models {
         public int MinAgeMonths { get; set; }
         public int MaxAgeMonths { get; set; }
         public WishlistItemStatus Status { get; set; }
+    }
+
+    public static class WishlistItemViewExtensions {
+        private static readonly IReadOnlyCollection<WishlistItemStatus> donatedStatuses = new[] {
+            WishlistItemStatus.Ordered,
+            WishlistItemStatus.Shipping,
+            WishlistItemStatus.Delivered };
+
+        public static int GetPercentDonated(this IList<WishlistItem> items) {
+            var itemCount = items.Count;
+            var donatedCount = items.GetCountDonated();
+            return (int) ((float) donatedCount / Math.Max(itemCount, 1) * 100);
+        }
+
+        public static int GetCountDonated(this IList<WishlistItem> items) {
+            return items.Count(i => donatedStatuses.Contains(i.Status));
+        }
     }
 }

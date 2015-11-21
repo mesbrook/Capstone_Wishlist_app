@@ -78,12 +78,19 @@ namespace Capstone_Wishlist_app.Models {
         public string Password { get; set; }
     }
 
+    public class FamilyWishlistsViewModel {
+        public int FamilyId { get; set; }
+        public string FamilyName { get; set; }
+        public ICollection<FamilyWishlistViewModel> Wishlists { get; set; }
+    }
+
     public class FamilyWishlistViewModel {
         public int WishlistId { get; set; }
         public int ChildId { get; set; }
 
         [Display(Name = "Child's Name")]
         public string ChildFirstName { get; set; }
+
         public IList<WishlistItem> Items { get; set; }
     }
 }

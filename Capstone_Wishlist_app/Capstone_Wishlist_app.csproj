@@ -378,6 +378,7 @@
     <Content Include="Views\Home\Unauthorized.cshtml" />
     <Content Include="Views\Family\Administer.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\_Address.cshtml" />
+    <Content Include="Views\Family\DisplayTemplates\_FamilyWishlist.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
