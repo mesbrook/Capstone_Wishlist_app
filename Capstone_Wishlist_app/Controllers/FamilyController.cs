@@ -25,65 +25,6 @@ namespace Capstone_Wishlist_app.Controllers {
             return View(_db.Families.ToList());
         }
 
-        // GET: Family/Details/5
-        public ActionResult Details(int? id) {
-            if (id == null) {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Family family = _db.Families.Find(id);
-            if (family == null) {
-                return HttpNotFound();
-            }
-            return View(family);
-        }
-
-        // GET: Family/Create
-        public ActionResult Create() {
-            //List<Child> ci = new List<Child> { new Child { Child_ID = 0, Child_FirstName = "", Child_LastName = "", Age = 0 } };
-            return View();
-        }
-
-        // POST: Family/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Family_ID,ParentFirstName,ParentLastName,Shipping_address,Shipping_city,Shipping_state,Shipping_zipCode,Phone,Email")] Family family) {
-            if (ModelState.IsValid) {
-                _db.Families.Add(family);
-                _db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-
-            return View(family);
-        }
-
-        // GET: Family/Edit/5
-        public ActionResult Edit(int? id) {
-            if (id == null) {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Family family = _db.Families.Find(id);
-            if (family == null) {
-                return HttpNotFound();
-            }
-            return View(family);
-        }
-
-        // POST: Family/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Family_ID,ParentFirstName,ParentLastName,Shipping_address,Shipping_city,Shipping_state,Shipping_zipCode,Phone,Email")] Family family) {
-            if (ModelState.IsValid) {
-                _db.Entry(family).State = EntityState.Modified;
-                _db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(family);
-        }
-
         [HttpGet]
         [Authorize(Roles = "Admin")]
         public ActionResult Register() {
