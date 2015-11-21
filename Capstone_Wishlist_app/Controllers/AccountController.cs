@@ -61,15 +61,6 @@ namespace Capstone_Wishlist_app.Controllers
                 var user = await UserManager.FindAsync(model.Username, model.Password);
                 if (user != null)
                 {
-                    
-                    if (!await UserManager.IsEmailConfirmedAsync(user.Id))
-                    {
-                        string callbackUrl = await SendEmailConfirmationTokenAsync(user.Id, "Confirm your account-Resend");
-                        ViewBag.errorMessage = "You must have a confirmed email to log on. "
-                             + "The confirmation token has been resent to your email account."; 
-                        return View("Error");
-                    }
-                    //var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe);
                     await SignInAsync(user, model.RememberMe);
                     return RedirectToLocal(returnUrl);
                 }

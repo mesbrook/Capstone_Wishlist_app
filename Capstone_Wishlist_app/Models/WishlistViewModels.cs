@@ -2,22 +2,22 @@
 using Capstone_Wishlist_app.Services;
 
 namespace Capstone_Wishlist_app.Models {
-    public static class ItemViewExtensions {
-        public static string GetFormattedAgeRange(this Item item) {
-            if (item.MinAgeMonths == 0 && item.MaxAgeMonths == 0) {
+    public static class AgeRange {
+        public static string FormatAgeRange(int minAgeMonths, int maxAgeMonths) {
+            if (minAgeMonths == 0 && maxAgeMonths == 0) {
                 return "all ages";
             }
-            if (item.MinAgeMonths == 0) {
-                return "up to " + FormatAge(item.MaxAgeMonths);
+            if (minAgeMonths == 0) {
+                return "up to " + FormatAge(maxAgeMonths);
             }
-            if (item.MaxAgeMonths == 0) {
-                return FormatAge(item.MinAgeMonths) + " and up";
+            if (maxAgeMonths == 0) {
+                return FormatAge(minAgeMonths) + " and up";
             }
 
-            return FormatAge(item.MinAgeMonths) + " to " + FormatAge(item.MaxAgeMonths);
+            return FormatAge(minAgeMonths) + " to " + FormatAge(maxAgeMonths);
         }
 
-        private static string FormatAge(int ageMonths) {
+        public static string FormatAge(int ageMonths) {
             if (ageMonths < 24) {
                 return string.Format("{0} months");
             }
@@ -39,5 +39,27 @@ namespace Capstone_Wishlist_app.Models {
         public int WishlistId { get; set; }
         public IList<Item> Results { get; set; }
         public ICollection<string> ExistingItemIds { get; set; }
+    }
+
+    public class OwnWishlistViewModel {
+        public int WishlistId { get; set; }
+        public int ChildId { get; set; }
+        public int FamilyId { get; set; }
+        public string ChildFirstName { get; set; }
+        public string ChildLastName { get; set; }
+        public IList<WishlistItemViewModel> Items { get; set; }
+    }
+
+    public class WishlistItemViewModel {
+        public int Id { get; set; }
+        public int WishlistId { get; set; }
+        public string ItemId { get; set; }
+        public string Title { get; set; }
+        public decimal ListPrice { get; set; }
+        public string ImageUrl { get; set; }
+        public string ListingUrl { get; set; }
+        public int MinAgeMonths { get; set; }
+        public int MaxAgeMonths { get; set; }
+        public WishlistItemStatus Status { get; set; }
     }
 }

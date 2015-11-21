@@ -1,0 +1,12 @@
+﻿@model Capstone_Wishlist_app.Models.OwnWishlistViewModel
+
+@{
+    ViewBag.Title = "View Wishlist";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Gifts on @Model.ChildFirstName @Model.ChildLastName's Wishlist</h2>
+
+<div id="ownItems">
+    @Html.Partial("_OwnItems", Model.Items)
+</div>
