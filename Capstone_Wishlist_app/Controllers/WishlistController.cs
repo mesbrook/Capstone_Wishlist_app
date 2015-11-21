@@ -33,27 +33,27 @@ namespace Capstone_Wishlist_app.Controllers {
             _retailer = new AmazonRetailer(AmazonAssociateTag, AmazonAccessKey, "AWSECommerceServicePort");
         }
 
-        public ActionResult Index() {
-
+        public async Task<ActionResult> Index() {
             var results = _context.WishLists.Include(c => c.Child).Include(i => i.Items).Include(w => w.Child.Biographies).ToList();
                                  
-          var list = new List<DonorListViewModel>();
+          var WLlist = new List<DonorListViewModel>();
             foreach (var item in results)
             {
                 //string[] WLitems = new string[item.Items.Select(w => w.ItemId).Count()];
                 string[] WLitems = item.Items.Select(w => w.ItemId).ToArray();
-                list.Add(new DonorListViewModel(){
+                var items = await _retailer.LookupItemsAsync(WLitems);
+                WLlist.Add(new DonorListViewModel(){
                     ChildId = item.ChildId,
                     FamilyId = item.Child.FamilyId,
                     WishlistId = item.Id,
                     FirstName = item.Child.FirstName,
                     Age = item.Child.Age,
                     Gender = item.Child.Gender,
-                    Biographies = item.Child.Biographies.OrderBy(b => b.CreationDate).First().Text
-
+                    Biographies = item.Child.Biographies.OrderBy(b => b.CreationDate).First().Text,                   
+                    retailItems = items.ToList()
                 });
             }
-            return View(list);
+            return View(WLlist);
         }
 
         

@@ -44,6 +44,7 @@ namespace Capstone_Wishlist_app.Models {
 
     public class DonorListViewModel
     {
+        [Key]
         public int ChildId { get; set; }
         public int FamilyId { get; set; }
         public int  WishlistId { get; set; }
@@ -57,6 +58,6 @@ namespace Capstone_Wishlist_app.Models {
         [Display(Name = "Short Biography")]
         public string Biographies { get; set; }
 
-        public IList<Item> items { get; set; }
+        public IList<Item> retailItems { get; set; }
     }
 }
