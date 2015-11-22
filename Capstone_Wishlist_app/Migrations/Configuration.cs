@@ -66,8 +66,16 @@ namespace Capstone_Wishlist_app.Migrations {
             roleManager.Create(new IdentityRole {
                 Name = "Admin"
             });
+            roleManager.Create(new IdentityRole
+            {
+                Name = "Moderator"
+            });
             roleManager.Create(new IdentityRole {
                 Name = "Family"
+            });
+            roleManager.Create(new IdentityRole
+            {
+                Name = "Donor"
             });
         }
 

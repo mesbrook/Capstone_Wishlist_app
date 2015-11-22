@@ -6,7 +6,9 @@
     ViewBag.Title = "WishlistIndex";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
+<style>
+    tr-hide {display:none}
+</style>
 <h2>Children's Wishlists</h2>
 
 
@@ -37,30 +39,46 @@
         <td>
             @Html.DisplayFor(model => child.Biographies)
         </td>
-        <td>            
-            @*@Html.ActionLink("Details", "Details", new { id=child.Id })*@            
-        </td>
-    </tr>
-    foreach (var item in child.retailItems) { 
-    <tr>
-        <td></td>
         <td>
-            <a target="_blank" href=@item.ListingUrl>@item.Title</a><span class="glyphicon glyphicon-link" />
+            @{ViewBag.buttonID = child.ChildId;}
+            <button type="button" value="@ViewBag.buttonID" id="btn-hide" onclick="listToggle(this)">Hide/Show Wishlist</button>
         </td>
-        <td>
-            <img src=@item.ImageUrl />
-        </td>
-        <td>
-            @item.ListPrice
-        </td>
-        <td>
-            <button type="button" class="btn btn-default" @*onclick="addItemToWishlist(this, '@item.Id')"*@>
-                <span class="glyphicon glyphicon-gift"></span>
-                Buy Gift
-            </button>
-        </td>
-    </tr>
+    </tr>    
+    foreach (var item in child.retailItems)
+    {
+        <tr class="@ViewBag.buttonID" style="display:none">
+            <td></td>
+            <td>
+                <a target="_blank" href=@item.ListingUrl>@item.Title</a><span class="glyphicon glyphicon-link" />
+            </td>
+            <td>
+                <img src=@item.ImageUrl />
+            </td>
+            <td>
+                @item.ListPrice
+            </td>
+            <td>
+                <button type="button" class="btn btn-default" @*onclick="addItemToWishlist(this, '@item.Id')"*@>
+                    <span class="glyphicon glyphicon-gift"></span>
+                    Buy Gift
+                </button>
+            </td>
+        </tr>
+
     }
 }
 
 </table>
+
+@section scripts {
+    <script type="text/javascript">
+
+        function listToggle(element) {            
+                if (window.console) console.log($(element).val());
+                $('.' + $(element).val()).toggle();
+            };
+        
+        
+
+    </script>
+}

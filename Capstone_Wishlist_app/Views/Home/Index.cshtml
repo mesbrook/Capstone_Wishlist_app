@@ -10,7 +10,7 @@
                 <p class="lead">Make A Difference Today.</p>
                 @*----------------------Url.Action("Register", "Account")---------------------------------*@
                 @if (Request.IsAuthenticated) {
-                    <p><a href="" class="btn btn-primary btn-lg">Give a Gift &raquo;</a></p>
+                    <p><a href="@Url.Action("Index", "Wishlist")" class="btn btn-primary btn-lg">Give a Gift &raquo;</a></p>
                 } else {
                     <p><a href="@Url.Action("Register", "Account")" class="btn btn-primary btn-lg">Register as a Donor &raquo;</a></p>
                 }

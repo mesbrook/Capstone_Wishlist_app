@@ -19,4 +19,5 @@ namespace Capstone_Wishlist_app.Models {
         [ForeignKey("ChildId")]
         public virtual Child Child { get; set; }
     }
+
 }

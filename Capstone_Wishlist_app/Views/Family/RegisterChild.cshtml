@@ -86,7 +86,7 @@
         
         <div class="form-group">
             <div class="col-md-10">
-                @Html.TextAreaFor(model => model.BiographyText, new { @class = "form-control", multiline = true, style = "max-width:600px", rows = "12" })
+                @Html.TextAreaFor(model => model.BiographyText, new { @class = "form-control", multiline = true, style = "max-width:600px", rows = "12", @Value = "" })
                 @Html.ValidationMessageFor(model => model.BiographyText, "", new { @class = "text-danger" })
             </div>
         </div>

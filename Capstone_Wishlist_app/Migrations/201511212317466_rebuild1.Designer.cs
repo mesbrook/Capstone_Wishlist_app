@@ -7,13 +7,13 @@ namespace Capstone_Wishlist_app.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class update : IMigrationMetadata
+    public sealed partial class rebuild1 : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(update));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(rebuild1));
         
         string IMigrationMetadata.Id
         {
-            get { return "201511212214214_update"; }
+            get { return "201511212317466_rebuild1"; }
         }
         
         string IMigrationMetadata.Source

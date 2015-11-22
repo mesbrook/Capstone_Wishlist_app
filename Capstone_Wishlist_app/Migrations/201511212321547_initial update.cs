@@ -3,7 +3,7 @@ namespace Capstone_Wishlist_app.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class update : DbMigration
+    public partial class initialupdate : DbMigration
     {
         public override void Up()
         {

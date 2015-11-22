@@ -34,7 +34,7 @@ namespace Capstone_Wishlist_app.Controllers {
         }
 
         public async Task<ActionResult> Index() {
-            var results = _context.WishLists.Include(c => c.Child).Include(i => i.Items).Include(w => w.Child.Biographies).ToList();
+            var results = _db.WishLists.Include(c => c.Child).Include(i => i.Items).Include(w => w.Child.Biographies).ToList();
                                  
           var WLlist = new List<DonorListViewModel>();
             foreach (var item in results)
@@ -48,9 +48,9 @@ namespace Capstone_Wishlist_app.Controllers {
                     WishlistId = item.Id,
                     FirstName = item.Child.FirstName,
                     Age = item.Child.Age,
-                    Gender = item.Child.Gender,
-                    Biographies = item.Child.Biographies.OrderBy(b => b.CreationDate).First().Text,                   
-                    retailItems = items.ToList()
+                   // Gender = item.Child.Gender,
+                    Biographies = item.Child.Biographies.OrderBy(b => b.CreationDate).Select( b => b.Text).FirstOrDefault(),                   
+                    retailItems = items.ToList()                    
                 });
             }
             return View(WLlist);

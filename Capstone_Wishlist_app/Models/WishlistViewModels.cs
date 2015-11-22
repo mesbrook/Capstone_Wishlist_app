@@ -56,6 +56,7 @@ namespace Capstone_Wishlist_app.Models {
         public string FirstName { get; set; }
 
         public int Age { get; set; }
+
         public char Gender { get; set; }
 
         [Display(Name = "Short Biography")]
@@ -63,6 +64,7 @@ namespace Capstone_Wishlist_app.Models {
 
         public IList<Item> retailItems { get; set; }
 	}
+
     public class OwnWishlistViewModel {
         public int WishlistId { get; set; }
         public int ChildId { get; set; }
