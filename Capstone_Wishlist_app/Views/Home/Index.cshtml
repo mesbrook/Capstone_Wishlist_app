@@ -90,7 +90,7 @@
     <br />
     <div class="jumbotron">
         <h1>Welcome To Santa's Wishlist</h1>
-        <p>See the quick links below to start creating wishlists.</p>
+        <p>See the quick links below to manage the family's profiles and wishlists.</p>
     </div>
     <div class="row">
         <div class="col-md-4">
@@ -105,6 +105,19 @@
                     </p>
                 </a>
             </div>
+            <div class="list-group">
+                <a href=@Url.Action("ViewChildren", "Family", new { id = ViewBag.FamilyId }) class="list-group-item">
+                    <h4 class="list-group-item-heading">
+                        <i class="fa fa-user"></i>
+                        Child Profiles
+                    </h4>
+                    <p class="list-group-item-text">
+                        See the list of profiles for the children of this family.
+                    </p>
+                </a>
+            </div>
+        </div>
+        <div class="col-md-4">
             <div class="list-group">
                 <a href=@Url.Action("ViewWishlists", "Family", new { id = ViewBag.FamilyId }) class="list-group-item">
                     <h4 class="list-group-item-heading">
