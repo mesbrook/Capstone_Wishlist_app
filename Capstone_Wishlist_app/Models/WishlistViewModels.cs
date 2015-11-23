@@ -65,6 +65,19 @@ namespace Capstone_Wishlist_app.Models {
         public WishlistItemStatus Status { get; set; }
     }
 
+    public class ApproveWishlistViewModel {
+        public int WishlistId { get; set; }
+        public int ChildId { get; set; }
+        public int FamilyId { get; set; }
+        public string ChildFirstName { get; set; }
+        public string ChildLastName { get; set; }
+        public IList<ApproveItemViewModel> Items { get; set; }
+    }
+
+    public class ApproveItemViewModel : WishlistItemViewModel {
+        public bool IsSelected { get; set; }
+    }
+
     public static class WishlistItemViewExtensions {
         private static readonly IReadOnlyCollection<WishlistItemStatus> donatedStatuses = new[] {
             WishlistItemStatus.Ordered,
