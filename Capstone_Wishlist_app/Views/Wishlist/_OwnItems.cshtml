@@ -17,33 +17,40 @@
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @switch (item.Status) {
-                case WishlistItemStatus.Unapproved:
+    @foreach (var item in Model) {
+        <tr>
+            <td>
+                @switch (item.Status) {
+                    case WishlistItemStatus.Unapproved:
+                        <text>
+                            <i class="fa fa-star-o"></i>
+                            Unapproved
+                        </text>
+                        break;
+                    case WishlistItemStatus.Avaliable:
                     <text>
-                        <i class="fa fa-star-o"></i>
-                        Unapproved
+                        <i class="fa fa-check-circle"></i>
+                        Available
                     </text>
-                    break;
-            }
-        </td>
-        <td><img src=@item.ImageUrl /></td>
-        <td>
-            <a href=@item.ListingUrl>@item.Title</a>
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ListPrice)
-        </td>
-        <td>@AgeRange.FormatAgeRange(item.MinAgeMonths, item.MaxAgeMonths)</td>
-        <td>
-            <button type="button" class="btn btn-default" onclick="removeItem(this, @item.Id)">
-                <span class="glyphicon glyphicon-remove"></span>
-                Remove this item
-            </button>
-        </td>
-    </tr>
-}
+                        break;
+                }
+            </td>
+            <td><img src=@item.ImageUrl /></td>
+            <td>
+                <a href=@item.ListingUrl target="_blank">
+                    @item.Title
+                </a>
+                <i class="fa fa-external-link"></i>
+            </td>
+            <td>@string.Format("{0:C}", item.ListPrice)</td>
+            <td>@AgeRange.FormatAgeRange(item.MinAgeMonths, item.MaxAgeMonths)</td>
+            <td>
+                <button type="button" class="btn btn-danger" onclick="removeItem(this, @item.Id)">
+                    <span class="glyphicon glyphicon-remove"></span>
+                    Remove this item
+                </button>
+            </td>
+        </tr>
+    }
 
 </table>
