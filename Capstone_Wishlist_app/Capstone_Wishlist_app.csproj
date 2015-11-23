@@ -192,9 +192,17 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201511110126255_adding table.cs" />
-    <Compile Include="Migrations\201511110126255_adding table.Designer.cs">
-      <DependentUpon>201511110126255_adding table.cs</DependentUpon>
+    <Compile Include="Migrations\201511212317466_rebuild1.cs" />
+    <Compile Include="Migrations\201511212317466_rebuild1.Designer.cs">
+      <DependentUpon>201511212317466_rebuild1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201511212321547_initial update.cs" />
+    <Compile Include="Migrations\201511212321547_initial update.Designer.cs">
+      <DependentUpon>201511212321547_initial update.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201511231128496_initial.cs" />
+    <Compile Include="Migrations\201511231128496_initial.Designer.cs">
+      <DependentUpon>201511231128496_initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -223,12 +231,19 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\santasWishlist.mdf" />
+    <Content Include="App_Data\santasWishlist_log.ldf">
+      <DependentUpon>santasWishlist.mdf</DependentUpon>
+    </Content>
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\font-awesome.css" />
+    <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\images\santa_gift.jpg" />
     <Content Include="favicon.ico" />
+    <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
@@ -239,6 +254,11 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Content\bootstrap.css.map" />
+    <Content Include="fonts\fontawesome-webfont.woff2" />
+    <Content Include="fonts\fontawesome-webfont.woff" />
+    <Content Include="fonts\fontawesome-webfont.ttf" />
+    <Content Include="fonts\fontawesome-webfont.eot" />
+    <Content Include="fonts\FontAwesome.otf" />
     <None Include="Properties\PublishProfiles\santawishlist %282%29.pubxml" />
     <None Include="Properties\PublishProfiles\santawishlist.pubxml" />
     <None Include="Scripts\jquery-2.1.4.intellisense.js" />
@@ -356,10 +376,6 @@
     <Content Include="Views\Shared\Info.cshtml" />
     <Content Include="Views\Wishlist\_SearchResults.cshtml" />
     <Content Include="Views\Wishlist\FindGifts.cshtml" />
-    <Content Include="Views\Family\Create.cshtml" />
-    <Content Include="Views\Family\Delete.cshtml" />
-    <Content Include="Views\Family\Details.cshtml" />
-    <Content Include="Views\Family\Edit.cshtml" />
     <Content Include="Views\Family\Index.cshtml" />
     <Content Include="Views\CreateFamily\CreateFamily.cshtml" />
     <Content Include="Views\Account\RegisterStaff.cshtml" />
@@ -369,6 +385,13 @@
     <Content Include="Views\Child\EditProfile.cshtml" />
     <Content Include="Views\Child\ViewProfile.cshtml" />
     <Content Include="Views\Wishlist\Index.cshtml" />
+    <Content Include="Views\Family\ViewWishlists.cshtml" />
+    <Content Include="Views\Wishlist\_OwnItems.cshtml" />
+    <Content Include="Views\Wishlist\ViewOwn.cshtml" />
+    <Content Include="Views\Home\Unauthorized.cshtml" />
+    <Content Include="Views\Family\Administer.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\_Address.cshtml" />
+    <Content Include="Views\Family\DisplayTemplates\_FamilyWishlist.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
@@ -384,8 +407,14 @@
     <Folder Include="Views\Item\" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201511110126255_adding table.resx">
-      <DependentUpon>201511110126255_adding table.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201511212317466_rebuild1.resx">
+      <DependentUpon>201511212317466_rebuild1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201511212321547_initial update.resx">
+      <DependentUpon>201511212321547_initial update.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201511231128496_initial.resx">
+      <DependentUpon>201511231128496_initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

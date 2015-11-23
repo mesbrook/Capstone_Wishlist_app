@@ -18,6 +18,7 @@ namespace Capstone_Wishlist_app.Controllers {
         }
 
         [HttpGet]
+        [FamilyAuthorize(Entity="Child")]
         public async Task<ActionResult> EditProfile(int id) {
             var child = await _db.Children.FindAsync(id);
             var bioText = await (
@@ -35,6 +36,7 @@ namespace Capstone_Wishlist_app.Controllers {
         }
 
         [HttpPost]
+        [FamilyAuthorize(Entity="Child")]
         public async Task<ActionResult> EditProfile(int id, EditChildProfileModel edit) {
             if (!ModelState.IsValid) {
                 edit.Id = id;

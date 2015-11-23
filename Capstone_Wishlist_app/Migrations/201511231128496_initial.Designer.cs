@@ -7,13 +7,13 @@ namespace Capstone_Wishlist_app.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class addingtable : IMigrationMetadata
+    public sealed partial class initial : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(addingtable));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(initial));
         
         string IMigrationMetadata.Id
         {
-            get { return "201511110126255_adding table"; }
+            get { return "201511231128496_initial"; }
         }
         
         string IMigrationMetadata.Source

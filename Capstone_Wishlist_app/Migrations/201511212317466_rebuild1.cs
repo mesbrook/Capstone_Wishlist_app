@@ -3,7 +3,7 @@ namespace Capstone_Wishlist_app.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class addingtable : DbMigration
+    public partial class rebuild1 : DbMigration
     {
         public override void Up()
         {
@@ -42,6 +42,7 @@ namespace Capstone_Wishlist_app.Migrations
                         FirstName = c.String(nullable: false),
                         LastName = c.String(nullable: false),
                         Age = c.Int(nullable: false),
+                        Gender = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.Family", t => t.FamilyId, cascadeDelete: true)
