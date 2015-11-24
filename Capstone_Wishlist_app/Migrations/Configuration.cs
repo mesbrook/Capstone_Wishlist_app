@@ -55,9 +55,23 @@ namespace Capstone_Wishlist_app.Migrations {
             context.WishLists.AddOrUpdate(wishlist);
             context.SaveChanges();
 
+            SeedDonor(context);
             SeedRoles(context);
             SeedUserAccounts(context);
             base.Seed(context);
+        }
+
+        private static void SeedDonor(WishlistContext context) {
+            var donor = new Donor { Id = 1 };
+            context.Donors.AddOrUpdate(donor);
+            context.SaveChanges();
+
+            var cart = new Cart {
+                DonorId = 1,
+                ModifiedDate = DateTime.Now
+            };
+            context.Carts.AddOrUpdate(cart);
+            context.SaveChanges();
         }
 
         private static void SeedRoles(WishlistContext context) {

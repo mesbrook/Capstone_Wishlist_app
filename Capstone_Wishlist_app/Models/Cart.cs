@@ -8,13 +8,14 @@ using System.Web;
 namespace Capstone_Wishlist_app.Models {
     public class Cart {
         [Key]
-        public int Id { get; set; }
-
-        [Required]
         public int DonorId { get; set; }
 
+        [Required]
         [ForeignKey("DonorId")]
         public virtual Donor Donor { get; set; }
+
+        [Required]
+        public DateTime ModifiedDate { get; set; }
 
         public virtual ICollection<CartItem> Items { get; set; }
     }
@@ -35,6 +36,7 @@ namespace Capstone_Wishlist_app.Models {
         [ForeignKey("CartId")]
         public virtual Cart Cart { get; set; }
 
+        [Required]
         [ForeignKey("WishlistItemId")]
         public virtual WishlistItem Item { get; set; }
     }

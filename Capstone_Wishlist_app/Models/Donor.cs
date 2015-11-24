@@ -10,7 +10,7 @@ namespace Capstone_Wishlist_app.Models {
         [Key]
         public int Id { get; set; }
 
-        public virtual ICollection<Cart> Carts { get; set; }
+        public virtual Cart Cart { get; set; }
 
         public virtual ICollection<Donation> Donations { get; set; }
     }
