@@ -192,18 +192,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201511212317466_rebuild1.cs" />
-    <Compile Include="Migrations\201511212317466_rebuild1.Designer.cs">
-      <DependentUpon>201511212317466_rebuild1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201511212321547_initial update.cs" />
-    <Compile Include="Migrations\201511212321547_initial update.Designer.cs">
-      <DependentUpon>201511212321547_initial update.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201511231128496_initial.cs" />
-    <Compile Include="Migrations\201511231128496_initial.Designer.cs">
-      <DependentUpon>201511231128496_initial.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Address.cs" />
@@ -231,10 +219,6 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Data\santasWishlist.mdf" />
-    <Content Include="App_Data\santasWishlist_log.ldf">
-      <DependentUpon>santasWishlist.mdf</DependentUpon>
-    </Content>
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -405,17 +389,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Item\" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201511212317466_rebuild1.resx">
-      <DependentUpon>201511212317466_rebuild1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201511212321547_initial update.resx">
-      <DependentUpon>201511212321547_initial update.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201511231128496_initial.resx">
-      <DependentUpon>201511231128496_initial.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
