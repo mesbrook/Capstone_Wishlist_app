@@ -35,13 +35,12 @@ namespace Capstone_Wishlist_app.Models {
 
     public class DonatedItem {
         [Key]
-        public int Id { get; set; }
-
-        [Required]
-        public int WishlistItemId { get; set; }
-
-        [Required]
+        [Column(Order = 1)]
         public int DonationId { get; set; }
+
+        [Key]
+        [Column(Order = 2)]
+        public int WishlistItemId { get; set; }
 
         public string Title { get; set; }
         public decimal PurchasePrice { get; set; }
