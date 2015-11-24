@@ -105,6 +105,17 @@ namespace Capstone_Wishlist_app.Migrations {
             userManager.AddClaim(bobUser.Id, new Claim("Family", (1).ToString()));
             userManager.AddClaim(bobUser.Id, new Claim("Child", (1).ToString()));
             userManager.AddClaim(bobUser.Id, new Claim("Wishlist", (1).ToString()));
+
+            userManager.Create(new WishlistUser {
+                UserName = "bscrooge@example.com",
+                Email = "bscrooge@example.com",
+                EmailConfirmed = true,
+                Name = "Ben Scrooge"
+            }, "ChristmasPast");
+
+            var benUser = userManager.FindByName("bscrooge@example.com");
+            userManager.AddToRole(benUser.Id, "Donor");
+            userManager.AddClaim(benUser.Id, new Claim("Donor", (1).ToString()));
         }
     }
 }
