@@ -7,78 +7,107 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <style>
-    tr-hide {display:none}
+    tr-hide {
+        display: none;
+    }
 </style>
 <h2>Children's Wishlists</h2>
 
-
-<table class="table">
-    <tr>
-        <th>
-            Child's Name
-        </th>        
-        <th>
-            Child's Age
-        </th>
-      
-        <th>
-        Child's Bio
-        </th>        
-        <th></th>
-    </tr>
-
-@foreach (var child in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(model => child.FirstName)
-        </td>        
-        <td>
-            @Html.DisplayFor(model => child.Age)
-        </td>
-        
-        <td>
-            @Html.DisplayFor(model => child.Biographies)
-        </td>
-        <td>
-            @{ViewBag.buttonID = child.ChildId;}
-            <button type="button" value="@ViewBag.buttonID" id="btn-hide" onclick="listToggle(this)">Hide/Show Wishlist</button>
-        </td>
-    </tr>    
-    foreach (var item in child.retailItems)
-    {
-        <tr class="@ViewBag.buttonID" style="display:none">
-            <td></td>
-            <td>
-                <a target="_blank" href=@item.ListingUrl>@item.Title</a><span class="glyphicon glyphicon-link" />
-            </td>
-            <td>
-                <img src=@item.ImageUrl />
-            </td>
-            <td>
-                @item.ListPrice
-            </td>
-            <td>
-                <button type="button" class="btn btn-default" @*onclick="addItemToWishlist(this, '@item.Id')"*@>
-                    <span class="glyphicon glyphicon-gift"></span>
-                    Buy Gift
+@foreach (var wl in Model) {
+    <div class="row">
+        <div class="col-md-12">
+            <h3>
+                @wl.FirstName
+                <small>@wl.Gender age @wl.Age</small>
+                <button type="button" value=@wl.ChildId class="btn btn-primary btn-sm" onclick="toggleWishlistView(this)" style="margin-bottom: 5px">
+                    <i class="fa fa-minus"></i>
                 </button>
-            </td>
-        </tr>
-
-    }
+            </h3>
+            <div class=@("sw-wl-view-" + wl.ChildId)>
+                <label class="control-label">About @wl.FirstName</label>
+                <p>@wl.Biography</p>
+                <label class="control-label">@wl.FirstName's Wishlist</label>
+                <table class="table">
+                    <tr>
+                        <th>Item</th>
+                        <th></th>
+                        <th>List Price</th>
+                        <th></th>
+                    </tr>
+                    @foreach (var item in wl.Items) {
+                        <tr>
+                            <td>
+                                <a target="_blank" href=@item.ListingUrl>@item.Title</a>
+                                <i class="fa fa-external-link"></i>
+                            </td>
+                            <td>
+                                <img src=@item.ImageUrl />
+                            </td>
+                            <td>
+                                @item.ListPrice
+                            </td>
+                            <td>
+                                @if (ViewData.ContainsKey("DonorId")) {
+                                    <button type="button" class="btn btn-default" onclick="addItemToCart(this, @item.Id, '@item.Title', '@item.ListPrice')">
+                                        <i class="fa fa-cart-plus"></i>
+                                        Add to cart
+                                    </button>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        </div>
+    </div>
 }
-
-</table>
 
 @section scripts {
     <script type="text/javascript">
+        @if (ViewData.ContainsKey("DonorId")) {
+            <text>
+                var addItemUrl = '@Url.Action("AddItemToCart", "Donor", new { id = ViewBag.DonorId })';
+            </text>
+        }
 
-        function listToggle(element) {            
-                if (window.console) console.log($(element).val());
-                $('.' + $(element).val()).toggle();
+        function toggleWishlistView(element) {
+            var $toggle = $(element);
+            var childId = $toggle.val();
+
+            if (window.console) {
+                console.log(childId);
+            }
+
+            var viewClass = ".sw-wl-view-" + childId;
+            $(viewClass).toggle();
+
+            var $icon = $("i", $toggle);
+
+            if ($icon.hasClass("fa-plus")) {
+                $icon.removeClass("fa-plus");
+                $icon.addClass("fa-minus");
+            } else if ($icon.hasClass("fa-minus")) {
+                $icon.removeClass("fa-minus");
+                $icon.addClass("fa-plus");
+            }
+        };
+
+        function addItemToCart(element, id, title, listPrice) {
+            var $element = $(element);
+            var addition = {
+                wishlistItemId : id,
+                title : title,
+                listPrice : listPrice
             };
-        
-        
+
+            $.post(addItemUrl, addition, function(result) {
+                if (result.IsInCart) {
+                    $element.replaceWith('<p class="text-success"><i class="fa fa-check"/>Added to cart!</p>');
+                } else if (result.WasInCart) {
+                    $element.replaceWith('<p class="text-success"><i class="fa fa-check"/>Already in cart!</p>');
+                }
+            }, "json");
+        }
 
     </script>
 }

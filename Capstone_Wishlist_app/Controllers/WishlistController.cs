@@ -33,29 +33,36 @@ namespace Capstone_Wishlist_app.Controllers {
             _retailer = new AmazonRetailer(AmazonAssociateTag, AmazonAccessKey, "AWSECommerceServicePort");
         }
 
+        [InjectDonorIdentity]
         public async Task<ActionResult> Index() {
-            var results = _db.WishLists.Include(c => c.Child).Include(i => i.Items).Include(w => w.Child.Biographies).ToList();
+            var wishlists = await _db.WishLists.Include(c => c.Child)
+                .Include(i => i.Items)
+                .Include(w => w.Child.Biographies)
+                .ToListAsync();
                                  
-          var WLlist = new List<DonorListViewModel>();
-            foreach (var item in results)
+          var wishlistViews = new List<DonorListViewModel>();
+
+            foreach (var wl in wishlists)
             {
-                //string[] WLitems = new string[item.Items.Select(w => w.ItemId).Count()];
-                string[] WLitems = item.Items.Select(w => w.ItemId).ToArray();
-                var items = await _retailer.LookupItemsAsync(WLitems);
-                WLlist.Add(new DonorListViewModel(){
-                    ChildId = item.ChildId,
-                    FamilyId = item.Child.FamilyId,
-                    WishlistId = item.Id,
-                    FirstName = item.Child.FirstName,
-                    Age = item.Child.Age,
-                   // Gender = item.Child.Gender,
-                    Biographies = item.Child.Biographies.OrderBy(b => b.CreationDate).Select( b => b.Text).FirstOrDefault(),                   
-                    retailItems = items.ToList()                    
+                var availableItems = wl.Items.Where(wi => wi.Status == WishlistItemStatus.Avaliable)
+                    .ToList();
+                var viewableItems = await GetViewableItems(availableItems);
+                var biographyText = wl.Child.Biographies.OrderBy(b => b.CreationDate)
+                    .Select(b => b.Text)
+                    .FirstOrDefault();
+
+                wishlistViews.Add(new DonorListViewModel(){
+                    ChildId = wl.ChildId,
+                    WishlistId = wl.Id,
+                    FirstName = wl.Child.FirstName,
+                    Age = wl.Child.Age,
+                    Gender = wl.Child.Gender,
+                    Biography = wl.Child.Biographies.OrderBy(b => b.CreationDate).Select( b => b.Text).FirstOrDefault(),                   
+                    Items = viewableItems                    
                 });
             }
-            return View(WLlist);
+            return View(wishlistViews);
         }
-
 
         [HttpGet]
         [FamilyAuthorize(Entity="Wishlist")]
@@ -126,7 +133,7 @@ namespace Capstone_Wishlist_app.Controllers {
             var wishlist = await _db.WishLists.Where(w => w.Id == id)
                 .Include(w => w.Items)
                 .FirstAsync();
-            var items = await GetViewableItems(wishlist);
+            var items = await GetViewableItems(wishlist.Items.ToList());
 
             return PartialView("_OwnItems", items);
         }
@@ -135,7 +142,7 @@ namespace Capstone_Wishlist_app.Controllers {
         [FamilyAuthorize(Entity="Wishlist")]
         public async Task<ActionResult> ViewOwn(int id) {
             var wishlist = _db.WishLists.Find(id);
-            var items = await GetViewableItems(wishlist);
+            var items = await GetViewableItems(wishlist.Items.ToList());
 
             return View(new OwnWishlistViewModel {
                 WishlistId = wishlist.Id,
@@ -209,11 +216,12 @@ namespace Capstone_Wishlist_app.Controllers {
                 wi.MaxAgeMonths = ri.MaxAgeMonths;
             }
         }
-        private async Task<IList<WishlistItemViewModel>> GetViewableItems(Wishlist wishlist) {
-            var itemIds = wishlist.Items.Select(i => i.ItemId).ToArray();
+
+        private async Task<IList<WishlistItemViewModel>> GetViewableItems(IList<WishlistItem> items) {
+            var itemIds = items.Select(i => i.ItemId).ToArray();
             var retailItems = await _retailer.LookupItemsAsync(itemIds);
 
-            return wishlist.Items.Join(retailItems, wi => wi.ItemId, ri => ri.Id,
+            return items.Join(retailItems, wi => wi.ItemId, ri => ri.Id,
                 (wi, ri) => new WishlistItemViewModel {
                     Id = wi.Id,
                     WishlistId = wi.WishlistId,

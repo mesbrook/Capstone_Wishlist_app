@@ -47,22 +47,19 @@ namespace Capstone_Wishlist_app.Models {
 
     public class DonorListViewModel
     {
-        [Key]
         public int ChildId { get; set; }
-        public int FamilyId { get; set; }
         public int  WishlistId { get; set; }
 
         [Display(Name = "Name")]
         public string FirstName { get; set; }
 
         public int Age { get; set; }
+        public Gender Gender { get; set; }
 
-        public char Gender { get; set; }
+        [Display(Name = "About Me")]
+        public string Biography { get; set; }
 
-        [Display(Name = "Short Biography")]
-        public string Biographies { get; set; }
-
-        public IList<Item> retailItems { get; set; }
+        public IList<WishlistItemViewModel> Items { get; set; }
 	}
 
     public class OwnWishlistViewModel {
