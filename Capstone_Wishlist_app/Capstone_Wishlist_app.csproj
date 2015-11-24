@@ -195,9 +195,11 @@
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Address.cs" />
+    <Compile Include="Models\Cart.cs" />
     <Compile Include="Models\Child.cs" />
     <Compile Include="Models\ChildBiography.cs" />
     <Compile Include="Models\ChildViewModels.cs" />
+    <Compile Include="Models\Donor.cs" />
     <Compile Include="Models\Family.cs" />
     <Compile Include="Models\FamilyViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
