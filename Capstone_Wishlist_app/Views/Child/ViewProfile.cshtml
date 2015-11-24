@@ -5,73 +5,61 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>ViewProfile</h2>
-
-<div>
-    <h4>ChildViewModel</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.ChildId)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.ChildId)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.FamilyId)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.FamilyId)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.WishlistId)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.WishlistId)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.FirstName)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.FirstName)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Age)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Age)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Gender)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Gender)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.BiographyText)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.BiographyText)
-        </dd>
-
-    </dl>
-</div>
+<h2>@Model.FirstName's Profile</h2>
 <div class="row">
     <div class="col-md-12">
-        @Html.ActionLink("Edit Biography", "EditProfile", new { id = Model.ChildId }) |
-        @Html.ActionLink("Find Gifts for Wishlist", "FindGifts", "Wishlist", new { id = Model.WishlistId }, null)
+        <ol class="breadcrumb">
+            <li>
+                <a href=@Url.Action("Index", "Home")>
+                    <i class="fa fa-home"></i>
+                    Home
+                </a>
+            </li>
+            <li>
+                <i class="fa fa-users"></i>
+                Child Profiles
+            </li>
+            <li class="active">
+                <i class="fa fa-user"></i>
+                @Model.FirstName's Profile
+            </li>
+        </ol>
+  </div>
+</div>
+<div class="row">
+    <div class="col-md-3">
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.Age)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Age)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Gender)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Gender)
+            </dd>
+        </dl>
+    </div>
+    <div class="col-md-9">
+        <dl>
+            <dt>About @Model.FirstName</dt>
+            <dd>
+                <p>@Html.DisplayFor(m => m.BiographyText)</p>
+            </dd>
+        </dl>
+        <a href=@Url.Action("EditProfile", new { id=Model.ChildId }) class="btn btn-default">
+            <i class="fa fa-pencil"></i>
+            Edit biography
+        </a>
+        <a href=@Url.Action("FindGifts", "Wishlist", new { id = Model.WishlistId }) class="btn btn-default">
+            <i class="fa fa-gift"></i>
+            <i class="fa fa-search"></i>
+            Find gifts for @Model.FirstName
+        </a>
     </div>
 </div>

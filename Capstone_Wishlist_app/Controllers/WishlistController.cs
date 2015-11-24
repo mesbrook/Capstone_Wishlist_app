@@ -111,6 +111,26 @@ namespace Capstone_Wishlist_app.Controllers {
             return Json(new { IsOnWishlist = true });
         }
 
+        [HttpPost]
+        [FamilyAuthorize(Entity="Wishlist")]
+        public async Task<ActionResult> RemoveItem(int id, int itemId) {
+            var wishItem = await _db.WishlistItems.Where(wi => wi.Id == itemId)
+                .FirstOrDefaultAsync();
+
+            if (wishItem != null) {
+                _db.WishlistItems.Remove(wishItem);
+                await _db.SaveChangesAsync();
+                TempData["itemRemoved"] = wishItem.ItemId;
+            }
+            
+            var wishlist = await _db.WishLists.Where(w => w.Id == id)
+                .Include(w => w.Items)
+                .FirstAsync();
+            var items = await GetViewableItems(wishlist);
+
+            return PartialView("_OwnItems", items);
+        }
+
         [HttpGet]
         [FamilyAuthorize(Entity="Wishlist")]
         public async Task<ActionResult> ViewOwn(int id) {
@@ -127,6 +147,68 @@ namespace Capstone_Wishlist_app.Controllers {
             });
         }
 
+        [HttpGet]
+        [Authorize(Roles="Admin")]
+        public async Task<ActionResult> Approve(int id) {
+            var wishlist = await _db.WishLists.Where(w => w.Id == id)
+                .Include(w => w.Items)
+                .Include(w => w.Child)
+                .FirstOrDefaultAsync();
+            var items = wishlist.Items.Select(wi => new ApproveItemViewModel {
+                Id = wi.Id,
+                WishlistId = wi.WishlistId,
+                ItemId = wi.ItemId,
+                Status = wi.Status,
+                IsSelected = false
+            }).ToList();
+
+            await AddRetailerItemProperties(items);
+
+            return View(new ApproveWishlistViewModel {
+                WishlistId = wishlist.Id,
+                ChildId = wishlist.ChildId,
+                FamilyId = wishlist.Child.FamilyId,
+                ChildFirstName = wishlist.Child.FirstName,
+                ChildLastName = wishlist.Child.LastName,
+                Items = items
+            });
+        }
+
+        [HttpPost]
+        [Authorize(Roles="Admin")]
+        public async Task<ActionResult> Approve(int id, ApproveWishlistViewModel approval) {
+            var items = await _db.WishlistItems.Where(wi => wi.WishlistId == id)
+                .ToListAsync();
+            var itemApprovals = items.Join(approval.Items, wi => wi.Id, ai => ai.Id,
+                (wi, ai) => new { Item = wi, IsApproved = ai.IsSelected });
+
+            foreach (var ia in itemApprovals) {
+                if (ia.IsApproved && ia.Item.Status == WishlistItemStatus.Unapproved) {
+                    ia.Item.Status = WishlistItemStatus.Avaliable;
+                }
+            }
+
+            await _db.SaveChangesAsync();
+            return RedirectToAction("Approve", new { id = id });
+        }
+
+        private async Task AddRetailerItemProperties(IList<ApproveItemViewModel> items) {
+            var itemIds = items.Select(i => i.ItemId).ToArray();
+            var retailItems = await _retailer.LookupItemsAsync(itemIds);
+            var itemMatches = items.Join(retailItems, wi => wi.ItemId, ri => ri.Id,
+                (wi, ri) => new{ Item = wi, RetailItem = ri});
+
+            foreach (var match in itemMatches) {
+                var wi = match.Item;
+                var ri = match.RetailItem;
+                wi.Title = ri.Title;
+                wi.ListingUrl = ri.ListingUrl;
+                wi.ImageUrl = ri.ImageUrl;
+                wi.ListPrice = ri.ListPrice;
+                wi.MinAgeMonths = ri.MinAgeMonths;
+                wi.MaxAgeMonths = ri.MaxAgeMonths;
+            }
+        }
         private async Task<IList<WishlistItemViewModel>> GetViewableItems(Wishlist wishlist) {
             var itemIds = wishlist.Items.Select(i => i.ItemId).ToArray();
             var retailItems = await _retailer.LookupItemsAsync(itemIds);

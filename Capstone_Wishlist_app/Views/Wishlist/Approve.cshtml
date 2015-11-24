@@ -1,0 +1,83 @@
+﻿@model Capstone_Wishlist_app.Models.ApproveWishlistViewModel
+@using Capstone_Wishlist_app.Models
+
+@{
+    ViewBag.FamilyId = @Model.FamilyId;
+    ViewBag.Title = "Approve";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <h2>Approve @Model.ChildFirstName @Model.ChildLastName's Wishlist</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href=@Url.Action("Index", "Home")>
+                    <i class="fa fa-home"></i>
+                    Home
+                </a>
+            </li>
+            <li class="active">
+                <a href=@Url.Action("ViewWishlists", "Family", new { id = Model.FamilyId })>
+                    <i class="fa fa-file-text"></i>
+                    Family Wishlists
+                </a>
+            </li>
+            <li class="active">@Model.ChildFirstName's Wishlist</li>
+        </ol>
+        <dl class="dl-horizontal">
+            <dt>Name</dt>
+            <dd>@Model.ChildFirstName @Model.ChildLastName</dd>
+            <dt>@Html.DisplayNameFor(w => w.WishlistId)</dt>
+            <dd>@Model.WishlistId</dd>
+        </dl>
+    </div>
+</div>
+@using (Html.BeginForm("Approve", "Wishlist", new { id = Model.WishlistId }, FormMethod.Post, new { @class = "form-horizontal" })) {
+    <table class="table">
+        <tr>
+            <th>Is Selected</th>
+            <th>Status</th>
+            <th>Image</th>
+            <th>Title</th>
+            <th>List Price</th>
+            <th>Recommended Ages</th>
+        </tr>
+        @foreach (var wi in @Model.Items.Select((wi, i) => new { Item = wi, Index = i })) {
+            @Html.HiddenFor(wl => wl.Items[wi.Index].Id)
+            <tr>
+                <td>@Html.CheckBoxFor(wl => wl.Items[wi.Index].IsSelected, new { @class = "form-control" })</td>
+                <td>
+                    @switch (wi.Item.Status) {
+                        case WishlistItemStatus.Unapproved:
+                            <text>
+                                <i class="fa fa-star-o"></i>
+                                Unapproved
+                            </text>
+                            break;
+                        case WishlistItemStatus.Avaliable:
+                        <text>
+                            <i class="fa fa-check-circle"></i>
+                            Available
+                        </text>
+                            break;
+                    }
+                </td>
+                <td><img src=@wi.Item.ImageUrl /></td>
+                <td>
+                    <a href=@wi.Item.ListingUrl>@wi.Item.Title</a>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => wi.Item.ListPrice)
+                </td>
+                <td>@AgeRange.FormatAgeRange(wi.Item.MinAgeMonths, wi.Item.MaxAgeMonths)</td>
+            </tr>
+        }
+    </table>
+    <button type="submit" class="btn btn-success">
+        <i class="fa fa-check"></i>
+        Approve selected items
+    </button>
+}
+
+
