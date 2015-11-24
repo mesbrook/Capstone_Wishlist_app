@@ -104,5 +104,13 @@ namespace Capstone_Wishlist_app.Controllers
                 Count = count
             });
         }
+
+        [HttpGet]
+        public async Task<ActionResult> PurchaseCart(int id) {
+            return View(new PurchaseCartViewModel{
+                DonorId = id,
+                BillingAddress = new CreateAddressModel()
+            });
+        }
     }
 }

@@ -384,6 +384,7 @@
     <Content Include="Views\Shared\_CartCount.cshtml" />
     <Content Include="Views\Donor\ViewCart.cshtml" />
     <Content Include="Views\Donor\_CartItems.cshtml" />
+    <Content Include="Views\Donor\PurchaseCart.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

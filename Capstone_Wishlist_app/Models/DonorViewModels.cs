@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -28,5 +29,26 @@ namespace Capstone_Wishlist_app.Models {
         public string Title { get; set; }
         public decimal Price { get; set; }
         public string ChildName { get; set; }
+    }
+
+    public class PurchaseCartViewModel {
+        public int DonorId { get; set; }
+
+        [Display(Name = "Credit Card Number")]
+        public string Number { get; set; }
+
+        [Display(Name = "Name On Card")]
+        public string Name { get; set; }
+
+        [Display(Name = "Verification Code")]
+        public string VerficationCode { get; set; }
+
+        [Display(Name = "Month")]
+        public int ExpirationMonth { get; set; }
+
+        [Display(Name = "Year")]
+        public int ExpirationYear { get; set; }
+
+        public CreateAddressModel BillingAddress { get; set; }
     }
 }
