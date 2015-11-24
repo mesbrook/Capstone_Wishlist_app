@@ -22,12 +22,11 @@ namespace Capstone_Wishlist_app.Models {
 
     public class CartItem {
         [Key]
-        public int Id { get; set; }
-
-        [Required]
+        [Column(Order=1)]
         public int CartId { get; set; }
 
-        [Required]
+        [Key]
+        [Column(Order=2)]
         public int WishlistItemId { get; set; }
 
         public string Title { get; set; }
