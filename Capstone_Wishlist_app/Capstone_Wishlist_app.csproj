@@ -382,6 +382,8 @@
     <Content Include="Views\Family\DisplayTemplates\_FamilyWishlist.cshtml" />
     <Content Include="Views\Wishlist\Approve.cshtml" />
     <Content Include="Views\Shared\_CartCount.cshtml" />
+    <Content Include="Views\Donor\ViewCart.cshtml" />
+    <Content Include="Views\Donor\_CartItems.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
@@ -394,7 +396,6 @@
     <WCFMetadataStorage Include="Service References\Services.Amazon\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Views\Donor\" />
     <Folder Include="Views\Item\" />
   </ItemGroup>
   <PropertyGroup>
