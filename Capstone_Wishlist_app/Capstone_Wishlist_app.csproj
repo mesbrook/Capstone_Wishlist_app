@@ -381,6 +381,7 @@
     <Content Include="Views\Shared\DisplayTemplates\_Address.cshtml" />
     <Content Include="Views\Family\DisplayTemplates\_FamilyWishlist.cshtml" />
     <Content Include="Views\Wishlist\Approve.cshtml" />
+    <Content Include="Views\Shared\_CartCount.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

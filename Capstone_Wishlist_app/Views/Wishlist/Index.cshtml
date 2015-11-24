@@ -6,22 +6,19 @@
     ViewBag.Title = "WishlistIndex";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<style>
-    tr-hide {
-        display: none;
-    }
-</style>
-<h2>Children's Wishlists</h2>
 
+<h2>Children's Wishlists</h2>
 @foreach (var wl in Model) {
     <div class="row">
         <div class="col-md-12">
             <h3>
-                @wl.FirstName
-                <small>@wl.Gender age @wl.Age</small>
-                <button type="button" value=@wl.ChildId class="btn btn-primary btn-sm" onclick="toggleWishlistView(this)" style="margin-bottom: 5px">
+                <button type="button" value=@wl.ChildId class="btn btn-default btn-sm" onclick="toggleWishlistView(this)" style="margin-bottom: 5px">
                     <i class="fa fa-minus"></i>
                 </button>
+                @wl.FirstName
+                <small>
+                    @wl.Gender age @wl.Age
+                </small>
             </h3>
             <div class=@("sw-wl-view-" + wl.ChildId)>
                 <label class="control-label">About @wl.FirstName</label>
@@ -37,16 +34,16 @@
                     @foreach (var item in wl.Items) {
                         <tr>
                             <td>
+                                <img src=@item.ImageUrl />
+                            </td>
+                            <td>
                                 <a target="_blank" href=@item.ListingUrl>@item.Title</a>
                                 <i class="fa fa-external-link"></i>
                             </td>
                             <td>
-                                <img src=@item.ImageUrl />
-                            </td>
-                            <td>
                                 @item.ListPrice
                             </td>
-                            <td>
+                            <td class="text-right">
                                 @if (ViewData.ContainsKey("DonorId")) {
                                     <button type="button" class="btn btn-default" onclick="addItemToCart(this, @item.Id, '@item.Title', '@item.ListPrice')">
                                         <i class="fa fa-cart-plus"></i>
@@ -60,13 +57,36 @@
             </div>
         </div>
     </div>
+
 }
 
 @section scripts {
     <script type="text/javascript">
         @if (ViewData.ContainsKey("DonorId")) {
             <text>
-                var addItemUrl = '@Url.Action("AddItemToCart", "Donor", new { id = ViewBag.DonorId })';
+            var addItemUrl = '@Url.Action("AddItemToCart", "Donor", new { id = ViewBag.DonorId })';
+            var countCartUrl = '@Url.Action("CountItemsInCart", "Donor", new { id = ViewBag.DonorId })';
+
+            function addItemToCart(element, id, title, listPrice) {
+                var $element = $(element);
+                var addition = {
+                    wishlistItemId: id,
+                    title: title,
+                    listPrice: listPrice
+                };
+
+                $.post(addItemUrl, addition, function (result) {
+                    if (result.IsInCart) {
+                        $element.replaceWith('<p class="text-success"><i class="fa fa-check"/>Added to cart!</p>');
+                    } else if (result.WasInCart) {
+                        $element.replaceWith('<p class="text-success"><i class="fa fa-check"/>Already in cart!</p>');
+                    }
+
+                    $.get(countCartUrl, null, function (result) {
+                        $("#menuCartCount").replaceWith(result);
+                    }, "html");
+                }, "json"); 
+            }
             </text>
         }
 
@@ -91,23 +111,5 @@
                 $icon.addClass("fa-plus");
             }
         };
-
-        function addItemToCart(element, id, title, listPrice) {
-            var $element = $(element);
-            var addition = {
-                wishlistItemId : id,
-                title : title,
-                listPrice : listPrice
-            };
-
-            $.post(addItemUrl, addition, function(result) {
-                if (result.IsInCart) {
-                    $element.replaceWith('<p class="text-success"><i class="fa fa-check"/>Added to cart!</p>');
-                } else if (result.WasInCart) {
-                    $element.replaceWith('<p class="text-success"><i class="fa fa-check"/>Already in cart!</p>');
-                }
-            }, "json");
-        }
-
     </script>
 }

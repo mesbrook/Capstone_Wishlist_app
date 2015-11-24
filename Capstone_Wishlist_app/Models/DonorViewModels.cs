@@ -9,4 +9,9 @@ namespace Capstone_Wishlist_app.Models {
         public decimal ListPrice { get; set; }
         public string Title { get; set; }
     }
+
+    public class CartCountViewModel {
+        public int DonorId { get; set; }
+        public int Count { get; set; }
+    }
 }

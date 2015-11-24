@@ -1,0 +1,9 @@
+﻿@model Capstone_Wishlist_app.Models.CartCountViewModel
+
+<li id="menuCartCount">
+    <a href=@Url.Action("ViewCart", "Donor", Model.DonorId)>
+        <i class="fa fa-shopping-cart"></i>
+        My Cart
+        <span class="badge">@Model.Count</span>
+    </a>
+</li>

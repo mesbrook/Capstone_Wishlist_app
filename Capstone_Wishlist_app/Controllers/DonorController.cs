@@ -58,5 +58,15 @@ namespace Capstone_Wishlist_app.Controllers
 
             return Json(new { IsInCart = true });
         }
+
+        [HttpGet]
+        public ActionResult CountItemsInCart(int id) {
+            var count = _db.CartItems.Count(ci => ci.CartId == id);
+
+            return PartialView("_CartCount", new CartCountViewModel {
+                DonorId = id,
+                Count = count
+            });
+        }
     }
 }
