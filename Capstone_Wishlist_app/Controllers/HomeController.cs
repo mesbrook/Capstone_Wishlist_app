@@ -13,6 +13,7 @@ using Capstone_Wishlist_app.Services;
 using System.Security.Claims;
 
 namespace Capstone_Wishlist_app.Controllers {
+    [InjectDonorIdentity]
     public class HomeController : Controller {
 
         public ActionResult Index() {
