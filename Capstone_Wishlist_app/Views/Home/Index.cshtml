@@ -20,7 +20,7 @@
     </div>
 }
 
-@if (this.User.IsInRole("Moderator")) {
+@if (User.IsInRole("Moderator")) {
     <div class="row">
         <div class="col-md-3, col-lg-4">
             <h2>Add Wishlists</h2>
@@ -32,12 +32,15 @@
         </div>
 
         <div class="col-md-3, col-lg-4">
-            <h2>Adding a Family Profile</h2>
-            <p>To add a family's and child's profile</p>
-            <p><a class="btn btn-default" href="@Url.Action("CreateFamily", "CreateFamily")">Add Family Profile &raquo;</a></p>
+            <h2>Register a Family</h2>
+            <p>To register a family's and add a child's profile</p>
+            <p><a class="btn btn-default" href="@Url.Action("Register", "Family")">Family Registration &raquo;</a></p>
         </div>
     </div>
-} else if (this.User.IsInRole("Admin")) {
+    <hr/>
+} 
+@if (User.IsInRole("Admin")) {
+    <h3><strong>Administrator Tools</strong></h3>
     <div class="row">
         <div class="col-md-4">
             <h2>Add Role to User</h2>
@@ -63,11 +66,7 @@
             <p><a class="btn btn-default" href="@Url.Action("RoleIndex", "Account")">Role Index &raquo;</a></p>
         </div>
 
-    <div class="col-md-3, col-lg-4">
-        <h2>Register a Family</h2>
-        <p>To register a family's and add a child's profile</p>
-        <p><a class="btn btn-default" href="@Url.Action("Register", "Family")">Family Registration &raquo;</a></p>
-    </div>
+    
 
         <div class="col-md-4">
             <h2>Approve Wishlists Items</h2>
@@ -76,15 +75,6 @@
             </p>
             @*-------------------------need to add link to wishlist form---------------------------*@
             <p><a class="btn btn-default" href="@Url.Action("Index", "Items")">Approve Wishlist Items&raquo;</a></p>
-        </div>
-
-        <div class="col-md-4">
-            <h2>Add Wishlists</h2>
-            <p>
-                To create new profiles and wishlists
-            </p>
-            @*-------------------------need to add link to wishlist form---------------------------*@
-            <p><a class="btn btn-default" href="">Add Wishlist &raquo;</a></p>
         </div>
     </div>
 } else if (ViewData.ContainsKey("FamilyId")) {
