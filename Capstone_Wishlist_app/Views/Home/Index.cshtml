@@ -20,7 +20,7 @@
     </div>
 }
 
-@if (this.User.IsInRole("Moderator")) {
+@if (User.IsInRole("Moderator")) {
     <div class="row">
         <div class="col-md-3, col-lg-4">
             <h2>Add Wishlists</h2>
@@ -32,12 +32,15 @@
         </div>
 
         <div class="col-md-3, col-lg-4">
-            <h2>Adding a Family Profile</h2>
-            <p>To add a family's and child's profile</p>
-            <p><a class="btn btn-default" href="@Url.Action("CreateFamily", "CreateFamily")">Add Family Profile &raquo;</a></p>
+            <h2>Register a Family</h2>
+            <p>To register a family's and add a child's profile</p>
+            <p><a class="btn btn-default" href="@Url.Action("Register", "Family")">Family Registration &raquo;</a></p>
         </div>
     </div>
-} else if (this.User.IsInRole("Admin")) {
+    <hr/>
+} 
+@if (User.IsInRole("Admin")) {
+    <h3><strong>Administrator Tools</strong></h3>
     <div class="row">
         <div class="col-md-4">
             <h2>Add Role to User</h2>
@@ -63,11 +66,7 @@
             <p><a class="btn btn-default" href="@Url.Action("RoleIndex", "Account")">Role Index &raquo;</a></p>
         </div>
 
-    <div class="col-md-3, col-lg-4">
-        <h2>Register a Family</h2>
-        <p>To register a family's and add a child's profile</p>
-        <p><a class="btn btn-default" href="@Url.Action("Register", "Family")">Family Registration &raquo;</a></p>
-    </div>
+    
 
         <div class="col-md-4">
             <h2>Approve Wishlists Items</h2>
@@ -77,21 +76,12 @@
             @*-------------------------need to add link to wishlist form---------------------------*@
             <p><a class="btn btn-default" href="@Url.Action("Index", "Items")">Approve Wishlist Items&raquo;</a></p>
         </div>
-
-        <div class="col-md-4">
-            <h2>Add Wishlists</h2>
-            <p>
-                To create new profiles and wishlists
-            </p>
-            @*-------------------------need to add link to wishlist form---------------------------*@
-            <p><a class="btn btn-default" href="">Add Wishlist &raquo;</a></p>
-        </div>
     </div>
 } else if (ViewData.ContainsKey("FamilyId")) {
     <br />
     <div class="jumbotron">
         <h1>Welcome To Santa's Wishlist</h1>
-        <p>See the quick links below to start creating wishlists.</p>
+        <p>See the quick links below to manage the family's profiles and wishlists.</p>
     </div>
     <div class="row">
         <div class="col-md-4">
@@ -106,6 +96,19 @@
                     </p>
                 </a>
             </div>
+            <div class="list-group">
+                <a href=@Url.Action("ViewChildren", "Family", new { id = ViewBag.FamilyId }) class="list-group-item">
+                    <h4 class="list-group-item-heading">
+                        <i class="fa fa-user"></i>
+                        Child Profiles
+                    </h4>
+                    <p class="list-group-item-text">
+                        See the list of profiles for the children of this family.
+                    </p>
+                </a>
+            </div>
+        </div>
+        <div class="col-md-4">
             <div class="list-group">
                 <a href=@Url.Action("ViewWishlists", "Family", new { id = ViewBag.FamilyId }) class="list-group-item">
                     <h4 class="list-group-item-heading">

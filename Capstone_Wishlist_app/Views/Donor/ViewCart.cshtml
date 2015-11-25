@@ -1,0 +1,45 @@
+﻿@model Capstone_Wishlist_app.Models.CartViewModel
+@using Capstone_Wishlist_app.Models
+@{
+    ViewBag.DonorId = Model.DonorId;
+    ViewBag.Title = "ViewCart";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <h2>My Cart</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href=@Url.Action("Index", "Home")>
+                    <i class="fa fa-home"></i>
+                    Home
+                </a>
+            </li>
+            <li class="active">
+                <i class="fa fa-shopping-cart"></i>
+                My Cart
+            </li>
+        </ol>
+    </div>
+</div>
+<div id="items">
+    @{Html.RenderPartial("_CartItems", Model);}
+</div>
+
+<script type="text/javascript">
+    var removeItemUrl = "@Url.Action("RemoveItemFromCart", new{ id = Model.DonorId })";
+    var countCartUrl = "@Url.Action("CountItemsInCart", new { id = Model.DonorId })";
+
+    function removeItemFromCart(element) {
+        var $element = $(element);
+        var itemId = $element.val();
+
+        $.post(removeItemUrl, { wishlistItemId: itemId }, function (result) {
+            $("#items").html(result);
+            $.get(countCartUrl, null, function (result) {
+                $("#menuCartCount").replaceWith(result);
+            }, "html");
+        }, "html");
+    }
+</script>

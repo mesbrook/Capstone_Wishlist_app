@@ -47,22 +47,19 @@ namespace Capstone_Wishlist_app.Models {
 
     public class DonorListViewModel
     {
-        [Key]
         public int ChildId { get; set; }
-        public int FamilyId { get; set; }
         public int  WishlistId { get; set; }
 
         [Display(Name = "Name")]
         public string FirstName { get; set; }
 
         public int Age { get; set; }
+        public Gender Gender { get; set; }
 
-        public char Gender { get; set; }
+        [Display(Name = "About Me")]
+        public string Biography { get; set; }
 
-        [Display(Name = "Short Biography")]
-        public string Biographies { get; set; }
-
-        public IList<Item> retailItems { get; set; }
+        public IList<WishlistItemViewModel> Items { get; set; }
 	}
 
     public class OwnWishlistViewModel {
@@ -87,6 +84,19 @@ namespace Capstone_Wishlist_app.Models {
         public WishlistItemStatus Status { get; set; }
     }
 
+    public class ApproveWishlistViewModel {
+        public int WishlistId { get; set; }
+        public int ChildId { get; set; }
+        public int FamilyId { get; set; }
+        public string ChildFirstName { get; set; }
+        public string ChildLastName { get; set; }
+        public IList<ApproveItemViewModel> Items { get; set; }
+    }
+
+    public class ApproveItemViewModel : WishlistItemViewModel {
+        public bool IsSelected { get; set; }
+    }
+
     public static class WishlistItemViewExtensions {
         private static readonly IReadOnlyCollection<WishlistItemStatus> donatedStatuses = new[] {
             WishlistItemStatus.Ordered,
@@ -95,13 +105,24 @@ namespace Capstone_Wishlist_app.Models {
 
         public static int GetPercentDonated(this IList<WishlistItem> items) {
             var itemCount = items.Count;
-            var donatedCount = items.GetCountDonated();
+            var donatedCount = items.CountDonated();
             return (int) ((float) donatedCount / Math.Max(itemCount, 1) * 100);
         }
 
-        public static int GetCountDonated(this IList<WishlistItem> items) {
+        public static int GetPercentAvailable(this IList<WishlistItem> items) {
+            var itemCount = items.Count;
+            var availableCount = items.CountAvailable();
+            return (int) ((float) availableCount / Math.Max(itemCount, 1) * 100);
+        }
+
+        public static int CountDonated(this IList<WishlistItem> items) {
             return items.Count(i => donatedStatuses.Contains(i.Status));
         }
 
+        public static int CountAvailable(this IList<WishlistItem> items) {
+            return items.Count(i => i.Status == WishlistItemStatus.Avaliable);
+        }
     }
+
+
 }

@@ -3,7 +3,7 @@ namespace Capstone_Wishlist_app.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class rebuild1 : DbMigration
+    public partial class initialsetup : DbMigration
     {
         public override void Up()
         {
@@ -88,6 +88,70 @@ namespace Capstone_Wishlist_app.Migrations
                 .Index(t => t.WishlistId);
             
             CreateTable(
+                "dbo.CartItem",
+                c => new
+                    {
+                        CartId = c.Int(nullable: false),
+                        WishlistItemId = c.Int(nullable: false),
+                        Title = c.String(),
+                        Price = c.Decimal(nullable: false, precision: 18, scale: 2),
+                    })
+                .PrimaryKey(t => new { t.CartId, t.WishlistItemId })
+                .ForeignKey("dbo.Cart", t => t.CartId, cascadeDelete: true)
+                .ForeignKey("dbo.WishlistItem", t => t.WishlistItemId, cascadeDelete: true)
+                .Index(t => t.CartId)
+                .Index(t => t.WishlistItemId);
+            
+            CreateTable(
+                "dbo.Cart",
+                c => new
+                    {
+                        DonorId = c.Int(nullable: false),
+                        ModifiedDate = c.DateTime(nullable: false),
+                    })
+                .PrimaryKey(t => t.DonorId)
+                .ForeignKey("dbo.Donor", t => t.DonorId)
+                .Index(t => t.DonorId);
+            
+            CreateTable(
+                "dbo.Donor",
+                c => new
+                    {
+                        Id = c.Int(nullable: false, identity: true),
+                    })
+                .PrimaryKey(t => t.Id);
+            
+            CreateTable(
+                "dbo.Donation",
+                c => new
+                    {
+                        Id = c.Int(nullable: false, identity: true),
+                        DonorId = c.Int(nullable: false),
+                        Date = c.DateTime(nullable: false),
+                        SubTotal = c.Decimal(nullable: false, precision: 18, scale: 2),
+                        SalesTax = c.Decimal(nullable: false, precision: 18, scale: 2),
+                        Total = c.Decimal(nullable: false, precision: 18, scale: 2),
+                    })
+                .PrimaryKey(t => t.Id)
+                .ForeignKey("dbo.Donor", t => t.DonorId, cascadeDelete: true)
+                .Index(t => t.DonorId);
+            
+            CreateTable(
+                "dbo.DonatedItem",
+                c => new
+                    {
+                        DonationId = c.Int(nullable: false),
+                        WishlistItemId = c.Int(nullable: false),
+                        Title = c.String(),
+                        PurchasePrice = c.Decimal(nullable: false, precision: 18, scale: 2),
+                    })
+                .PrimaryKey(t => new { t.DonationId, t.WishlistItemId })
+                .ForeignKey("dbo.Donation", t => t.DonationId, cascadeDelete: true)
+                .ForeignKey("dbo.WishlistItem", t => t.WishlistItemId, cascadeDelete: true)
+                .Index(t => t.DonationId)
+                .Index(t => t.WishlistItemId);
+            
+            CreateTable(
                 "dbo.AspNetRoles",
                 c => new
                     {
@@ -164,6 +228,12 @@ namespace Capstone_Wishlist_app.Migrations
             DropForeignKey("dbo.AspNetUserLogins", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserClaims", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserRoles", "RoleId", "dbo.AspNetRoles");
+            DropForeignKey("dbo.CartItem", "WishlistItemId", "dbo.WishlistItem");
+            DropForeignKey("dbo.CartItem", "CartId", "dbo.Cart");
+            DropForeignKey("dbo.Cart", "DonorId", "dbo.Donor");
+            DropForeignKey("dbo.DonatedItem", "WishlistItemId", "dbo.WishlistItem");
+            DropForeignKey("dbo.DonatedItem", "DonationId", "dbo.Donation");
+            DropForeignKey("dbo.Donation", "DonorId", "dbo.Donor");
             DropForeignKey("dbo.WishlistItem", "WishlistId", "dbo.Wishlist");
             DropForeignKey("dbo.Wishlist", "ChildId", "dbo.Child");
             DropForeignKey("dbo.Family", "ShippingAddressId", "dbo.Address");
@@ -175,6 +245,12 @@ namespace Capstone_Wishlist_app.Migrations
             DropIndex("dbo.AspNetUserRoles", new[] { "RoleId" });
             DropIndex("dbo.AspNetUserRoles", new[] { "UserId" });
             DropIndex("dbo.AspNetRoles", "RoleNameIndex");
+            DropIndex("dbo.DonatedItem", new[] { "WishlistItemId" });
+            DropIndex("dbo.DonatedItem", new[] { "DonationId" });
+            DropIndex("dbo.Donation", new[] { "DonorId" });
+            DropIndex("dbo.Cart", new[] { "DonorId" });
+            DropIndex("dbo.CartItem", new[] { "WishlistItemId" });
+            DropIndex("dbo.CartItem", new[] { "CartId" });
             DropIndex("dbo.WishlistItem", new[] { "WishlistId" });
             DropIndex("dbo.Wishlist", new[] { "ChildId" });
             DropIndex("dbo.Family", new[] { "ShippingAddressId" });
@@ -185,6 +261,11 @@ namespace Capstone_Wishlist_app.Migrations
             DropTable("dbo.AspNetUsers");
             DropTable("dbo.AspNetUserRoles");
             DropTable("dbo.AspNetRoles");
+            DropTable("dbo.DonatedItem");
+            DropTable("dbo.Donation");
+            DropTable("dbo.Donor");
+            DropTable("dbo.Cart");
+            DropTable("dbo.CartItem");
             DropTable("dbo.WishlistItem");
             DropTable("dbo.Wishlist");
             DropTable("dbo.Family");

@@ -184,6 +184,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ChildController.cs" />
+    <Compile Include="Controllers\DonorController.cs" />
     <Compile Include="Controllers\FamilyController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ItemController.cs" />
@@ -192,24 +193,19 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201511212317466_rebuild1.cs" />
-    <Compile Include="Migrations\201511212317466_rebuild1.Designer.cs">
-      <DependentUpon>201511212317466_rebuild1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201511212321547_initial update.cs" />
-    <Compile Include="Migrations\201511212321547_initial update.Designer.cs">
-      <DependentUpon>201511212321547_initial update.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201511231128496_initial.cs" />
-    <Compile Include="Migrations\201511231128496_initial.Designer.cs">
-      <DependentUpon>201511231128496_initial.cs</DependentUpon>
+    <Compile Include="Migrations\201511250145531_initial setup.cs" />
+    <Compile Include="Migrations\201511250145531_initial setup.Designer.cs">
+      <DependentUpon>201511250145531_initial setup.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Address.cs" />
+    <Compile Include="Models\Cart.cs" />
     <Compile Include="Models\Child.cs" />
     <Compile Include="Models\ChildBiography.cs" />
     <Compile Include="Models\ChildViewModels.cs" />
+    <Compile Include="Models\Donor.cs" />
+    <Compile Include="Models\DonorViewModels.cs" />
     <Compile Include="Models\Family.cs" />
     <Compile Include="Models\FamilyViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -239,8 +235,11 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\custom.css" />
     <Content Include="Content\font-awesome.css" />
     <Content Include="Content\font-awesome.min.css" />
+    <Content Include="Content\images\christmas2.jpg" />
+    <Content Include="Content\images\Merry-Christmas.jpg" />
     <Content Include="Content\images\santa_gift.jpg" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\fontawesome-webfont.svg" />
@@ -392,6 +391,11 @@
     <Content Include="Views\Family\Administer.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\_Address.cshtml" />
     <Content Include="Views\Family\DisplayTemplates\_FamilyWishlist.cshtml" />
+    <Content Include="Views\Wishlist\Approve.cshtml" />
+    <Content Include="Views\Shared\_CartCount.cshtml" />
+    <Content Include="Views\Donor\ViewCart.cshtml" />
+    <Content Include="Views\Donor\_CartItems.cshtml" />
+    <Content Include="Views\Donor\PurchaseCart.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
@@ -407,14 +411,8 @@
     <Folder Include="Views\Item\" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201511212317466_rebuild1.resx">
-      <DependentUpon>201511212317466_rebuild1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201511212321547_initial update.resx">
-      <DependentUpon>201511212321547_initial update.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201511231128496_initial.resx">
-      <DependentUpon>201511231128496_initial.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201511250145531_initial setup.resx">
+      <DependentUpon>201511250145531_initial setup.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
