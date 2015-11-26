@@ -197,6 +197,10 @@
     <Compile Include="Migrations\201511250145531_initial setup.Designer.cs">
       <DependentUpon>201511250145531_initial setup.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201511260026143_added unapproved bool to DonorListViewModel.cs" />
+    <Compile Include="Migrations\201511260026143_added unapproved bool to DonorListViewModel.Designer.cs">
+      <DependentUpon>201511260026143_added unapproved bool to DonorListViewModel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Address.cs" />
@@ -413,6 +417,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201511250145531_initial setup.resx">
       <DependentUpon>201511250145531_initial setup.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201511260026143_added unapproved bool to DonorListViewModel.resx">
+      <DependentUpon>201511260026143_added unapproved bool to DonorListViewModel.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
