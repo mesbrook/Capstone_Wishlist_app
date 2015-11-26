@@ -22,8 +22,9 @@ namespace Capstone_Wishlist_app.Models {
         [Required]
         public int DonorId { get; set; }
 
+        public string OrderId { get; set; }
         public DateTime Date { get; set; }
-        public decimal SubTotal { get; set; }
+        public decimal Subtotal { get; set; }
         public decimal SalesTax { get; set; }
         public decimal Total { get; set; }
 

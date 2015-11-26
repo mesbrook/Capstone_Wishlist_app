@@ -8,20 +8,21 @@ using System.Configuration;
 using System.Threading.Tasks;
 using Capstone_Wishlist_app.Models;
 using Capstone_Wishlist_app.DAL;
+using System.Data.Entity.Infrastructure;
+using System.Web.SessionState;
 
-namespace Capstone_Wishlist_app.Controllers
-{
-    public class DonorController : Controller
-    {
+namespace Capstone_Wishlist_app.Controllers {
+    [SessionState(SessionStateBehavior.Required)]
+    public class DonorController : Controller {
         private WishlistContext _db;
 
-        public DonorController() : base() {
+        public DonorController()
+            : base() {
             _db = new WishlistContext();
         }
 
         // GET: Donor
-        public ActionResult Index()
-        {
+        public ActionResult Index() {
             return View();
         }
 
@@ -30,7 +31,7 @@ namespace Capstone_Wishlist_app.Controllers
             var cart = _db.Carts.Where(c => c.DonorId == id)
                 .Include(c => c.Donor)
                 .Include(c => c.Items.Select(ci => ci.Item.Wishlist.Child))
-                .First();
+                .Single();
             var items = cart.Items.Select(ci => new CartItemViewModel {
                 CartId = ci.CartId,
                 WishlistItemId = ci.WishlistItemId,
@@ -76,11 +77,20 @@ namespace Capstone_Wishlist_app.Controllers
             _db.CartItems.Remove(item);
             await _db.SaveChangesAsync();
 
-            var cart = _db.Carts.Where(c => c.DonorId == id)
+            var items = await GetViewableItemsFromCart(id);
+
+            return PartialView("_CartItems", new CartViewModel {
+                DonorId = id,
+                Items = items
+            });
+        }
+
+        public async Task<IList<CartItemViewModel>> GetViewableItemsFromCart(int donorId) {
+            var cart = await _db.Carts.Where(c => c.DonorId == donorId)
                 .Include(c => c.Donor)
                 .Include(c => c.Items.Select(ci => ci.Item.Wishlist.Child))
-                .First();
-            var items = cart.Items.Select(ci => new CartItemViewModel {
+                .SingleAsync();
+            return cart.Items.Select(ci => new CartItemViewModel {
                 CartId = ci.CartId,
                 WishlistItemId = ci.WishlistItemId,
                 ItemId = ci.Item.ItemId,
@@ -88,11 +98,6 @@ namespace Capstone_Wishlist_app.Controllers
                 Price = ci.Price,
                 Title = ci.Title
             }).ToList();
-
-            return PartialView("_CartItems", new CartViewModel {
-                DonorId = id,
-                Items = items
-            });
         }
 
         [HttpGet]
@@ -107,9 +112,181 @@ namespace Capstone_Wishlist_app.Controllers
 
         [HttpGet]
         public async Task<ActionResult> PurchaseCart(int id) {
-            return View(new PurchaseCartViewModel{
+            var items = await _db.CartItems.Where(ci => ci.CartId == id)
+                .Include(ci => ci.Item.Wishlist.Child)
+                .ToListAsync();
+
+            return View(new PurchaseCartViewModel {
                 DonorId = id,
-                BillingAddress = new CreateAddressModel()
+                BillingAddress = new CreateAddressModel(),
+                Items = ToViewableItems(items)
+            });
+        }
+
+        private async Task RemoveUnavailableItems(IList<CartItem> items) {
+            foreach (var ci in items) {
+                _db.CartItems.Remove(ci);
+            }
+
+            await _db.SaveChangesAsync();
+        }
+
+        private IList<CartItemViewModel> ToViewableItems(IList<CartItem> items) {
+            return items.Select(ci => new CartItemViewModel {
+                CartId = ci.CartId,
+                WishlistItemId = ci.WishlistItemId,
+                ItemId = ci.Item.ItemId,
+                ChildName = ci.Item.Wishlist.Child.FirstName,
+                Price = ci.Price,
+                Title = ci.Title
+            }).ToList();
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> PurchaseCart(int id, PurchaseCartViewModel purchase) {
+            var items = await _db.CartItems.Where(ci => ci.CartId == id)
+                .Include(ci => ci.Item.Wishlist.Child)
+                .ToListAsync();
+            var availableItems = items.Where(ci => ci.Item.Status == WishlistItemStatus.Avaliable)
+                .ToList();
+            var unavailableItems = items.Where(ci => ci.Item.Status != WishlistItemStatus.Avaliable)
+                .ToList();
+
+            if (unavailableItems.Any()) {
+                await RemoveUnavailableItems(unavailableItems);
+                TempData["unavailableItems"] = ToViewableItems(unavailableItems);
+            }
+
+            Session["order"] = BuildOrderModel(id, items);
+
+            return RedirectToAction("ConfirmOrder", new { id = id });
+        }
+
+        private OrderViewModel BuildOrderModel(int donorId, IList<CartItem> items) {
+            var orderItems = items.Select(ci => new OrderItemViewModel {
+                WishlistItemId = ci.Item.Id,
+                ItemId = ci.Item.ItemId,
+                Price = ci.Price,
+                Title = ci.Title
+            }).ToList();
+
+            var subtotal = items.Sum(oi => oi.Price);
+            var shipping = subtotal * (decimal) (0.05 + new Random().NextDouble() * 0.2);
+            var tax = (subtotal + shipping) * 0.05m;
+            var total = subtotal + shipping + tax;
+
+            var order = new OrderViewModel {
+                DonorId = donorId,
+                OrderId = Guid.NewGuid().ToString(),
+                Subtotal = subtotal,
+                Shipping = shipping,
+                SalesTax = tax,
+                Total = total,
+                Items = orderItems
+            };
+
+            return order;
+        }
+
+        [HttpGet]
+        public ActionResult ConfirmOrder(int id) {
+            var order = Session["order"] as OrderViewModel;
+
+            return View(order);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> CompleteOrder(int id) {
+            var order = Session["order"] as OrderViewModel;
+            Session.Remove("order");
+
+            var orderedItemIds = order.Items.Select(oi => oi.WishlistItemId);
+            var wishlistItems = await _db.WishlistItems.Where(wi => orderedItemIds.Contains(wi.Id))
+                .ToListAsync();
+
+            var hasReserved = await ReserveItemsForDonation(wishlistItems);
+
+            if (!hasReserved) {
+                return RedirectToAction("PurchaseCart", new { id = id });
+            }
+
+            var donationId = await BuildDonationModel(order, wishlistItems);
+
+            await ClearCart(wishlistItems);
+
+            return RedirectToAction("ThankYou", new { id = id, donationId = donationId });
+        }
+
+        private async Task ClearCart(List<WishlistItem> wishlistItems) {
+            var donatedIds = wishlistItems.Select(wi => wi.Id);
+            var clearItems = await _db.CartItems.Where(ci => donatedIds.Contains(ci.WishlistItemId))
+                .ToListAsync();
+
+            foreach(var ci in clearItems) {
+                _db.CartItems.Remove(ci);
+            }
+
+            await _db.SaveChangesAsync();
+        }
+
+        private async Task<int> BuildDonationModel(OrderViewModel order, IList<WishlistItem> wishlistItems) {
+            var donation = new Donation {
+                DonorId = order.DonorId,
+                OrderId = order.OrderId,
+                Date = DateTime.Now,
+                Subtotal = order.Subtotal,
+                SalesTax = order.SalesTax,
+                Total = order.Total
+            };
+
+            _db.Donations.Add(donation);
+
+            var donatedItems = order.Items.Join(wishlistItems, oi => oi.WishlistItemId, wi => wi.Id,
+                (oi, wi) => new DonatedItem {
+                    Donation = donation,
+                    Item = wi,
+                    PurchasePrice = oi.Price,
+                    Title = oi.Title,
+                });
+
+            foreach (var di in donatedItems) {
+                _db.DonatedItems.Add(di);
+            }
+
+            await _db.SaveChangesAsync();
+
+            return donation.Id;
+        }
+
+        private async Task<bool> ReserveItemsForDonation(IList<WishlistItem> items) {
+            foreach (var wi in items) {
+                wi.Status = WishlistItemStatus.Ordered;
+            }
+
+            try {
+                await _db.SaveChangesAsync();
+                return true;
+            }
+            catch (DbUpdateConcurrencyException) {
+                return false;
+            }
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> ThankYou(int id, int donationId) {
+            var donation = await _db.Donations.Where(dn => dn.Id == donationId)
+                .Include(dn => dn.Donor)
+                .Include(dn => dn.Items.Select(di => di.Item.Wishlist.Child))
+                .FirstAsync();
+            var childNames = donation.Items.Select(di => di.Item.Wishlist.Child.FirstName)
+                .Distinct()
+                .ToList();
+
+            return View(new ThankYouViewModel {
+                DonorId = id,
+                DonationId = donation.Id,
+                Total = donation.Total,
+                ChildNames = childNames
             });
         }
     }
