@@ -23,14 +23,24 @@
             <div class=@("sw-wl-view-" + wl.ChildId)>
                 <label class="control-label">About @wl.FirstName</label>
                 <p>@wl.Biography</p>
-                <label class="control-label">@wl.FirstName's Wishlist</label>
+                <div class="row">
+                    <label class="control-label">@wl.FirstName's Wishlist</label>
+                    @if (User.IsInRole("Moderator"))
+                    {                       
+                            <button type="button" class="btn btn-default" onclick="location.href='/Wishlist/@wl.WishlistId/Approve'">
+                                <i class="glyphicon glyphicon-thumbs-up"></i>
+                                Approve Wishlist
+                            </button>                       
+                    }
+                </div>
                 <table class="table">
                     <tr>
                         <th>Item</th>
                         <th></th>
-                        <th>List Price</th>
+                        <th>List Price</th>                        
                         <th></th>
                     </tr>
+
                     @foreach (var item in wl.Items) {
                         <tr>
                             <td>
@@ -38,7 +48,7 @@
                             </td>
                             <td>
                                 <a target="_blank" href=@item.ListingUrl>@item.Title</a>
-                                <i class="fa fa-external-link"></i>
+                                <i class="glyphicon glyphicon-thumbs-up"></i>
                             </td>
                             <td>
                                 @item.ListPrice
