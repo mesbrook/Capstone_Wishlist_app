@@ -25,7 +25,7 @@
                 <p>@wl.Biography</p>
                 <div class="row">
                     <label class="control-label">@wl.FirstName's Wishlist</label>
-                    @if (User.IsInRole("Moderator"))
+                    @if (User.IsInRole("Moderator")  && (@wl.ContainsUnapproved))
                     {                       
                             <button type="button" class="btn btn-default" onclick="location.href='/Wishlist/@wl.WishlistId/Approve'">
                                 <i class="glyphicon glyphicon-thumbs-up"></i>
