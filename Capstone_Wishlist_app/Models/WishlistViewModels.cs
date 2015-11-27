@@ -98,10 +98,6 @@ namespace Capstone_Wishlist_app.Models {
     }
 
     public static class WishlistItemViewExtensions {
-        private static readonly IReadOnlyCollection<WishlistItemStatus> donatedStatuses = new[] {
-            WishlistItemStatus.Ordered,
-            WishlistItemStatus.Shipping,
-            WishlistItemStatus.Delivered };
 
         public static int GetPercentDonated(this IList<WishlistItem> items) {
             var itemCount = items.Count;
@@ -116,7 +112,7 @@ namespace Capstone_Wishlist_app.Models {
         }
 
         public static int CountDonated(this IList<WishlistItem> items) {
-            return items.Count(i => donatedStatuses.Contains(i.Status));
+            return items.Count(i => i.Status == WishlistItemStatus.Ordered);
         }
 
         public static int CountAvailable(this IList<WishlistItem> items) {

@@ -27,7 +27,6 @@ namespace Capstone_Wishlist_app.Models
     public enum WishlistItemStatus {
         Unapproved,
         Avaliable,
-        Ordered,
-        Shipping,
-        Delivered };
+        Ordered
+    };
 }

@@ -10,10 +10,23 @@ using Capstone_Wishlist_app.Models;
 using Capstone_Wishlist_app.DAL;
 using System.Data.Entity.Infrastructure;
 using System.Web.SessionState;
+using Capstone_Wishlist_app.Services;
 
 namespace Capstone_Wishlist_app.Controllers {
     [SessionState(SessionStateBehavior.Required)]
     public class DonorController : Controller {
+        private static string AmazonAccessKey {
+            get {
+                return ConfigurationManager.AppSettings["AWSAccessKeyId"];
+            }
+        }
+
+        private static string AmazonAssociateTag {
+            get {
+                return ConfigurationManager.AppSettings["AWSAssociatesId"];
+            }
+        }
+
         private WishlistContext _db;
 
         public DonorController()
@@ -48,21 +61,23 @@ namespace Capstone_Wishlist_app.Controllers {
         }
 
         [HttpPost]
-        public async Task<ActionResult> AddItemToCart(int id, AddToCartViewModel addition) {
-            var isInCart = await _db.CartItems.AnyAsync(ci => ci.CartId == id && ci.Item.Id == addition.WishlistItemId);
+        public async Task<ActionResult> AddItemToCart(int id, int wishlistItemId) {
+            var isInCart = await _db.CartItems.AnyAsync(ci => ci.CartId == id && ci.Item.Id == wishlistItemId);
 
             if (isInCart) {
                 return Json(new { WasInCart = true });
             }
 
-            var cart = await _db.Carts.Where(c => c.DonorId == id)
-                .FirstAsync();
-            var item = await _db.WishlistItems.FindAsync(addition.WishlistItemId);
+            var item = await _db.WishlistItems.FindAsync(wishlistItemId);
+            var retailer = new AmazonRetailer(AmazonAssociateTag, AmazonAccessKey, "AWSECommerceServicePort");
+            var retailItem = (await retailer.LookupItemsAsync(new[] { item.ItemId })).FirstOrDefault();
+            var cart = await _db.Carts.FindAsync(id);
+
             var cartItem = new CartItem {
                 Cart = cart,
                 Item = item,
-                Price = addition.ListPrice,
-                Title = addition.Title
+                Price = retailItem.ListPrice,
+                Title = retailItem.Title
             };
 
             _db.CartItems.Add(cartItem);
@@ -197,8 +212,7 @@ namespace Capstone_Wishlist_app.Controllers {
 
         [HttpPost]
         public async Task<ActionResult> CompleteOrder(int id) {
-            var order = Session["order"] as OrderViewModel;
-            Session.Remove("order");
+            var order = TakeOrderFromSession();
 
             var orderedItemIds = order.Items.Select(oi => oi.WishlistItemId);
             var wishlistItems = await _db.WishlistItems.Where(wi => orderedItemIds.Contains(wi.Id))
@@ -215,6 +229,13 @@ namespace Capstone_Wishlist_app.Controllers {
             await ClearCart(wishlistItems);
 
             return RedirectToAction("ThankYou", new { id = id, donationId = donationId });
+        }
+
+        private OrderViewModel TakeOrderFromSession() {
+            var order = Session["order"] as OrderViewModel;
+            Session.Remove("order");
+
+            return order;
         }
 
         private async Task ClearCart(List<WishlistItem> wishlistItems) {
