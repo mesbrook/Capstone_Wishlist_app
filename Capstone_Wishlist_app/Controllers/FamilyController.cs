@@ -75,28 +75,57 @@ namespace Capstone_Wishlist_app.Controllers {
         }
 
         private async Task<FamilyCredentials> CreateFamilyAccount(Family family) {
-            var userNameChars = family.ParentLastName.ToLowerInvariant()
-                .ToCharArray()
-                .Where(c => char.IsLetter(c))
-                .ToArray();
-            var userName = new string(userNameChars);
+            var username = await GenerateFamilyUsername(family.ParentLastName);
             var password = GenerateRandomPassword(8);
             var userStore = new UserStore<WishlistUser>(_db);
             var userManager = new WishlistUserManager(userStore);
             await userManager.CreateAsync(new WishlistUser {
-                UserName = userName,
+                UserName = username,
                 Email = family.Email,
                 PhoneNumber = family.Phone
             }, password);
 
-            var createdUser = await userManager.FindByNameAsync(userName);
+            var createdUser = await userManager.FindByNameAsync(username);
             await userManager.AddToRoleAsync(createdUser.Id, "Family");
             await userManager.AddClaimAsync(createdUser.Id, new Claim("Family", family.Id.ToString()));
 
             return new FamilyCredentials {
-                Username = userName,
+                Username = username,
                 Password = password
             };
+        }
+
+        private async Task<string> GenerateFamilyUsername(string lastName) {
+            var username = ToUsername(lastName);
+            var isTaken = await _db.Users.AnyAsync(u => u.UserName == username);
+            
+            if (isTaken) {
+                var existingNames = await _db.Users.Where(u => u.UserName.StartsWith(username))
+                .Select(u => u.UserName)
+                .ToListAsync();
+
+                int maxOrdinal = GetMaxOrdinal(existingNames);
+                return username + (maxOrdinal + 1).ToString();
+            }
+
+            return username;
+        }
+
+        private static string ToUsername(string name) {
+            var userNameChars = name.ToLowerInvariant()
+                .ToCharArray()
+                .Where(c => char.IsLetter(c))
+                .ToArray();
+            return new string(userNameChars);
+        }
+
+        private static int GetMaxOrdinal(IEnumerable<string> names) {
+            var regex = new Regex(@"(\d+)$", RegexOptions.IgnoreCase);
+
+            return names.Select(n => {
+                var match = regex.Match(n);
+                return match.Success ? int.Parse(match.Groups[0].Value) : 0;
+            }).Max();
         }
 
         private static string GenerateRandomPassword(int maxLength) {
