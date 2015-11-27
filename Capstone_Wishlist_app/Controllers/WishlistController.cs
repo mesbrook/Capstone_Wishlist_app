@@ -44,7 +44,7 @@ namespace Capstone_Wishlist_app.Controllers {
 
             foreach (var wl in wishlists)
             {
-                var availableItems = wl.Items.Where(wi => wi.Status == WishlistItemStatus.Avaliable)
+                var availableItems = wl.Items.Where(wi => wi.Status == WishlistItemStatus.Available)
                     .ToList();
                 var viewableItems = await GetViewableItems(availableItems);
                 var biographyText = wl.Child.Biographies.OrderBy(b => b.CreationDate)
@@ -167,7 +167,8 @@ namespace Capstone_Wishlist_app.Controllers {
                 ItemId = wi.ItemId,
                 Status = wi.Status,
                 IsSelected = false
-            }).ToList();
+            }).OrderBy(ia => ia.Status)
+            .ToList();
 
             await AddRetailerItemProperties(items);
 
@@ -191,7 +192,25 @@ namespace Capstone_Wishlist_app.Controllers {
 
             foreach (var ia in itemApprovals) {
                 if (ia.IsApproved && ia.Item.Status == WishlistItemStatus.Unapproved) {
-                    ia.Item.Status = WishlistItemStatus.Avaliable;
+                    ia.Item.Status = WishlistItemStatus.Available;
+                }
+            }
+
+            await _db.SaveChangesAsync();
+            return RedirectToAction("Approve", new { id = id });
+        }
+
+        [HttpPost]
+        [Authorize(Roles="Admin")]
+        public async Task<ActionResult> DisapproveItems(int id, ApproveWishlistViewModel disapproval) {
+            var items = await _db.WishlistItems.Where(wi => wi.WishlistId == id)
+                .ToListAsync();
+            var itemApprovals = items.Join(disapproval.Items, wi => wi.Id, ai => ai.Id,
+                (wi, ai) => new { Item = wi, IsApproved = ai.IsSelected });
+
+            foreach (var ia in itemApprovals) {
+                if (ia.IsApproved && ia.Item.Status == WishlistItemStatus.Available) {
+                    ia.Item.Status = WishlistItemStatus.Unapproved;
                 }
             }
 

@@ -194,9 +194,9 @@ namespace Capstone_Wishlist_app.Controllers {
             var items = await _db.CartItems.Where(ci => ci.CartId == id)
                 .Include(ci => ci.Item.Wishlist.Child)
                 .ToListAsync();
-            var availableItems = items.Where(ci => ci.Item.Status == WishlistItemStatus.Avaliable)
+            var availableItems = items.Where(ci => ci.Item.Status == WishlistItemStatus.Available)
                 .ToList();
-            var unavailableItems = items.Where(ci => ci.Item.Status != WishlistItemStatus.Avaliable)
+            var unavailableItems = items.Where(ci => ci.Item.Status != WishlistItemStatus.Available)
                 .ToList();
 
             if (unavailableItems.Any()) {
