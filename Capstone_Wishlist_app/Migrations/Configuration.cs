@@ -55,9 +55,23 @@ namespace Capstone_Wishlist_app.Migrations {
             context.WishLists.AddOrUpdate(wishlist);
             context.SaveChanges();
 
+            SeedDonor(context);
             SeedRoles(context);
             SeedUserAccounts(context);
             base.Seed(context);
+        }
+
+        private static void SeedDonor(WishlistContext context) {
+            var donor = new Donor { Id = 1 };
+            context.Donors.AddOrUpdate(donor);
+            context.SaveChanges();
+
+            var cart = new Cart {
+                DonorId = 1,
+                ModifiedDate = DateTime.Now
+            };
+            context.Carts.AddOrUpdate(cart);
+            context.SaveChanges();
         }
 
         private static void SeedRoles(WishlistContext context) {
@@ -66,8 +80,16 @@ namespace Capstone_Wishlist_app.Migrations {
             roleManager.Create(new IdentityRole {
                 Name = "Admin"
             });
+            roleManager.Create(new IdentityRole
+            {
+                Name = "Moderator"
+            });
             roleManager.Create(new IdentityRole {
                 Name = "Family"
+            });
+            roleManager.Create(new IdentityRole
+            {
+                Name = "Donor"
             });
         }
 
@@ -97,6 +119,17 @@ namespace Capstone_Wishlist_app.Migrations {
             userManager.AddClaim(bobUser.Id, new Claim("Family", (1).ToString()));
             userManager.AddClaim(bobUser.Id, new Claim("Child", (1).ToString()));
             userManager.AddClaim(bobUser.Id, new Claim("Wishlist", (1).ToString()));
+
+            userManager.Create(new WishlistUser {
+                UserName = "bscrooge@example.com",
+                Email = "bscrooge@example.com",
+                EmailConfirmed = true,
+                Name = "Ben Scrooge"
+            }, "ChristmasPast");
+
+            var benUser = userManager.FindByName("bscrooge@example.com");
+            userManager.AddToRole(benUser.Id, "Donor");
+            userManager.AddClaim(benUser.Id, new Claim("Donor", (1).ToString()));
         }
     }
 }

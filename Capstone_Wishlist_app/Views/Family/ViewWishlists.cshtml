@@ -1,37 +1,35 @@
-﻿@model IEnumerable<Capstone_Wishlist_app.Models.FamilyWishlistViewModel>
+﻿@model FamilyWishlistsViewModel
 @using Capstone_Wishlist_app.Models
 
 @{
-    ViewBag.Title = "ViewWishlists";
+    ViewBag.FamilyId = Model.FamilyId;
+    ViewBag.Title = "Wishlists";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Family Wishlists</h2>
+<h2>@Model.FamilyName Family Wishlists</h2>
+<div class="row">
+    <div class="col-md-12">
+        <ol class="breadcrumb">
+            <li>
+                <a href=@Url.Action("Index", "Home")>
+                    <i class="fa fa-home"></i>
+                    Home
+                </a>
+            </li>
+            <li class="active">
+                <i class="fa fa-file-text"></i>
+                Family Wishlists
+            </li>
+        </ol>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        @foreach (var wl in Model.Wishlists) {
+            @Html.DisplayFor(m => wl, "_FamilyWishlist");
+        }
+    </div>
+</div>
 
-<table class="table">
-    <tr>
-        <th>Wishlist</th>
-        <th>Items</th>
-        <th>Actions</th>
-    </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>@item.ChildFirstName's Wishlist</td>
-        <td>
-            <span class="sw-gift-status glyphicon glyphicon-plus-sign"></span>
-            @item.Items.Count(w => w.Status == WishlistItemStatus.Unapproved)
-        </td>
-        <td>
-            @Html.ActionLink("Find Gifts for " + item.ChildFirstName, "FindGifts", "Wishlist", new { id = @item.WishlistId }, null)
-        </td>
-    </tr>
-}
-
-</table>
-
-<style type="text/css">
-    .sw-gift-status {
-        margin-right: 5px;
-    }
-</style>

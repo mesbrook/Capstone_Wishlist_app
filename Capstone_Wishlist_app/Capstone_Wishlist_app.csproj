@@ -184,6 +184,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ChildController.cs" />
+    <Compile Include="Controllers\DonorController.cs" />
     <Compile Include="Controllers\FamilyController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ItemController.cs" />
@@ -192,16 +193,15 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201511110126255_adding table.cs" />
-    <Compile Include="Migrations\201511110126255_adding table.Designer.cs">
-      <DependentUpon>201511110126255_adding table.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Address.cs" />
+    <Compile Include="Models\Cart.cs" />
     <Compile Include="Models\Child.cs" />
     <Compile Include="Models\ChildBiography.cs" />
     <Compile Include="Models\ChildViewModels.cs" />
+    <Compile Include="Models\Donor.cs" />
+    <Compile Include="Models\DonorViewModels.cs" />
     <Compile Include="Models\Family.cs" />
     <Compile Include="Models\FamilyViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -227,8 +227,11 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\font-awesome.css" />
+    <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\images\santa_gift.jpg" />
     <Content Include="favicon.ico" />
+    <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
@@ -239,6 +242,11 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Content\bootstrap.css.map" />
+    <Content Include="fonts\fontawesome-webfont.woff2" />
+    <Content Include="fonts\fontawesome-webfont.woff" />
+    <Content Include="fonts\fontawesome-webfont.ttf" />
+    <Content Include="fonts\fontawesome-webfont.eot" />
+    <Content Include="fonts\FontAwesome.otf" />
     <None Include="Properties\PublishProfiles\santawishlist %282%29.pubxml" />
     <None Include="Properties\PublishProfiles\santawishlist.pubxml" />
     <None Include="Scripts\jquery-2.1.4.intellisense.js" />
@@ -356,10 +364,6 @@
     <Content Include="Views\Shared\Info.cshtml" />
     <Content Include="Views\Wishlist\_SearchResults.cshtml" />
     <Content Include="Views\Wishlist\FindGifts.cshtml" />
-    <Content Include="Views\Family\Create.cshtml" />
-    <Content Include="Views\Family\Delete.cshtml" />
-    <Content Include="Views\Family\Details.cshtml" />
-    <Content Include="Views\Family\Edit.cshtml" />
     <Content Include="Views\Family\Index.cshtml" />
     <Content Include="Views\CreateFamily\CreateFamily.cshtml" />
     <Content Include="Views\Account\RegisterStaff.cshtml" />
@@ -368,12 +372,21 @@
     <Content Include="Views\Family\RegisterChild.cshtml" />
     <Content Include="Views\Child\EditProfile.cshtml" />
     <Content Include="Views\Child\ViewProfile.cshtml" />
+    <Content Include="Views\Wishlist\Index.cshtml" />
     <Content Include="Views\Family\ViewWishlists.cshtml" />
     <Content Include="Views\Wishlist\_OwnItems.cshtml" />
     <Content Include="Views\Wishlist\ViewOwn.cshtml" />
     <Content Include="Views\Home\Unauthorized.cshtml" />
     <Content Include="Views\Family\Administer.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\_Address.cshtml" />
+    <Content Include="Views\Family\DisplayTemplates\_FamilyWishlist.cshtml" />
+    <Content Include="Views\Wishlist\Approve.cshtml" />
+    <Content Include="Views\Shared\_CartCount.cshtml" />
+    <Content Include="Views\Donor\ViewCart.cshtml" />
+    <Content Include="Views\Donor\_CartItems.cshtml" />
+    <Content Include="Views\Donor\PurchaseCart.cshtml" />
+    <Content Include="Views\Donor\ThankYou.cshtml" />
+    <Content Include="Views\Donor\ConfirmOrder.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
@@ -387,11 +400,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Item\" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201511110126255_adding table.resx">
-      <DependentUpon>201511110126255_adding table.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

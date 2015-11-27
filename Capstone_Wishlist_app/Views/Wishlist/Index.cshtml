@@ -1,0 +1,113 @@
+﻿@using Capstone_Wishlist_app.Services
+@using Capstone_Wishlist_app.Models
+@model List<Capstone_Wishlist_app.Models.DonorListViewModel>
+
+@{
+    ViewBag.Title = "WishlistIndex";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Children's Wishlists</h2>
+@foreach (var wl in Model) {
+    <div class="row">
+        <div class="col-md-12">
+            <h3>
+                <button type="button" value=@wl.ChildId class="btn btn-default btn-sm" onclick="toggleWishlistView(this)" style="margin-bottom: 5px">
+                    <i class="fa fa-minus"></i>
+                </button>
+                @wl.FirstName
+                <small>
+                    @wl.Gender age @wl.Age
+                </small>
+            </h3>
+            <div class=@("sw-wl-view-" + wl.ChildId)>
+                <label class="control-label">About @wl.FirstName</label>
+                <p>@wl.Biography</p>
+                <label class="control-label">@wl.FirstName's Wishlist</label>
+                <table class="table">
+                    <tr>
+                        <th>Item</th>
+                        <th></th>
+                        <th>List Price</th>
+                        <th></th>
+                    </tr>
+                    @foreach (var item in wl.Items) {
+                        <tr>
+                            <td>
+                                <img src=@item.ImageUrl />
+                            </td>
+                            <td>
+                                <a target="_blank" href=@item.ListingUrl>@item.Title</a>
+                                <i class="fa fa-external-link"></i>
+                            </td>
+                            <td>
+                                @item.ListPrice
+                            </td>
+                            <td class="text-right">
+                                @if (ViewData.ContainsKey("DonorId")) {
+                                    <button type="button"
+                                            value="@item.Id"
+                                            class="btn btn-default" onclick="addItemToCart(this)">
+                                        <i class="fa fa-cart-plus"></i>
+                                        Add to cart
+                                    </button>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        </div>
+    </div>
+
+}
+
+@section scripts {
+    <script type="text/javascript">
+        @if (ViewData.ContainsKey("DonorId")) {
+            <text>
+        var addItemUrl = '@Url.Action("AddItemToCart", "Donor", new { id = ViewBag.DonorId })';
+        var countCartUrl = '@Url.Action("CountItemsInCart", "Donor", new { id = ViewBag.DonorId })';
+
+        function addItemToCart(element, id, title, listPrice) {
+            var $element = $(element);
+            var wishlistItemId = $element.val();
+
+            $.post(addItemUrl, { wishlistItemId: wishlistItemId }, function (result) {
+                if (result.IsInCart) {
+                    $element.replaceWith('<p class="text-success"><i class="fa fa-check"/>Added to cart!</p>');
+                } else if (result.WasInCart) {
+                    $element.replaceWith('<p class="text-success"><i class="fa fa-check"/>Already in cart!</p>');
+                }
+
+                $.get(countCartUrl, null, function (result) {
+                    $("#menuCartCount").replaceWith(result);
+                }, "html");
+            }, "json");
+        }
+        </text>
+        }
+
+        function toggleWishlistView(element) {
+            var $toggle = $(element);
+            var childId = $toggle.val();
+
+            if (window.console) {
+                console.log(childId);
+            }
+
+            var viewClass = ".sw-wl-view-" + childId;
+            $(viewClass).toggle();
+
+            var $icon = $("i", $toggle);
+
+            if ($icon.hasClass("fa-plus")) {
+                $icon.removeClass("fa-plus");
+                $icon.addClass("fa-minus");
+            } else if ($icon.hasClass("fa-minus")) {
+                $icon.removeClass("fa-minus");
+                $icon.addClass("fa-plus");
+            }
+        };
+    </script>
+}

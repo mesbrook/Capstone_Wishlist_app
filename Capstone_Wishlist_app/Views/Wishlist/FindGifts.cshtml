@@ -8,7 +8,30 @@
 }
 
 <h2>Find Gifts for @Model.ChildFirstName</h2>
+<ol class="breadcrumb">
+    <li>
+        <a href=@Url.Action("Index", "Home")>
+            <i class="fa fa-home"></i>
+            Home
+        </a>
+    </li>
+    <li>
+        <i class="fa fa-file-text"></i>
+        Family Wishlists
+    </li>
+    <li>
+        <a href=@Url.Action("ViewOwn", "Wishlist", new { id = Model.WishlistId })>
+            @Model.ChildFirstName's Wishlist
+        </a>
+    </li>
+    <li class="active">
+        <i class="fa fa-search"></i>
+        Find Gifts for @Model.ChildFirstName
+    </li>
+</ol>
+<div class="row">
 
+</div>
 <div id="searchForm" class="form-horizontal">
     <div class="form-group">
         <label class="control-label col-md-2">Category</label>
@@ -28,9 +51,8 @@
         </div>
     </div>
 </div>
-
-<div id="searchResults">
-
+<div class="row">
+    <div class="col-md-12" id="searchResults"></div>
 </div>
 
 <script type="text/javascript">

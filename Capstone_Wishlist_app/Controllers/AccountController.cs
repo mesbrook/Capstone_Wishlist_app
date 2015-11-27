@@ -118,6 +118,8 @@ namespace Capstone_Wishlist_app.Controllers
                     ViewBag.Message = "Check your email and confirm your account, you must be confirmed "
                                     + "before you can log in.";
 
+                    RoleAddToUser("Donor", user.UserName);
+
                     return View("Info");
                     //return RedirectToAction("Index", "Home");
                 }
@@ -654,7 +656,7 @@ namespace Capstone_Wishlist_app.Controllers
 
         //[Authorize(Roles = "Admin")]
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public ActionResult RoleAddToUser(string roleName, string userName)
         {
             List<string> roles;
