@@ -11,10 +11,15 @@ using Capstone_Wishlist_app.DAL;
 using System.Data.Entity.Infrastructure;
 using System.Web.SessionState;
 using Capstone_Wishlist_app.Services;
+using System.Security.Claims;
+using Microsoft.AspNet.Identity;
+using Microsoft.Owin.Security;
 
 namespace Capstone_Wishlist_app.Controllers {
     [SessionState(SessionStateBehavior.Required)]
     public class DonorController : Controller {
+        private const string IdentityProviderClaimType = "http://schemas.microsoft.com/accesscontrolservice/2010/07/claims/identityprovider";
+
         private static string AmazonAccessKey {
             get {
                 return ConfigurationManager.AppSettings["AWSAccessKeyId"];
@@ -39,7 +44,29 @@ namespace Capstone_Wishlist_app.Controllers {
             return View();
         }
 
+        [HttpPost]
+        public async Task<ActionResult> SignInAnonymously() {
+            var donor = new Donor();
+            _db.Donors.Add(donor);
+
+            var cart = new Cart { Donor = donor, ModifiedDate = DateTime.Now };
+            _db.Carts.Add(cart);
+
+            await _db.SaveChangesAsync();
+
+            var identity = new ClaimsIdentity(DefaultAuthenticationTypes.ApplicationCookie);
+            var anonymousIdentifier = Guid.NewGuid().ToString();
+            identity.AddClaim(new Claim("Donor", donor.Id.ToString()));
+            identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, anonymousIdentifier));
+            identity.AddClaim(new Claim(IdentityProviderClaimType, anonymousIdentifier));
+            var authManager = HttpContext.GetOwinContext().Authentication;
+            authManager.SignIn(new AuthenticationProperties { IsPersistent = true }, identity);
+
+            return RedirectToAction("Index", "Home");
+        }
+
         [HttpGet]
+        [DonorAuthorize]
         public ActionResult ViewCart(int id) {
             var cart = _db.Carts.Where(c => c.DonorId == id)
                 .Include(c => c.Donor)
@@ -61,6 +88,7 @@ namespace Capstone_Wishlist_app.Controllers {
         }
 
         [HttpPost]
+        [DonorAuthorize]
         public async Task<ActionResult> AddItemToCart(int id, int wishlistItemId) {
             var isInCart = await _db.CartItems.AnyAsync(ci => ci.CartId == id && ci.Item.Id == wishlistItemId);
 
@@ -87,6 +115,7 @@ namespace Capstone_Wishlist_app.Controllers {
         }
 
         [HttpPost]
+        [DonorAuthorize]
         public async Task<ActionResult> RemoveItemFromCart(int id, int wishlistItemId) {
             var item = await _db.CartItems.FindAsync(id, wishlistItemId);
             _db.CartItems.Remove(item);
@@ -116,6 +145,7 @@ namespace Capstone_Wishlist_app.Controllers {
         }
 
         [HttpGet]
+        [DonorAuthorize]
         public ActionResult CountItemsInCart(int id) {
             var count = _db.CartItems.Count(ci => ci.CartId == id);
 
@@ -126,6 +156,7 @@ namespace Capstone_Wishlist_app.Controllers {
         }
 
         [HttpGet]
+        [DonorAuthorize]
         public async Task<ActionResult> PurchaseCart(int id) {
             var items = await _db.CartItems.Where(ci => ci.CartId == id)
                 .Include(ci => ci.Item.Wishlist.Child)
@@ -158,6 +189,7 @@ namespace Capstone_Wishlist_app.Controllers {
         }
 
         [HttpPost]
+        [DonorAuthorize]
         public async Task<ActionResult> PurchaseCart(int id, PurchaseCartViewModel purchase) {
             var items = await _db.CartItems.Where(ci => ci.CartId == id)
                 .Include(ci => ci.Item.Wishlist.Child)
@@ -204,6 +236,7 @@ namespace Capstone_Wishlist_app.Controllers {
         }
 
         [HttpGet]
+        [DonorAuthorize]
         public ActionResult ConfirmOrder(int id) {
             var order = Session["order"] as OrderViewModel;
 
@@ -211,6 +244,7 @@ namespace Capstone_Wishlist_app.Controllers {
         }
 
         [HttpPost]
+        [DonorAuthorize]
         public async Task<ActionResult> CompleteOrder(int id) {
             var order = TakeOrderFromSession();
 
@@ -294,8 +328,9 @@ namespace Capstone_Wishlist_app.Controllers {
         }
 
         [HttpGet]
+        [DonorAuthorize]
         public async Task<ActionResult> ThankYou(int id, int donationId) {
-            var donation = await _db.Donations.Where(dn => dn.Id == donationId)
+            var donation = await _db.Donations.Where(dn => dn.Id == donationId && dn.DonorId == id)
                 .Include(dn => dn.Donor)
                 .Include(dn => dn.Items.Select(di => di.Item.Wishlist.Child))
                 .FirstAsync();
