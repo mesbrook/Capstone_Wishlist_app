@@ -2,8 +2,7 @@
     ViewBag.Title = "Home Page";
 }
 
-@if (User.IsInRole("Moderator"))
-{
+@if (User.IsInRole("Moderator")) {
     <h3 style="color:darkturquoise"><strong>Moderator Tools ------------------------</strong></h3>
     <div class="row">
         <div class="col-md-3, col-lg-4">
@@ -30,8 +29,7 @@
     </div>
     <hr />
 }
-@if (User.IsInRole("Admin"))
-{
+@if (User.IsInRole("Admin")) {
     <h3 style="color:darkturquoise"><strong>Administrator Tools ------------------------</strong></h3>
     <div class="row">
         <div class="col-md-3">
@@ -58,25 +56,24 @@
             <p><a class="btn btn-default" href="@Url.Action("RoleIndex", "Account")">Role Index &raquo;</a></p>
         </div>
 
-    <div class="col-md-3, col-lg-4">
-        <h2>Register a Family</h2>
-        <p>To register a family and add a child's profile</p>
-        <p><a class="btn btn-default" href="@Url.Action("Register", "Family")">Register a Family &raquo;</a></p>
-    </div>
+        <div class="col-md-3, col-lg-4">
+            <h2>Register a Family</h2>
+            <p>To register a family and add a child's profile</p>
+            <p><a class="btn btn-default" href="@Url.Action("Register", "Family")">Register a Family &raquo;</a></p>
+        </div>
 
         <div class="col-md-4">
             <h2>Approve Wishlists Items</h2>
-        <div class="col-md-3">
-            <h2>Register Staff</h2>
-            <p>
-                To add new staff accounts
-            </p>
-            <p><a class="btn btn-default" href="@Url.Action("RegisterStaff", "Account")">Register Staff &raquo;</a></p>
+            <div class="col-md-3">
+                <h2>Register Staff</h2>
+                <p>
+                    To add new staff accounts
+                </p>
+                <p><a class="btn btn-default" href="@Url.Action("RegisterStaff", "Account")">Register Staff &raquo;</a></p>
+            </div>
         </div>
-    </div>    
-}
-else if (ViewData.ContainsKey("FamilyId"))
-{
+    </div>
+} else if (ViewData.ContainsKey("FamilyId")) {
     <br />
     <div class="jumbotron">
         <h1>Welcome To Santa's Wishlist</h1>
@@ -144,5 +141,5 @@ else if (ViewData.ContainsKey("FamilyId"))
                 This system is designed to help those children by facilitating gift-giving by charitable donors to children in need.
             </p>
         </div>
-    }
+    </div>
 }

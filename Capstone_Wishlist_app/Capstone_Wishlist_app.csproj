@@ -409,14 +409,6 @@
   <ItemGroup>
     <Folder Include="Views\Item\" />
   </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201511250145531_initial setup.resx">
-      <DependentUpon>201511250145531_initial setup.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201511260026143_added unapproved bool to DonorListViewModel.resx">
-      <DependentUpon>201511260026143_added unapproved bool to DonorListViewModel.cs</DependentUpon>
-    </EmbeddedResource>
-  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
