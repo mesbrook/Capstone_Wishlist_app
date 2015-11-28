@@ -30,49 +30,7 @@
     <hr />
 }
 @if (User.IsInRole("Admin")) {
-    <h3 style="color:darkturquoise"><strong>Administrator Tools ------------------------</strong></h3>
-    <div class="row">
-        <div class="col-md-3">
-            <h2>Add Role to User</h2>
-            <p>
-                Add a role to a user
-            </p>
-            <p><a class="btn btn-default" href="@Url.Action("RoleAddToUser", "Account")">Add Roles &raquo;</a></p>
-        </div>
-
-        <div class="col-md-3">
-            <h2>Create Role</h2>
-            <p>
-                To create a new role for users
-            </p>
-            <p><a class="btn btn-default" href="@Url.Action("RoleCreate", "Account")">Create Roles &raquo;</a></p>
-        </div>
-
-        <div class="col-md-3">
-            <h2>Role Index</h2>
-            <p>
-                To view and manage all roles.
-            </p>
-            <p><a class="btn btn-default" href="@Url.Action("RoleIndex", "Account")">Role Index &raquo;</a></p>
-        </div>
-
-        <div class="col-md-3, col-lg-4">
-            <h2>Register a Family</h2>
-            <p>To register a family and add a child's profile</p>
-            <p><a class="btn btn-default" href="@Url.Action("Register", "Family")">Register a Family &raquo;</a></p>
-        </div>
-
-        <div class="col-md-4">
-            <h2>Approve Wishlists Items</h2>
-            <div class="col-md-3">
-                <h2>Register Staff</h2>
-                <p>
-                    To add new staff accounts
-                </p>
-                <p><a class="btn btn-default" href="@Url.Action("RegisterStaff", "Account")">Register Staff &raquo;</a></p>
-            </div>
-        </div>
-    </div>
+    Html.RenderPartial("_AdministratorHome");
 } else if (ViewData.ContainsKey("FamilyId")) {
     <br />
     <div class="jumbotron">

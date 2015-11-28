@@ -389,6 +389,7 @@
     <Content Include="Views\Donor\ThankYou.cshtml" />
     <Content Include="Views\Donor\ConfirmOrder.cshtml" />
     <Content Include="Views\Donor\Register.cshtml" />
+    <Content Include="Views\Home\_AdministratorHome.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
