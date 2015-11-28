@@ -20,9 +20,21 @@ namespace Capstone_Wishlist_app.Controllers {
     public class FamilyController : Controller {
         private WishlistContext _db = new WishlistContext();
 
-        // GET: Family
-        public ActionResult Index() {
-            return View(_db.Families.ToList());
+        [HttpGet]
+        public async Task<ActionResult> Index() {
+            var families = await _db.Families.Include(f => f.Children.Select(c => c.Wishlists.Select(wl => wl.Items)))
+                .ToListAsync();
+            var familyViews = families.Select(f => new FamilyIndexViewModel {
+                Id = f.Id,
+                ParentFirstName = f.ParentFirstName,
+                ParentLastName = f.ParentLastName,
+                Phone = f.Phone,
+                Email = f.Email,
+                ChildCount = f.Children.Count(),
+                GiftCount = f.Children.SelectMany(c => c.Wishlists).Sum(wl => wl.Items.Count()),
+            });
+
+            return View(familyViews);
         }
 
         [HttpGet]
