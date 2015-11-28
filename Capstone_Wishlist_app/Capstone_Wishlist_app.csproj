@@ -387,6 +387,7 @@
     <Content Include="Views\Donor\PurchaseCart.cshtml" />
     <Content Include="Views\Donor\ThankYou.cshtml" />
     <Content Include="Views\Donor\ConfirmOrder.cshtml" />
+    <Content Include="Views\Donor\Register.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
