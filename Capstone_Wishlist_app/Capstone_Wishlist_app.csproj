@@ -193,10 +193,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201511250145531_initial setup.cs" />
-    <Compile Include="Migrations\201511250145531_initial setup.Designer.cs">
-      <DependentUpon>201511250145531_initial setup.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Address.cs" />
@@ -392,6 +388,9 @@
     <Content Include="Views\Donor\ViewCart.cshtml" />
     <Content Include="Views\Donor\_CartItems.cshtml" />
     <Content Include="Views\Donor\PurchaseCart.cshtml" />
+    <Content Include="Views\Donor\ThankYou.cshtml" />
+    <Content Include="Views\Donor\ConfirmOrder.cshtml" />
+    <Content Include="Views\Donor\Register.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
@@ -405,11 +404,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Item\" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201511250145531_initial setup.resx">
-      <DependentUpon>201511250145531_initial setup.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

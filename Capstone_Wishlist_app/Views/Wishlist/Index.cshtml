@@ -23,14 +23,24 @@
             <div class=@("sw-wl-view-" + wl.ChildId)>
                 <label class="control-label">About @wl.FirstName</label>
                 <p>@wl.Biography</p>
-                <label class="control-label">@wl.FirstName's Wishlist</label>
+                <div class="row">
+                    <label class="control-label">@wl.FirstName's Wishlist</label>
+                    @if (User.IsInRole("Moderator")  && (@wl.ContainsUnapproved))
+                    {                       
+                            <button type="button" class="btn btn-default" onclick="location.href='/Wishlist/@wl.WishlistId/Approve'">
+                                <i class="glyphicon glyphicon-thumbs-up"></i>
+                                Approve Wishlist
+                            </button>                       
+                    }
+                </div>
                 <table class="table">
                     <tr>
                         <th>Item</th>
                         <th></th>
-                        <th>List Price</th>
+                        <th>List Price</th>                        
                         <th></th>
                     </tr>
+
                     @foreach (var item in wl.Items) {
                         <tr>
                             <td>
@@ -38,14 +48,16 @@
                             </td>
                             <td>
                                 <a target="_blank" href=@item.ListingUrl>@item.Title</a>
-                                <i class="fa fa-external-link"></i>
+                                <i class="glyphicon glyphicon-thumbs-up"></i>
                             </td>
                             <td>
                                 @item.ListPrice
                             </td>
                             <td class="text-right">
                                 @if (ViewData.ContainsKey("DonorId")) {
-                                    <button type="button" class="btn btn-default" onclick="addItemToCart(this, @item.Id, '@item.Title', '@item.ListPrice')">
+                                    <button type="button"
+                                            value="@item.Id"
+                                            class="btn btn-default" onclick="addItemToCart(this)">
                                         <i class="fa fa-cart-plus"></i>
                                         Add to cart
                                     </button>
@@ -64,30 +76,26 @@
     <script type="text/javascript">
         @if (ViewData.ContainsKey("DonorId")) {
             <text>
-            var addItemUrl = '@Url.Action("AddItemToCart", "Donor", new { id = ViewBag.DonorId })';
-            var countCartUrl = '@Url.Action("CountItemsInCart", "Donor", new { id = ViewBag.DonorId })';
+        var addItemUrl = '@Url.Action("AddItemToCart", "Donor", new { id = ViewBag.DonorId })';
+        var countCartUrl = '@Url.Action("CountItemsInCart", "Donor", new { id = ViewBag.DonorId })';
 
-            function addItemToCart(element, id, title, listPrice) {
-                var $element = $(element);
-                var addition = {
-                    wishlistItemId: id,
-                    title: title,
-                    listPrice: listPrice
-                };
+        function addItemToCart(element, id, title, listPrice) {
+            var $element = $(element);
+            var wishlistItemId = $element.val();
 
-                $.post(addItemUrl, addition, function (result) {
-                    if (result.IsInCart) {
-                        $element.replaceWith('<p class="text-success"><i class="fa fa-check"/>Added to cart!</p>');
-                    } else if (result.WasInCart) {
-                        $element.replaceWith('<p class="text-success"><i class="fa fa-check"/>Already in cart!</p>');
-                    }
+            $.post(addItemUrl, { wishlistItemId: wishlistItemId }, function (result) {
+                if (result.IsInCart) {
+                    $element.replaceWith('<p class="text-success"><i class="fa fa-check"/>Added to cart!</p>');
+                } else if (result.WasInCart) {
+                    $element.replaceWith('<p class="text-success"><i class="fa fa-check"/>Already in cart!</p>');
+                }
 
-                    $.get(countCartUrl, null, function (result) {
-                        $("#menuCartCount").replaceWith(result);
-                    }, "html");
-                }, "json"); 
-            }
-            </text>
+                $.get(countCartUrl, null, function (result) {
+                    $("#menuCartCount").replaceWith(result);
+                }, "html");
+            }, "json");
+        }
+        </text>
         }
 
         function toggleWishlistView(element) {

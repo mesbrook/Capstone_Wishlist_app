@@ -58,6 +58,7 @@ namespace Capstone_Wishlist_app.Models {
 
         [Display(Name = "About Me")]
         public string Biography { get; set; }
+        public bool ContainsUnapproved { get; set; }
 
         public IList<WishlistItemViewModel> Items { get; set; }
 	}
@@ -98,29 +99,33 @@ namespace Capstone_Wishlist_app.Models {
     }
 
     public static class WishlistItemViewExtensions {
-        private static readonly IReadOnlyCollection<WishlistItemStatus> donatedStatuses = new[] {
-            WishlistItemStatus.Ordered,
-            WishlistItemStatus.Shipping,
-            WishlistItemStatus.Delivered };
 
         public static int GetPercentDonated(this IList<WishlistItem> items) {
-            var itemCount = items.Count;
-            var donatedCount = items.CountDonated();
-            return (int) ((float) donatedCount / Math.Max(itemCount, 1) * 100);
+            return ToPercent(items.CountDonated(), items.Count);
         }
 
         public static int GetPercentAvailable(this IList<WishlistItem> items) {
-            var itemCount = items.Count;
-            var availableCount = items.CountAvailable();
-            return (int) ((float) availableCount / Math.Max(itemCount, 1) * 100);
+            return ToPercent(items.CountAvailable(), items.Count);
+        }
+
+        public static int GetPercentUnapproved(this IList<WishlistItem> items) {
+            return ToPercent(items.CountUnapproved(), items.Count);
         }
 
         public static int CountDonated(this IList<WishlistItem> items) {
-            return items.Count(i => donatedStatuses.Contains(i.Status));
+            return items.Count(i => i.Status == WishlistItemStatus.Ordered);
         }
 
         public static int CountAvailable(this IList<WishlistItem> items) {
-            return items.Count(i => i.Status == WishlistItemStatus.Avaliable);
+            return items.Count(i => i.Status == WishlistItemStatus.Available);
+        }
+
+        public static int CountUnapproved(this IList<WishlistItem> items) {
+            return items.Count(i => i.Status == WishlistItemStatus.Unapproved);
+        }
+
+        private static int ToPercent(int count, int total) {
+            return total > 0 ? (int) Math.Round((float) count / total * 100) : 0;
         }
     }
 
