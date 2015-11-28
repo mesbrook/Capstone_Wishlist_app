@@ -98,6 +98,16 @@ namespace Capstone_Wishlist_app.Models {
         public bool IsSelected { get; set; }
     }
 
+    public class UnapprovedWishlistViewModel {
+        [Display(Name="ID")]
+        public int WishlistId { get; set; }
+
+        public string ChildFirstName { get; set; }
+
+        [Display(Name="Items Unapproved")]
+        public int UnapprovedCount { get; set; }
+    }
+
     public static class WishlistItemViewExtensions {
 
         public static int GetPercentDonated(this IList<WishlistItem> items) {

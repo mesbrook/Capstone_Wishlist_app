@@ -35,9 +35,9 @@ namespace Capstone_Wishlist_app.Controllers {
 
         [InjectDonorIdentity]
         public async Task<ActionResult> Index() {
-            var wishlists = await _db.WishLists.Include(c => c.Child)
+            var wishlists = await _db.WishLists.Where(wl => wl.Items.Any(wi => wi.Status == WishlistItemStatus.Available))
                 .Include(i => i.Items)
-                .Include(w => w.Child.Biographies)
+                .Include(wl => wl.Child.Biographies)
                 .ToListAsync();
                                  
           var wishlistViews = new List<DonorListViewModel>();
@@ -51,7 +51,7 @@ namespace Capstone_Wishlist_app.Controllers {
                     .Select(b => b.Text)
                     .FirstOrDefault();
 
-                wishlistViews.Add(new DonorListViewModel(){
+                wishlistViews.Add(new DonorListViewModel{
                     ChildId = wl.ChildId,
                     WishlistId = wl.Id,
                     FirstName = wl.Child.FirstName,
@@ -153,6 +153,23 @@ namespace Capstone_Wishlist_app.Controllers {
                 ChildLastName = wishlist.Child.LastName,
                 Items = items
             });
+        }
+
+        [HttpGet]
+        [Authorize(Roles="Admin")]
+        public async Task<ActionResult> Unapproved() {
+            var wishlists = await _db.WishLists.Where(
+                wl => wl.Items.Any(wi => wi.Status == WishlistItemStatus.Unapproved))
+                .Include(wl => wl.Child)
+                .Include(wl => wl.Items)
+                .ToListAsync();
+            var wishlistViews = wishlists.Select(wl => new UnapprovedWishlistViewModel {
+                WishlistId = wl.Id,
+                ChildFirstName = wl.Child.FirstName,
+                UnapprovedCount = wl.Items.Count(wi => wi.Status == WishlistItemStatus.Unapproved)
+            });
+
+            return View(wishlistViews);
         }
 
         [HttpGet]

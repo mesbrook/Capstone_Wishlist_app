@@ -44,10 +44,21 @@
             <a href=@Url.Action("Index", "Wishlist") class="list-group-item">
                 <h4 class="list-group-item-heading">
                     <i class="fa fa-file-text-o"></i>
-                    Wishlist Index
+                    All Wishlists
                 </h4>
                 <p class="list-group-item-text">
                     See a list of all wishlists.
+                </p>
+            </a>
+        </div>
+        <div class="list-group">
+            <a href=@Url.Action("Unapproved", "Wishlist") class="list-group-item">
+                <h4 class="list-group-item-heading">
+                    <i class="fa fa-check-circle-o"></i>
+                    Approve Wishlists
+                </h4>
+                <p class="list-group-item-text">
+                    See a list of wishlists with unapproved items.
                 </p>
             </a>
         </div>

@@ -390,6 +390,7 @@
     <Content Include="Views\Donor\ConfirmOrder.cshtml" />
     <Content Include="Views\Donor\Register.cshtml" />
     <Content Include="Views\Home\_AdministratorHome.cshtml" />
+    <Content Include="Views\Wishlist\Unapproved.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
