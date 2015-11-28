@@ -6,14 +6,16 @@ using System.Web.Mvc;
 using System.Data.Entity;
 using System.Configuration;
 using System.Threading.Tasks;
-using Capstone_Wishlist_app.Models;
-using Capstone_Wishlist_app.DAL;
 using System.Data.Entity.Infrastructure;
 using System.Web.SessionState;
-using Capstone_Wishlist_app.Services;
 using System.Security.Claims;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
+using Microsoft.AspNet.Identity.EntityFramework;
+using Capstone_Wishlist_app.Services;
+using Capstone_Wishlist_app.Models;
+using Capstone_Wishlist_app.DAL;
 
 namespace Capstone_Wishlist_app.Controllers {
     [SessionState(SessionStateBehavior.Required)]
@@ -39,9 +41,73 @@ namespace Capstone_Wishlist_app.Controllers {
             _db = new WishlistContext();
         }
 
-        // GET: Donor
+        [Authorize(Roles="Admin")]
         public ActionResult Index() {
             return View();
+        }
+
+        [HttpGet]
+        public ActionResult Register(int? donorId) {
+            return View(new RegisterDonorViewModel { DonorId = donorId });
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Register(RegisterDonorViewModel registration) {
+            var userManager = HttpContext.GetOwinContext().GetUserManager<WishlistUserManager>();
+            var user = await CreateDonor(registration, userManager);
+
+            if (registration.DonorId.HasValue) {
+                await AuthorizeDonorForUser(user, registration.DonorId.Value, userManager);
+                await SendConfirmationEmail(user, userManager);
+                await SignDonorIn(user, userManager);
+
+                return RedirectToAction("Index", "Home");
+            }
+
+            var donor = new Donor();
+            _db.Donors.Add(donor);
+
+            var cart = new Cart {
+                Donor = donor,
+                ModifiedDate = DateTime.Now
+            };
+            _db.Carts.Add(cart);
+            await _db.SaveChangesAsync();
+
+            await AuthorizeDonorForUser(user, donor.Id, userManager);
+            await SendConfirmationEmail(user, userManager);
+            await SignDonorIn(user, userManager);
+            return RedirectToAction("Index", "Home");
+        }
+
+        private async Task<WishlistUser> CreateDonor(RegisterDonorViewModel registration, WishlistUserManager manager) {
+            await manager.CreateAsync(new WishlistUser {
+                Name = registration.Name,
+                UserName = registration.Email,
+                Email = registration.Email
+            }, registration.Password);
+
+            return await manager.FindByNameAsync(registration.Email);
+        }
+
+        private async Task AuthorizeDonorForUser(WishlistUser user, int donorId, WishlistUserManager manager) {
+            await manager.AddToRoleAsync(user.Id, "Donor");
+            await manager.AddClaimAsync(user.Id, new Claim("Donor", donorId.ToString()));
+        }
+
+        private async Task SendConfirmationEmail(WishlistUser user, WishlistUserManager manager) {
+            string code = await manager.GenerateEmailConfirmationTokenAsync(user.Id);
+            var callbackUrl = Url.Action("ConfirmEmail", "Account", new {
+                userId = user.Id, code = code
+            }, protocol: Request.Url.Scheme);
+            await manager.SendEmailAsync(user.Id, "Confirm Your Email for Santa's Wishlist",
+               "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+        }
+
+        private async Task SignDonorIn(WishlistUser user, WishlistUserManager manager) {
+            var authManager = HttpContext.GetOwinContext().Authentication;
+            authManager.SignIn(new AuthenticationProperties { IsPersistent = true },
+                await user.GenerateUserIdentityAsync(manager));
         }
 
         [HttpPost]
