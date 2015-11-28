@@ -16,28 +16,21 @@
                     <i class="fa fa-minus"></i>
                 </button>
                 @wl.FirstName
-                <small>
-                    @wl.Gender age @wl.Age
-                </small>
+                @if (wl.Gender == Gender.Unspecified) {
+                    <small>Age @wl.Age</small>
+                } else {
+                    <small>@wl.Gender, age @wl.Age</small>
+                }
             </h3>
             <div class=@("sw-wl-view-" + wl.ChildId)>
                 <label class="control-label">About @wl.FirstName</label>
                 <p>@wl.Biography</p>
-                <div class="row">
-                    <label class="control-label">@wl.FirstName's Wishlist</label>
-                    @if (User.IsInRole("Moderator")  && (@wl.ContainsUnapproved))
-                    {                       
-                            <button type="button" class="btn btn-default" onclick="location.href='/Wishlist/@wl.WishlistId/Approve'">
-                                <i class="glyphicon glyphicon-thumbs-up"></i>
-                                Approve Wishlist
-                            </button>                       
-                    }
-                </div>
+                <label class="control-label">@wl.FirstName's Wishlist</label>
                 <table class="table">
                     <tr>
                         <th>Item</th>
                         <th></th>
-                        <th>List Price</th>                        
+                        <th>List Price</th>
                         <th></th>
                     </tr>
 
@@ -48,7 +41,7 @@
                             </td>
                             <td>
                                 <a target="_blank" href=@item.ListingUrl>@item.Title</a>
-                                <i class="glyphicon glyphicon-thumbs-up"></i>
+                                <i class="fa fa-external-link"></i>
                             </td>
                             <td>
                                 @item.ListPrice
