@@ -58,6 +58,7 @@ namespace Capstone_Wishlist_app.Models {
 
         [Display(Name = "About Me")]
         public string Biography { get; set; }
+        public bool ContainsUnapproved { get; set; }
 
         public IList<WishlistItemViewModel> Items { get; set; }
 	}

@@ -26,13 +26,13 @@ namespace Capstone_Wishlist_app.Controllers {
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Moderator")]
         public ActionResult Register() {
             return View(new RegisterFamilyModel { ShippingAddress = new CreateAddressModel { } });
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Moderator")]
         public async Task<ActionResult> Register(RegisterFamilyModel registration) {
             if (!ModelState.IsValid) {
                 return View(registration);

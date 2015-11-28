@@ -58,7 +58,8 @@ namespace Capstone_Wishlist_app.Controllers {
                     Age = wl.Child.Age,
                     Gender = wl.Child.Gender,
                     Biography = wl.Child.Biographies.OrderBy(b => b.CreationDate).Select( b => b.Text).FirstOrDefault(),                   
-                    Items = viewableItems                    
+                    Items = viewableItems,
+                    ContainsUnapproved = wl.Items.Any(i => i.Status == WishlistItemStatus.Unapproved)
                 });
             }
             return View(wishlistViews);
