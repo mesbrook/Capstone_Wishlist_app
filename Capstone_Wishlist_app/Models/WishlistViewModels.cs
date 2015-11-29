@@ -44,25 +44,6 @@ namespace Capstone_Wishlist_app.Models {
         public ICollection<string> ExistingItemIds { get; set; }
     }
 
-
-    public class DonorListViewModel
-    {
-        public int ChildId { get; set; }
-        public int  WishlistId { get; set; }
-
-        [Display(Name = "Name")]
-        public string FirstName { get; set; }
-
-        public int Age { get; set; }
-        public Gender Gender { get; set; }
-
-        [Display(Name = "About Me")]
-        public string Biography { get; set; }
-        public bool ContainsUnapproved { get; set; }
-
-        public IList<WishlistItemViewModel> Items { get; set; }
-	}
-
     public class OwnWishlistViewModel {
         public int WishlistId { get; set; }
         public int ChildId { get; set; }

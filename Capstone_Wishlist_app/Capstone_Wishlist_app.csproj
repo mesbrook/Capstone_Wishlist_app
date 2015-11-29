@@ -373,7 +373,6 @@
     <Content Include="Views\Family\RegisterChild.cshtml" />
     <Content Include="Views\Child\EditProfile.cshtml" />
     <Content Include="Views\Child\ViewProfile.cshtml" />
-    <Content Include="Views\Wishlist\Index.cshtml" />
     <Content Include="Views\Family\ViewWishlists.cshtml" />
     <Content Include="Views\Wishlist\_OwnItems.cshtml" />
     <Content Include="Views\Wishlist\ViewOwn.cshtml" />
@@ -391,6 +390,8 @@
     <Content Include="Views\Donor\Register.cshtml" />
     <Content Include="Views\Home\_AdministratorHome.cshtml" />
     <Content Include="Views\Wishlist\Unapproved.cshtml" />
+    <Content Include="Views\Donor\ViewWishlists.cshtml" />
+    <Content Include="Views\Wishlist\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

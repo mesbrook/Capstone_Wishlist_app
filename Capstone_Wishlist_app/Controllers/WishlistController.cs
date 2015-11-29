@@ -33,41 +33,29 @@ namespace Capstone_Wishlist_app.Controllers {
             _retailer = new AmazonRetailer(AmazonAssociateTag, AmazonAccessKey, "AWSECommerceServicePort");
         }
 
-        [InjectDonorIdentity]
+        [Authorize(Roles="Admin")]
         public async Task<ActionResult> Index() {
-            var wishlists = await _db.WishLists.Where(wl => wl.Items.Any(wi => wi.Status == WishlistItemStatus.Available))
-                .Include(i => i.Items)
-                .Include(wl => wl.Child.Biographies)
+            var wishlists = await _db.WishLists.Include(wl => wl.Child.Family)
+                .Include(wl => wl.Items)
                 .ToListAsync();
-                                 
-          var wishlistViews = new List<DonorListViewModel>();
 
-            foreach (var wl in wishlists)
-            {
-                var availableItems = wl.Items.Where(wi => wi.Status == WishlistItemStatus.Available)
-                    .ToList();
-                var viewableItems = await GetViewableItems(availableItems);
-                var biographyText = wl.Child.Biographies.OrderBy(b => b.CreationDate)
-                    .Select(b => b.Text)
-                    .FirstOrDefault();
+            var wishlistViews = wishlists.Select(wl => new ManageWishlistViewModel {
+                WishlistId = wl.Id,
+                FamilyId = wl.Child.FamilyId,
+                ChildFirstName = wl.Child.FirstName,
+                ParentFirstName = wl.Child.Family.ParentFirstName,
+                ParentLastName = wl.Child.Family.ParentLastName,
+                ItemCount = wl.Items.Count,
+                UnapprovedCount = wl.Items.CountUnapproved(),
+                AvailableCount = wl.Items.CountAvailable(),
+                DonatedCount = wl.Items.CountDonated()
+            });
 
-                wishlistViews.Add(new DonorListViewModel{
-                    ChildId = wl.ChildId,
-                    WishlistId = wl.Id,
-                    FirstName = wl.Child.FirstName,
-                    Age = wl.Child.Age,
-                    Gender = wl.Child.Gender,
-                    Biography = wl.Child.Biographies.OrderBy(b => b.CreationDate).Select( b => b.Text).FirstOrDefault(),                   
-                    Items = viewableItems,
-                    ContainsUnapproved = wl.Items.Any(i => i.Status == WishlistItemStatus.Unapproved)
-                });
-            }
             return View(wishlistViews);
         }
 
         [HttpGet]
         [FamilyAuthorize(Entity="Wishlist")]
-
         public ActionResult FindGifts(int id) {
             var wishlist = _db.WishLists.Find(id);
 
