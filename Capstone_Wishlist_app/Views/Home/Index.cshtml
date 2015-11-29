@@ -82,8 +82,8 @@
             <h1>Santa's Wishlist</h1>
             <div class="col-md-8">
                 <p class="lead">Make A Difference Today.</p>
-                @if (Request.IsAuthenticated) {
-                    <p><a href="@Url.Action("Index", "Wishlist")" class="btn btn-primary btn-lg">Give a Gift &raquo;</a></p>
+                @if (ViewData.ContainsKey("DonorId")) {
+                    <p><a href="@Url.Action("ViewWishlists", "Donor", new { id = ViewBag.DonorId })" class="btn btn-primary btn-lg">Give a Gift &raquo;</a></p>
                 } else {
                     <p><a href="@Url.Action("Register", "Donor")" class="btn btn-primary btn-lg">Become a Donor &raquo;</a></p>
                 }
