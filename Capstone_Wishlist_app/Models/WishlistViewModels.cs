@@ -44,25 +44,6 @@ namespace Capstone_Wishlist_app.Models {
         public ICollection<string> ExistingItemIds { get; set; }
     }
 
-
-    public class DonorListViewModel
-    {
-        public int ChildId { get; set; }
-        public int  WishlistId { get; set; }
-
-        [Display(Name = "Name")]
-        public string FirstName { get; set; }
-
-        public int Age { get; set; }
-        public Gender Gender { get; set; }
-
-        [Display(Name = "About Me")]
-        public string Biography { get; set; }
-        public bool ContainsUnapproved { get; set; }
-
-        public IList<WishlistItemViewModel> Items { get; set; }
-	}
-
     public class OwnWishlistViewModel {
         public int WishlistId { get; set; }
         public int ChildId { get; set; }
@@ -108,29 +89,56 @@ namespace Capstone_Wishlist_app.Models {
         public int UnapprovedCount { get; set; }
     }
 
+    public class ManageWishlistViewModel {
+        [Display(Name = "ID")]
+        public int WishlistId { get; set; }
+
+        [Display(Name = "Family ID")]
+        public int FamilyId { get; set; }
+
+        public string ParentFirstName { get; set; }
+        public string ParentLastName { get; set; }
+
+        [Display(Name = "Wishlist")]
+        [DisplayFormat(DataFormatString="{0}'s Wishlist")]
+        public string ChildFirstName { get; set; }
+
+        [Display(Name = "Items")]
+        public int ItemCount { get; set; }
+
+        [Display(Name = "Unapproved")]
+        public int UnapprovedCount { get; set; }
+
+        [Display(Name = "Available")]
+        public int AvailableCount { get; set; }
+
+        [Display(Name = "Donated")]
+        public int DonatedCount { get; set; }
+    }
+
     public static class WishlistItemViewExtensions {
 
-        public static int GetPercentDonated(this IList<WishlistItem> items) {
+        public static int GetPercentDonated(this ICollection<WishlistItem> items) {
             return ToPercent(items.CountDonated(), items.Count);
         }
 
-        public static int GetPercentAvailable(this IList<WishlistItem> items) {
+        public static int GetPercentAvailable(this ICollection<WishlistItem> items) {
             return ToPercent(items.CountAvailable(), items.Count);
         }
 
-        public static int GetPercentUnapproved(this IList<WishlistItem> items) {
+        public static int GetPercentUnapproved(this ICollection<WishlistItem> items) {
             return ToPercent(items.CountUnapproved(), items.Count);
         }
 
-        public static int CountDonated(this IList<WishlistItem> items) {
+        public static int CountDonated(this ICollection<WishlistItem> items) {
             return items.Count(i => i.Status == WishlistItemStatus.Ordered);
         }
 
-        public static int CountAvailable(this IList<WishlistItem> items) {
+        public static int CountAvailable(this ICollection<WishlistItem> items) {
             return items.Count(i => i.Status == WishlistItemStatus.Available);
         }
 
-        public static int CountUnapproved(this IList<WishlistItem> items) {
+        public static int CountUnapproved(this ICollection<WishlistItem> items) {
             return items.Count(i => i.Status == WishlistItemStatus.Unapproved);
         }
 

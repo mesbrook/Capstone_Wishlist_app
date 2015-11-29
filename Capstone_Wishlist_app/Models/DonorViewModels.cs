@@ -28,10 +28,24 @@ namespace Capstone_Wishlist_app.Models {
         public int? DonorId { get; set; }
     }
 
-    public class AddToCartViewModel {
-        public int WishlistItemId { get; set; }
-        public decimal ListPrice { get; set; }
-        public string Title { get; set; }
+    public class DonorListViewModel {
+        public int ChildId { get; set; }
+        public int WishlistId { get; set; }
+
+        [Display(Name = "Name")]
+        public string FirstName { get; set; }
+
+        public int Age { get; set; }
+        public Gender Gender { get; set; }
+
+        [Display(Name = "About Me")]
+        public string Biography { get; set; }
+
+        public IList<DonorWishlistItemViewModel> Items { get; set; }
+    }
+
+    public class DonorWishlistItemViewModel : WishlistItemViewModel {
+        public bool IsInCart { get; set; }
     }
 
     public class CartCountViewModel {

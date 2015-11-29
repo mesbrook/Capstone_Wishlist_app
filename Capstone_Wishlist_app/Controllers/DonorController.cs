@@ -133,6 +133,101 @@ namespace Capstone_Wishlist_app.Controllers {
 
         [HttpGet]
         [DonorAuthorize]
+        [InjectDonorIdentity]
+        public async Task<ActionResult> ViewWishlists(int id) {
+            var wishlists = await GetAvailableWishlists();
+            var allAvailableItems = wishlists.SelectMany(wl => wl.Items)
+                .Where(wi => wi.Status == WishlistItemStatus.Available);
+            var retailItems = await LookupItems(allAvailableItems);
+            var itemsInCart = await GetItemsInCart(id);
+
+            var wishlistViews = new List<DonorListViewModel>();
+
+            foreach (var wl in wishlists) {
+                var availableItems = wl.Items.Where(wi => wi.Status == WishlistItemStatus.Available)
+                    .ToList();
+                var biographyText = GetCurrentBiography(wl.Child);
+
+                wishlistViews.Add(new DonorListViewModel {
+                    ChildId = wl.ChildId,
+                    WishlistId = wl.Id,
+                    FirstName = wl.Child.FirstName,
+                    Age = wl.Child.Age,
+                    Gender = wl.Child.Gender,
+                    Biography = wl.Child.Biographies.OrderBy(b => b.CreationDate).Select(b => b.Text).FirstOrDefault(),
+                    Items = JoinIntoViewableItems(availableItems, itemsInCart, retailItems),
+                });
+            }
+
+            return View(wishlistViews);
+        }
+
+        private async Task<IList<Wishlist>> GetAvailableWishlists() {
+            return await _db.WishLists.Where(wl => wl.Items.Any(wi => wi.Status == WishlistItemStatus.Available))
+                .Include(i => i.Items)
+                .Include(wl => wl.Child.Biographies)
+                .ToListAsync();
+        }
+
+        private async Task<IList<CartItem>> GetItemsInCart(int id) {
+            var cart = await _db.Carts.Where(c => c.DonorId == id)
+                .Include(c => c.Items)
+                .SingleAsync();
+            return cart.Items.ToList();
+        }
+
+        private string GetCurrentBiography(Child child) {
+            return child.Biographies.OrderBy(b => b.CreationDate)
+                    .Select(b => b.Text)
+                    .FirstOrDefault();
+        }
+
+        private async Task<IList<Item>> LookupItems(IEnumerable<WishlistItem> wishlistItems) {
+            const int MaxLookupCount = 10;
+
+            var itemIds = wishlistItems.Select(wi => wi.ItemId)
+                .ToArray();
+            var items = new List<Item>();
+            var retailer = new AmazonRetailer(AmazonAssociateTag, AmazonAccessKey, "AWSECommerceServicePort");
+
+            while (itemIds.Any()) {
+                var lookupIds = itemIds.Take(MaxLookupCount)
+                    .ToArray();
+                var resultItems = await retailer.LookupItemsAsync(lookupIds);
+                items.AddRange(resultItems);
+                itemIds = itemIds.Skip(lookupIds.Length)
+                    .ToArray();
+            }
+
+            return items;
+        }
+
+        private IList<DonorWishlistItemViewModel> JoinIntoViewableItems(
+            IList<WishlistItem> items,
+            IList<CartItem> cartItems,
+            IList<Item> retailItems
+        ) {
+            var inCartIds = cartItems.Select(ci => ci.WishlistItemId)
+                .ToList();
+
+            return items.Join(retailItems, wi => wi.ItemId, ri => ri.Id,
+                (wi, ri) => new DonorWishlistItemViewModel {
+                Id = wi.Id,
+                WishlistId = wi.WishlistId,
+                ItemId = wi.ItemId,
+                Status = wi.Status,
+                IsInCart = inCartIds.Contains(wi.Id),
+                Title = ri.Title,
+                ListingUrl = ri.ListingUrl,
+                ImageUrl = ri.ImageUrl,
+                ListPrice = ri.ListPrice,
+                MinAgeMonths = ri.MinAgeMonths,
+                MaxAgeMonths = ri.MaxAgeMonths
+            }).ToList();
+        }
+
+        [HttpGet]
+        [DonorAuthorize]
         public ActionResult ViewCart(int id) {
             var cart = _db.Carts.Where(c => c.DonorId == id)
                 .Include(c => c.Donor)
