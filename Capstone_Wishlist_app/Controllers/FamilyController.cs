@@ -38,13 +38,13 @@ namespace Capstone_Wishlist_app.Controllers {
         }
 
         [HttpGet]
-        [Authorize(Roles = "Moderator")]
+        [Authorize(Roles = "Admin")]
         public ActionResult Register() {
             return View(new RegisterFamilyModel { ShippingAddress = new CreateAddressModel { } });
         }
 
         [HttpPost]
-        [Authorize(Roles = "Moderator")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> Register(RegisterFamilyModel registration) {
             if (!ModelState.IsValid) {
                 return View(registration);
@@ -148,6 +148,7 @@ namespace Capstone_Wishlist_app.Controllers {
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public ActionResult Administer(int id) {
             var family = _db.Families.Where(f => f.Id == id)
                 .Include(f => f.Children)
@@ -157,6 +158,7 @@ namespace Capstone_Wishlist_app.Controllers {
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> ResetPassword(int id) {
             var familyUser = await _db.Users.Where(
                 u => u.Claims.Any(c => c.ClaimType == "Family" && c.ClaimValue == id.ToString())
