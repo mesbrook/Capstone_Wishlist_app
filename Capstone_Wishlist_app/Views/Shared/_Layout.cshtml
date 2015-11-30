@@ -54,6 +54,12 @@
                     }
                     @if (ViewData.ContainsKey("DonorId")) {
                         Html.RenderAction("CountItemsInCart", "Donor", new { id = ViewBag.DonorId });
+                        <li>
+                            <a href=@Url.Action("History", "Donor", new { id = ViewBag.DonorId })>
+                                <i class="fa fa-history"></i>
+                                My Donations
+                             </a>
+                        </li>
                     }
                 </ul>
                 @Html.Partial("_LoginPartial")
