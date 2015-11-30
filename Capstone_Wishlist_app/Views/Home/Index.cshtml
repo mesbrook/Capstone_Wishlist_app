@@ -2,10 +2,9 @@
     ViewBag.Title = "Home Page";
 }
 
-@if (User.IsInRole("Moderator")) {
+@*@if (User.IsInRole("Moderator")) {
     <h3 style="color:darkturquoise"><strong>Moderator Tools ------------------------</strong></h3>
-    <div class="row">
-        
+    <div class="row">        
 
         <div class="col-md-3, col-lg-4">
             <h2>Register a Family</h2>
@@ -21,7 +20,7 @@
         </div>
     </div>
     <hr />
-}
+}*@
 @if (User.IsInRole("Admin")) {
     Html.RenderPartial("_AdministratorHome");
 } else if (ViewData.ContainsKey("FamilyId")) {
