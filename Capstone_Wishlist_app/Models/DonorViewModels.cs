@@ -130,4 +130,22 @@ namespace Capstone_Wishlist_app.Models {
         public decimal Total { get; set; }
         public ICollection<string> ChildNames { get; set; }
     }
+
+    public class DonationViewModel {
+        public int DonorId { get; set; }
+        public int DonationId { get; set; }
+        public string OrderId { get; set; }
+        public DateTime Date { get; set; }
+        public decimal Subtotal { get; set; }
+        public decimal Total { get; set; }
+
+        public ICollection<DonatedItemViewModel> Items { get; set; }
+    }
+
+    public class DonatedItemViewModel {
+        public string ItemId { get; set; }
+        public string Title { get; set; }
+        public decimal PurhcasePrice { get; set; }
+        public string ChildFirsName { get; set; }
+    }
 }

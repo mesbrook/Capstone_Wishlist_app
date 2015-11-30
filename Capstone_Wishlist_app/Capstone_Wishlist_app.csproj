@@ -392,6 +392,8 @@
     <Content Include="Views\Wishlist\Unapproved.cshtml" />
     <Content Include="Views\Donor\ViewWishlists.cshtml" />
     <Content Include="Views\Wishlist\Index.cshtml" />
+    <Content Include="Views\Donor\History.cshtml" />
+    <Content Include="Views\Donor\DisplayTemplates\_Donation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
