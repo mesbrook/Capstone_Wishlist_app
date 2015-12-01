@@ -8,6 +8,39 @@
 
 <h2>Register a Child - @Model.FamilyName Family</h2>
 
+@if (User.IsInRole("Admin")) {
+    <ol class="breadcrumb">
+        <li>
+            <a href=@Url.Action("Index", "Home")>
+                <i class="fa fa-home"></i>
+                Home
+            </a>
+        </li>
+        <li>
+            <a href=@Url.Action("Index")>
+                <i class="fa fa-users"></i>
+                Family List
+            </a>
+        </li>
+        <li>
+            <a href=@Url.Action("Administer", new { id = Model.FamilyId })>
+                @Model.FamilyId - @Model.FamilyName Family
+            </a>
+        </li>
+        <li class="active">Register Child</li>
+    </ol>
+} else {
+    <ol class="breadcrumb">
+        <li>
+            <a href=@Url.Action("Index", "Home")>
+                <i class="fa fa-home"></i>
+                Home
+            </a>
+        </li>
+        <li class="active">Register Child</li>
+    </ol>
+}
+
 @if (TempData.ContainsKey("registeredChild")) {
     var child = TempData["registeredChild"] as RegisteredChildViewModel;
 
