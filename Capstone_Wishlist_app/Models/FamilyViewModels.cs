@@ -66,6 +66,12 @@ namespace Capstone_Wishlist_app.Models {
         public string BiographyText { get; set; }
     }
 
+    public class RegisteredChildViewModel {
+        public int ChildId { get; set; }
+        public int WishlistId { get; set; }
+        public string FirstName { get; set; }
+    }
+
     public class RegisteredFamilyViewModel {
         public int Id { get; set; }
         public string LastName { get; set; }

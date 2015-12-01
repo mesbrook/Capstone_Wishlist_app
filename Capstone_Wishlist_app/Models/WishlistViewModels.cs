@@ -116,6 +116,14 @@ namespace Capstone_Wishlist_app.Models {
         public int DonatedCount { get; set; }
     }
 
+    public class WishlistSummary {
+        public int Id { get; set; }
+        public string ChildFirstName { get; set; }
+        public int DonatedCount { get; set; }
+        public int ApprovedCount { get; set; }
+        public int PercentDonated { get; set; }
+    }
+
     public static class WishlistItemViewExtensions {
 
         public static int GetPercentDonated(this ICollection<WishlistItem> items) {
@@ -128,6 +136,10 @@ namespace Capstone_Wishlist_app.Models {
 
         public static int GetPercentUnapproved(this ICollection<WishlistItem> items) {
             return ToPercent(items.CountUnapproved(), items.Count);
+        }
+
+        public static int GetPercentAvailableDonated(this ICollection<WishlistItem> items) {
+            return ToPercent(items.CountDonated(), items.CountAvailable() + items.CountDonated());
         }
 
         public static int CountDonated(this ICollection<WishlistItem> items) {

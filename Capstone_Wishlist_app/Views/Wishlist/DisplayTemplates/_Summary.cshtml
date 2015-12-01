@@ -1,0 +1,17 @@
+﻿@model Capstone_Wishlist_app.Models.WishlistSummary
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <a href=@(Url.Action("ViewWishlists", "Donor", new { id = ViewBag.DonorId }) + "#" + Model.Id)>
+            <h3 class="panel-title">@Model.ChildFirstName's Wishlist</h3>
+        </a>
+    </div>
+    <div class="panel-body">
+        <div class="progress">
+            <div class="progress-bar" role="progressbar" style="min-width: 6em; width: @Model.PercentDonated%">
+                <i class="fa fa-gift"></i>
+                @Model.DonatedCount of @Model.ApprovedCount
+            </div>
+        </div>
+    </div>
+</div>
