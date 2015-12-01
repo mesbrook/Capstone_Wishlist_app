@@ -260,5 +260,45 @@ namespace Capstone_Wishlist_app.Controllers {
                     MaxAgeMonths = ri.MaxAgeMonths
                 }).ToList();
         }
+
+        [InjectDonorIdentity]
+        public ActionResult AlmostThere() {
+            var wishlists = _db.WishLists
+                .Where(wl => wl.Items.Any(wi => wi.Status == WishlistItemStatus.Available))
+                .OrderBy(wl => wl.Items.Count(wi => wi.Status == WishlistItemStatus.Available))
+                .Take(3)
+                .Include(wl => wl.Child)
+                .Include(wl => wl.Items)
+                .ToList();
+            var summaries = wishlists.Select(wl => new WishlistSummary {
+                Id = wl.Id,
+                ChildFirstName = wl.Child.FirstName,
+                ApprovedCount = wl.Items.CountAvailable() + wl.Items.CountDonated(),
+                DonatedCount = wl.Items.CountDonated(),
+                PercentDonated = wl.Items.GetPercentAvailableDonated()
+            }).ToList();
+
+            return PartialView("_AlmostComplete", summaries);
+        }
+
+        [InjectDonorIdentity]
+        public ActionResult JustStarted() {
+            var wishlists = _db.WishLists
+                .Where(wl => wl.Items.Any(wi => wi.Status == WishlistItemStatus.Available))
+                .OrderBy(wl => wl.Items.Count(wi => wi.Status == WishlistItemStatus.Ordered))
+                .Take(3)
+                .Include(wl => wl.Child)
+                .Include(wl => wl.Items)
+                .ToList();
+            var summaries = wishlists.Select(wl => new WishlistSummary {
+                Id = wl.Id,
+                ChildFirstName = wl.Child.FirstName,
+                ApprovedCount = wl.Items.CountAvailable() + wl.Items.CountDonated(),
+                DonatedCount = wl.Items.CountDonated(),
+                PercentDonated = wl.Items.GetPercentAvailableDonated()
+            }).ToList();
+
+            return PartialView("_JustStarted", summaries);
+        }
     }
 }
