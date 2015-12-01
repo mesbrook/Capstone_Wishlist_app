@@ -230,6 +230,7 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\font-awesome.css" />
     <Content Include="Content\font-awesome.min.css" />
+    <Content Include="Content\images\logo-ellipse.jpg" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Content\images\christmas2.jpg" />
     <Content Include="Content\images\Merry-Christmas.jpg" />
