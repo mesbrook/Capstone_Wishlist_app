@@ -8,13 +8,24 @@
 
 <h2>Register a Child - @Model.FamilyName Family</h2>
 
-@if (TempData["registeredChild"] != null) {
-    var registeredChild = (Child) TempData["registeredChild"];
-    <p class="text-success has-success">
-        <b>@registeredChild.FirstName</b> was successfully registered!
-        View <b>@registeredChild.FirstName's</b> profile @Html.ActionLink("here", "ViewProfile", "Child", new { id = registeredChild.Id }, null)
-        or continue registering children below.
-    </p>
+@if (TempData.ContainsKey("registeredChild")) {
+    var child = TempData["registeredChild"] as RegisteredChildViewModel;
+
+    <div class="well well-sm">
+        <p class="text-success">
+            <i class="fa fa-check-square-o"></i>
+            @child.FirstName is successfully registered!
+        </p>
+        <p>
+            View <b>@child.FirstName's</b> profile @Html.ActionLink("here", "ViewProfile", "Child", new { id = child.ChildId }, null)
+            or continue registering children below.
+        </p>
+        <a href=@Url.Action("FindGifts", "Wishlist", new { id = child.WishlistId }) class="btn btn-default">
+            <i class="fa fa-gift"></i>
+            <i class="fa fa-search"></i>
+            Find gifts for @child.FirstName
+        </a>
+    </div>
 }
 
 @using (Html.BeginForm(new { id = Model.FamilyId })) {
@@ -93,7 +104,7 @@
 
         <div class="form-group">
             <div class="col-md-2">
-                <input type="submit" value="Register" class="btn btn-default" />
+                <input type="submit" value="Register" class="btn btn-primary" />
             </div>
         </div>
     </div>
