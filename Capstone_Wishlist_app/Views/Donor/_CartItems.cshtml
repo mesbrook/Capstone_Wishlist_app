@@ -29,10 +29,12 @@
 </div>
 <div class="row">
     <div class="col-md-7">
-        <a href=@Url.Action("PurchaseCart", "Donor", new { id = Model.DonorId }) class="btn btn-primary">
-            <i class="fa fa-money"></i>
-            Purchase items for donation
-        </a>
+        @if (Model.Items.Any()) {
+            <a href=@Url.Action("PurchaseCart", "Donor", new { id = Model.DonorId }) class="btn btn-primary">
+                <i class="fa fa-money"></i>
+                Purchase items for donation
+            </a>
+        }      
     </div>
     <div class="col-md-3 text-right" style="border-top: solid 1px lightgrey; padding-top: 5px">
         <label class="control-label" style="margin-right: 10px">Subtotal</label>
