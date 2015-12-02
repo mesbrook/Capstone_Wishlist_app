@@ -83,8 +83,9 @@
             <div class="col-md-4"><img src="~/Content/images/santa_gift.jpg" height="266" width="400" class="img-responsive" /></div>
         </div>
     </div>
-    <div class="row">
-        @if (ViewData.ContainsKey("DonorId")) {
+    <div class="row" style="background-color: ivory;">
+        @if (ViewData.ContainsKey("DonorId"))
+        {
             <div class="col-md-4">
                 @{Html.RenderAction("AlmostThere", "Wishlist");}
             </div>
@@ -96,7 +97,8 @@
                 This system is designed to help those children by facilitating gift-giving by charitable donors to children in need.
             </p>
         </div>
-        @if (ViewData.ContainsKey("DonorId")) {
+        @if (ViewData.ContainsKey("DonorId"))
+        {
             <div class="col-md-4">
                 @{Html.RenderAction("JustStarted", "Wishlist");}
             </div>
