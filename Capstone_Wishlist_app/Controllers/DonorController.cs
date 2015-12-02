@@ -355,6 +355,11 @@ namespace Capstone_Wishlist_app.Controllers {
             var items = await _db.CartItems.Where(ci => ci.CartId == id)
                 .Include(ci => ci.Item.Wishlist.Child)
                 .ToListAsync();
+
+            if (!items.Any()) {
+                RedirectToAction("ViewCart", new { id = id });
+            }
+
             var availableItems = items.Where(ci => ci.Item.Status == WishlistItemStatus.Available)
                 .ToList();
             var unavailableItems = items.Where(ci => ci.Item.Status != WishlistItemStatus.Available)
