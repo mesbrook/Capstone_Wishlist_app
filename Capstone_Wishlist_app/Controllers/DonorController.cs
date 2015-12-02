@@ -506,5 +506,30 @@ namespace Capstone_Wishlist_app.Controllers {
                 ChildNames = childNames
             });
         }
+
+        [HttpGet]
+        [DonorAuthorize]
+        [InjectDonorIdentity]
+        public async Task<ActionResult> History(int id) {
+            var donations = await _db.Donations.Where(dn => dn.DonorId == id)
+                .Include(dn => dn.Items.Select(di => di.Item.Wishlist.Child))
+                .ToListAsync();
+            var donationView = donations.Select(dn => new DonationViewModel {
+                DonorId = dn.DonorId,
+                DonationId = dn.Id,
+                Date = dn.Date,
+                OrderId = dn.OrderId,
+                Subtotal = dn.Subtotal,
+                Total = dn.Total,
+                Items = dn.Items.Select(di => new DonatedItemViewModel {
+                    ItemId = di.Item.ItemId,
+                    Title = di.Title,
+                    PurhcasePrice = di.PurchasePrice,
+                    ChildFirsName = di.Item.Wishlist.Child.FirstName
+                }).ToList()
+            }).ToList();
+
+            return View(donationView);
+        }
     }
 }

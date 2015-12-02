@@ -17,7 +17,9 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("Santa's Wishlist", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                <a href=@Url.Action("Index", "Home") class="navbar-brand" style="padding:0px">
+                    <img src="~/Content/images/logo-ellipse.jpg" style="margin-top: 5px"/>
+                </a>
             </div>
             @if (User.IsInRole("Admin"))
             {
@@ -54,6 +56,12 @@
                     }
                     @if (ViewData.ContainsKey("DonorId")) {
                         Html.RenderAction("CountItemsInCart", "Donor", new { id = ViewBag.DonorId });
+                        <li>
+                            <a href=@Url.Action("History", "Donor", new { id = ViewBag.DonorId })>
+                                <i class="fa fa-history"></i>
+                                My Donations
+                             </a>
+                        </li>
                     }
                 </ul>
                 @Html.Partial("_LoginPartial")

@@ -223,7 +223,11 @@ namespace Capstone_Wishlist_app.Controllers {
             await _db.SaveChangesAsync();
             await AuthorizeChildAndWishlistForFamilyUser(child, wishlist);
 
-            TempData["registeredChild"] = child;
+            TempData["registeredChild"] = new RegisteredChildViewModel {
+                ChildId = child.Id,
+                WishlistId = wishlist.Id,
+                FirstName = child.FirstName
+            };
             return RedirectToAction("RegisterChild", new { id = registration.FamilyId });
         }
 

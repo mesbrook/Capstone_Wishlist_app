@@ -234,6 +234,7 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\font-awesome.css" />
     <Content Include="Content\font-awesome.min.css" />
+    <Content Include="Content\images\logo-ellipse.jpg" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Content\images\christmas2.jpg" />
     <Content Include="Content\images\Merry-Christmas.jpg" />
@@ -396,6 +397,11 @@
     <Content Include="Views\Wishlist\Unapproved.cshtml" />
     <Content Include="Views\Donor\ViewWishlists.cshtml" />
     <Content Include="Views\Wishlist\Index.cshtml" />
+    <Content Include="Views\Donor\History.cshtml" />
+    <Content Include="Views\Donor\DisplayTemplates\_Donation.cshtml" />
+    <Content Include="Views\Wishlist\DisplayTemplates\_Summary.cshtml" />
+    <Content Include="Views\Wishlist\_AlmostComplete.cshtml" />
+    <Content Include="Views\Wishlist\_JustStarted.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

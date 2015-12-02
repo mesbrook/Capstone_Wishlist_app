@@ -6,9 +6,9 @@
     ViewBag.Title = "Wishlists";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
 <h2>Children's Wishlists</h2>
 @foreach (var wl in Model) {
+    <a name=@wl.WishlistId></a>
     <div class="row">
         <div class="col-md-12">
             <h3>
@@ -23,6 +23,7 @@
                 }
             </h3>
             <div class=@("sw-wl-view-" + wl.ChildId)>
+                
                 <label class="control-label">About @wl.FirstName</label>
                 <p>@wl.Biography</p>
                 <label class="control-label">@wl.FirstName's Wishlist</label>

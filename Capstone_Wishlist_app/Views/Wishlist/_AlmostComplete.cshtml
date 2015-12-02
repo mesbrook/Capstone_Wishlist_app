@@ -1,0 +1,6 @@
+﻿@model ICollection<Capstone_Wishlist_app.Models.WishlistSummary>
+
+<h3>Almost There</h3>
+@foreach (var ws in Model) {
+    <text>@Html.DisplayFor(m => ws, "_Summary")</text>
+}
