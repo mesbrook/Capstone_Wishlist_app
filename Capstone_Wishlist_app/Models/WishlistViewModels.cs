@@ -22,7 +22,7 @@ namespace Capstone_Wishlist_app.Models {
 
         public static string FormatAge(int ageMonths) {
             if (ageMonths < 24) {
-                return string.Format("{0} months");
+                return string.Format("{0} months", ageMonths);
             }
 
             if (ageMonths % 12 != 0) {
