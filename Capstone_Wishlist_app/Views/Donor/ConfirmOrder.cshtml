@@ -1,0 +1,69 @@
+﻿@model Capstone_Wishlist_app.Models.OrderViewModel
+@using Capstone_Wishlist_app.Models
+
+@{
+    ViewBag.DonorId = Model.DonorId;
+    ViewBag.Title = "ConfirmOrder";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Confirm Your Donation</h2>
+
+<div class="row">
+    <div class="col-md-12">
+        @if (TempData.ContainsKey("unavailableItems")) {
+            var unavailableItems = TempData["unavailableItems"] as IList<CartItemViewModel>;
+
+            <div class="well-sm">
+                <p class="text-warning">
+                    <i class="fa fa-exclamation-triangle"></i>
+                    Some items in the cart are no longer available for donations.
+                </p>
+                <ul>
+                    @foreach (var ci in unavailableItems) {
+                        <li>@ci.Title <b>for @ci.ChildName</b></li>
+                    }
+                </ul>
+                <p>These items may have been donated by another user or removed by an administrator.</p>
+            </div>
+        }
+        @using (Html.BeginForm("CompleteOrder", "Donor", new { id = Model.DonorId })) {
+            <h4>Donated Items</h4>
+            <table class="table table-striped">
+                <tr>
+                    <th>Retailer ID</th>
+                    <th>Item</th>
+                    <th>Final Price</th>
+                </tr>
+                @foreach (var oi in Model.Items) {
+                    <tr>
+                        <td>@oi.ItemId</td>
+                        <td>@oi.Title</td>
+                        <td class="text-right">@Html.DisplayFor(o => oi.Price)</td>
+                    </tr>
+                }
+                <tr class="active">
+                    <td></td>
+                    <td class="text-right"><b>Total for @Model.Items.Count Items</b></td>
+                    <td class="text-right">@Html.DisplayFor(o => o.Subtotal)</td>
+                </tr>
+            </table>
+            <h4>Shipping, Tax, and Total</h4>
+            <hr />
+            <dl class="dl-horizontal">
+                <dt>@Html.DisplayNameFor(model => model.Subtotal)</dt>
+                <dd>@Html.DisplayFor(model => model.Subtotal)</dd>
+                <dt>@Html.DisplayNameFor(model => model.Shipping)</dt>
+                <dd>@Html.DisplayFor(model => model.Shipping)</dd>
+                <dt>@Html.DisplayNameFor(model => model.SalesTax)</dt>
+                <dd>@Html.DisplayFor(model => model.SalesTax)</dd>
+                <dt>@Html.DisplayNameFor(model => model.Total)</dt>
+                <dd>@Html.DisplayFor(model => model.Total)</dd>
+            </dl>
+            <button type="submit" class="btn btn-success">
+                <i class="fa fa-check"></i>
+                Confirm and pay
+            </button>
+        }
+    </div>
+</div>

@@ -20,68 +20,21 @@ namespace Capstone_Wishlist_app.Controllers {
     public class FamilyController : Controller {
         private WishlistContext _db = new WishlistContext();
 
-        // GET: Family
-        public ActionResult Index() {
-            return View(_db.Families.ToList());
-        }
+        [HttpGet]
+        public async Task<ActionResult> Index() {
+            var families = await _db.Families.Include(f => f.Children.Select(c => c.Wishlists.Select(wl => wl.Items)))
+                .ToListAsync();
+            var familyViews = families.Select(f => new FamilyIndexViewModel {
+                Id = f.Id,
+                ParentFirstName = f.ParentFirstName,
+                ParentLastName = f.ParentLastName,
+                Phone = f.Phone,
+                Email = f.Email,
+                ChildCount = f.Children.Count(),
+                GiftCount = f.Children.SelectMany(c => c.Wishlists).Sum(wl => wl.Items.Count()),
+            });
 
-        // GET: Family/Details/5
-        public ActionResult Details(int? id) {
-            if (id == null) {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Family family = _db.Families.Find(id);
-            if (family == null) {
-                return HttpNotFound();
-            }
-            return View(family);
-        }
-
-        // GET: Family/Create
-        public ActionResult Create() {
-            //List<Child> ci = new List<Child> { new Child { Child_ID = 0, Child_FirstName = "", Child_LastName = "", Age = 0 } };
-            return View();
-        }
-
-        // POST: Family/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Family_ID,ParentFirstName,ParentLastName,Shipping_address,Shipping_city,Shipping_state,Shipping_zipCode,Phone,Email")] Family family) {
-            if (ModelState.IsValid) {
-                _db.Families.Add(family);
-                _db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-
-            return View(family);
-        }
-
-        // GET: Family/Edit/5
-        public ActionResult Edit(int? id) {
-            if (id == null) {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Family family = _db.Families.Find(id);
-            if (family == null) {
-                return HttpNotFound();
-            }
-            return View(family);
-        }
-
-        // POST: Family/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Family_ID,ParentFirstName,ParentLastName,Shipping_address,Shipping_city,Shipping_state,Shipping_zipCode,Phone,Email")] Family family) {
-            if (ModelState.IsValid) {
-                _db.Entry(family).State = EntityState.Modified;
-                _db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(family);
+            return View(familyViews);
         }
 
         [HttpGet]
@@ -134,28 +87,57 @@ namespace Capstone_Wishlist_app.Controllers {
         }
 
         private async Task<FamilyCredentials> CreateFamilyAccount(Family family) {
-            var userNameChars = family.ParentLastName.ToLowerInvariant()
-                .ToCharArray()
-                .Where(c => char.IsLetter(c))
-                .ToArray();
-            var userName = new string(userNameChars);
+            var username = await GenerateFamilyUsername(family.ParentLastName);
             var password = GenerateRandomPassword(8);
             var userStore = new UserStore<WishlistUser>(_db);
             var userManager = new WishlistUserManager(userStore);
             await userManager.CreateAsync(new WishlistUser {
-                UserName = userName,
+                UserName = username,
                 Email = family.Email,
                 PhoneNumber = family.Phone
             }, password);
 
-            var createdUser = await userManager.FindByNameAsync(userName);
+            var createdUser = await userManager.FindByNameAsync(username);
             await userManager.AddToRoleAsync(createdUser.Id, "Family");
             await userManager.AddClaimAsync(createdUser.Id, new Claim("Family", family.Id.ToString()));
 
             return new FamilyCredentials {
-                Username = userName,
+                Username = username,
                 Password = password
             };
+        }
+
+        private async Task<string> GenerateFamilyUsername(string lastName) {
+            var username = ToUsername(lastName);
+            var isTaken = await _db.Users.AnyAsync(u => u.UserName == username);
+            
+            if (isTaken) {
+                var existingNames = await _db.Users.Where(u => u.UserName.StartsWith(username))
+                .Select(u => u.UserName)
+                .ToListAsync();
+
+                int maxOrdinal = GetMaxOrdinal(existingNames);
+                return username + (maxOrdinal + 1).ToString();
+            }
+
+            return username;
+        }
+
+        private static string ToUsername(string name) {
+            var userNameChars = name.ToLowerInvariant()
+                .ToCharArray()
+                .Where(c => char.IsLetter(c))
+                .ToArray();
+            return new string(userNameChars);
+        }
+
+        private static int GetMaxOrdinal(IEnumerable<string> names) {
+            var regex = new Regex(@"(\d+)$", RegexOptions.IgnoreCase);
+
+            return names.Select(n => {
+                var match = regex.Match(n);
+                return match.Success ? int.Parse(match.Groups[0].Value) : 0;
+            }).Max();
         }
 
         private static string GenerateRandomPassword(int maxLength) {
@@ -166,6 +148,7 @@ namespace Capstone_Wishlist_app.Controllers {
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public ActionResult Administer(int id) {
             var family = _db.Families.Where(f => f.Id == id)
                 .Include(f => f.Children)
@@ -175,6 +158,7 @@ namespace Capstone_Wishlist_app.Controllers {
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> ResetPassword(int id) {
             var familyUser = await _db.Users.Where(
                 u => u.Claims.Any(c => c.ClaimType == "Family" && c.ClaimValue == id.ToString())
@@ -239,7 +223,11 @@ namespace Capstone_Wishlist_app.Controllers {
             await _db.SaveChangesAsync();
             await AuthorizeChildAndWishlistForFamilyUser(child, wishlist);
 
-            TempData["registeredChild"] = child;
+            TempData["registeredChild"] = new RegisteredChildViewModel {
+                ChildId = child.Id,
+                WishlistId = wishlist.Id,
+                FirstName = child.FirstName
+            };
             return RedirectToAction("RegisterChild", new { id = registration.FamilyId });
         }
 
@@ -265,18 +253,23 @@ namespace Capstone_Wishlist_app.Controllers {
         [HttpGet]
         [FamilyAuthorize(Entity = "Family")]
         public ActionResult ViewWishlists(int id) {
-            var wishlists = (
-                from w in _db.WishLists
-                where w.Child.FamilyId == id
-                select w).ToList();
+            var family = _db.Families.Where(f => f.Id == id)
+                .Include(f => f.Children.Select(c => c.Wishlists.Select(w => w.Child)))
+                .First();
+            var wishlists = family.Children.SelectMany(c => c.Wishlists);
 
-            return View(wishlists.Select(w => new FamilyWishlistViewModel {
-                WishlistId = w.Id,
-                ChildId = w.ChildId,
-                ChildFirstName = w.Child.FirstName,
-                Items = new List<WishlistItem>(w.Items)
-            }));
+            return View(new FamilyWishlistsViewModel {
+                FamilyId = family.Id,
+                FamilyName = family.ParentLastName,
+                Wishlists = wishlists.Select(w => new FamilyWishlistViewModel {
+                    WishlistId = w.Id,
+                    ChildId = w.ChildId,
+                    ChildFirstName = w.Child.FirstName,
+                    Items = new List<WishlistItem>(w.Items)
+                }).ToList()
+            });
         }
+
         protected override void Dispose(bool disposing) {
             if (disposing) {
                 _db.Dispose();

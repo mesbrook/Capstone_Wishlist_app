@@ -1,0 +1,43 @@
+﻿@model Capstone_Wishlist_app.Models.CartViewModel
+
+<div class="row">
+    <div class="col-md-12">
+        <table class="table">
+            <tr>
+                <th class="col-md-2">Retailer ID</th>
+                <th class="col-md-5">Item</th>
+                <th class="col-md-2">Wishlist</th>
+                <th class="col-md-1">Price</th>
+                <th class="col-md-2"></th>
+            </tr>
+            @foreach (var item in Model.Items) {
+                <tr>
+                    <td>@item.ItemId</td>
+                    <td>@item.Title</td>
+                    <td>@item.ChildName's Wishlist</td>
+                    <td class="text-right">@item.Price</td>
+                    <td class="text-right">
+                        <button type="button" value="@item.WishlistItemId" class="btn btn-danger" onclick="removeItemFromCart(this)">
+                            <i class="fa fa-remove"></i>
+                            Remove this item
+                        </button>
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-7">
+        @if (Model.Items.Any()) {
+            <a href=@Url.Action("PurchaseCart", "Donor", new { id = Model.DonorId }) class="btn btn-primary">
+                <i class="fa fa-money"></i>
+                Purchase items for donation
+            </a>
+        }      
+    </div>
+    <div class="col-md-3 text-right" style="border-top: solid 1px lightgrey; padding-top: 5px">
+        <label class="control-label" style="margin-right: 10px">Subtotal</label>
+        <b>@string.Format("{0:C}", Model.Items.Sum(ci => ci.Price))</b>
+    </div>
+</div>

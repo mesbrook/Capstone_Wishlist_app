@@ -1,0 +1,30 @@
+﻿@model Capstone_Wishlist_app.Models.ThankYouViewModel
+
+@{
+    ViewBag.DonorId = Model.DonorId;
+    ViewBag.Title = "ThankYou";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <h2>Thank You For Your Donation</h2>
+        <p>
+            Your contribution of @Html.DisplayFor(d => d.Total) will help make the holiday season brighter for
+            @if (Model.ChildNames.Count == 1) {
+                <b>@Model.ChildNames.First()</b>
+            } else if (Model.ChildNames.Count == 2) {
+                <b>@string.Join(" and ", Model.ChildNames)</b>
+            } else {
+                <b>@(string.Join(", ", Model.ChildNames.Take(Model.ChildNames.Count - 1)) + ", and " + Model.ChildNames.Last())</b>
+            }
+        </p>
+        <a href=@Url.Action("ViewWishlists", "Donor", new { id = Model.DonorId }) class="btn btn-default">
+            <i class="fa fa-list"></i>
+            Return to wishlists
+        </a>
+    </div>
+</div>
+
+
+
