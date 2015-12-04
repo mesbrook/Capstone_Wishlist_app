@@ -71,7 +71,7 @@
 } else {
     <div class="jumbotron">
         <div class="container">
-            <h1>Santa's Wishlist</h1>
+            <img src="~/Content/images/logo-large.png" class="img-responsive"/>
             <div class="col-md-8">
                 <p class="lead">Make A Difference Today.</p>
                 @if (ViewData.ContainsKey("DonorId")) {
@@ -83,7 +83,7 @@
             <div class="col-md-4"><img src="~/Content/images/santa_gift.jpg" height="266" width="400" class="img-responsive" /></div>
         </div>
     </div>
-    <div class="row" style="background-color: ivory;">
+    <div class="row">
         @if (ViewData.ContainsKey("DonorId"))
         {
             <div class="col-md-4">

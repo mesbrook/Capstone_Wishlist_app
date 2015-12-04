@@ -1,11 +1,6 @@
 ﻿.christmas {
- /*background: url(http://placehold.it/1920x1080) no-repeat center center fixed;*/
- background: url("../Content/Images/christmas2.jpg") no-repeat center center fixed !important;
-  background-size: cover; 
-}
-
-.plates {
-    background-color: rgba(255,228,196,.85);
+ background: url("../Content/Images/christmas-lighter.jpg") no-repeat center center fixed !important;
+  background-size: cover;
 }
 
 .panelBorder {
